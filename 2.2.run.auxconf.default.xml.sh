@@ -3,6 +3,7 @@
 source 0.*
 
 # >> Pseudo-Distributed Operation <<
+#
 if [[ 'PSEUDO_DIS_MODE' == $HADOOP_CLUSTER_MODE ]]; then
 
 # * etc/hadoop/core-site.xml
@@ -48,6 +49,7 @@ $HADOOP_CODE_PATH'/bin/hdfs' dfs -mkdir /user
 $HADOOP_CODE_PATH'/bin/hdfs' dfs -mkdir /user/root
 
 # MR on yarn
+#
 # * etc/hadoop/mapred-site.xml
 echo """
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
@@ -74,6 +76,7 @@ echo """
 
 fi
 
+if [[ '3.0.0-alpha2' == $HADOOP_VERSION ]]; then
 # Enabling Opportunistic Containers
 #
 # * etc/hadoop/yarn-site.xml
@@ -87,7 +90,6 @@ echo """
         <value>20</value>
     </property>
 """ >> $HADOOP_CODE_PATH'/etc/hadoop/yarn-site.xml'
-
 # Distributed scheduling
 #
 # * etc/hadoop/yarn-site.xml
@@ -100,6 +102,10 @@ echo """
         <name>yarn.nodemanager.amrmproxy.enabled</name>
         <value>"""$HADOOP_DISTRIBUTED_SCHEDULING_ENABLE"""</value>
     </property>
-</configuration>
 """ >> $HADOOP_CODE_PATH'/etc/hadoop/yarn-site.xml'
 
+fi
+
+echo """
+</configuration>
+""" >> $HADOOP_CODE_PATH'/etc/hadoop/yarn-site.xml'

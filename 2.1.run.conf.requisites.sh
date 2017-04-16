@@ -10,8 +10,8 @@ source 0.*
 FILE=$HADOOP_CODE_PATH'/etc/hadoop/hadoop-env.sh'
 #
 # * set to the root of your Java installation
-grep 'export JAVA_HOME=' $FILE
-if [[$? -eq 0]]; then
+grep 'export JAVA_HOME=' $FILE > /dev/null
+if [[ 0 == $? ]]; then
     sed -i 's#.*export JAVA_HOME=.*#export JAVA_HOME=/usr/lib/jvm/java-8-oracle#g' $FILE
 else
     echo 'export JAVA_HOME=/usr/lib/jvm/java-8-oracle' >> $FILE
@@ -21,10 +21,13 @@ fi
 # Setup passphraseless ssh
 #   ssh localhost without a passphrase
 #   -- ssh localhost # check
-if [[ ! -f '~/.ssh/id_rsa.pub' ]]; then
+if [[ ! -f ~/.ssh/id_rsa.pub ]]; then
     ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 fi
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+grep "`cat ~/.ssh/id_rsa.pub`" ~/.ssh/authorized_keys > /dev/null
+if [[ 0 != $? ]]; then
+    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+fi
 chmod 700 ~/.ssh
 chmod 644 ~/.ssh/authorized_keys
 
@@ -35,10 +38,10 @@ chmod 644 ~/.ssh/authorized_keys
 #       reset ssh and reconnect terminal
 #   -- echo 'export PDSH_RCMD_TYPE=ssh' >>  ~/.profile # add
 #   -- pdsh -w localhost -l root uptime # test
-FILE='~/.profile'
+FILE=~/.profile
 grep 'export PDSH_RCMD_TYPE=' $FILE
-if [[$? -eq 0]]; then
-    sed -i 's#.*export PDSH_RCMD_TYPE=.*#export PDSH_RCMD_TYP=ssh#g' $FILE
+if [[ 0 == $? ]]; then
+    sed -i 's#.*export PDSH_RCMD_TYPE=.*#export PDSH_RCMD_TYPE=ssh#g' $FILE
 else
     echo 'export PDSH_RCMD_TYPE=ssh' >> $FILE
 fi
