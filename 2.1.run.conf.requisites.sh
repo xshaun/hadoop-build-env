@@ -39,7 +39,7 @@ chmod 644 ~/.ssh/authorized_keys
 #   -- echo 'export PDSH_RCMD_TYPE=ssh' >>  ~/.profile # add
 #   -- pdsh -w localhost -l root uptime # test
 FILE=~/.profile
-grep 'export PDSH_RCMD_TYPE=' ${FILE}
+grep 'export PDSH_RCMD_TYPE=' ${FILE} > /dev/null
 if [[ 0 == $? ]]; then
     sed -i 's#.*export PDSH_RCMD_TYPE=.*#export PDSH_RCMD_TYPE=ssh#g' ${FILE}
 else
