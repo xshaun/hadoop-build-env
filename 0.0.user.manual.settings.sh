@@ -25,15 +25,15 @@ HADOOP_CLUSTER_MODE='PSEUDO_DIS_MODE'
 # * HADOOP_CLUSTER_MODE='FULLY_DIS_MODE'
 # ]
 
+
+# -----------------------------
+# >> Hadoop original env vars <<
+
 # Hadoop Opportunistic container enable/disable
 HADOOP_OPPORTUNISTIC_CONTAINER_ENABLE=true
 
 # Hadoop Distributed scheduling enable/disbale
-HADOOP_DISTRIBUTED_SCHEDULING_ENABLE=true
-
-
-# -----------------------------
-# >> Hadoop original env vars <<
+HADOOP_DISTRIBUTED_SCHEDULING_ENABLE=false
 
 # Secure and insecure env vars
 # * [start|stop]-dfs.sh

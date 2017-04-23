@@ -6,8 +6,8 @@ _XML_FILE_HEADER='<?xml version="1.0" encoding="UTF-8"?>'"\n"'<?xml-stylesheet t
 
 # * Make the HDFS directories required to execute MapReduce jobs:
 ${HADOOP_CODE_PATH}/sbin/start-dfs.sh
-${HADOOP_CODE_PATH}/bin/hdfs dfs -mkdir /yarn/user
-${HADOOP_CODE_PATH}/bin/hdfs dfs -mkdir /yarn/user/root
+${HADOOP_CODE_PATH}/bin/hdfs dfs -mkdir /user
+${HADOOP_CODE_PATH}/bin/hdfs dfs -mkdir /user/root
 ${HADOOP_CODE_PATH}/sbin/stop-dfs.sh
 
 # MR on yarn
