@@ -42,7 +42,7 @@ ${_XML_FILE_HEADER}
 " > ${HADOOP_CODE_PATH}'/etc/hadoop/hdfs-site.xml'
 
 # *Format the filesystem:
-${HADOOP_CODE_PATH}/bin/hdfs namenode -format -force
+${HADOOP_CODE_PATH}/bin/hdfs namenode -format -nonInteractive
 
 fi #<<IF END>> if [[ 'PSEUDO_DIS_MODE' == ${HADOOP_CLUSTER_MODE} ]]; then
 
