@@ -35,6 +35,8 @@ apt-get -y install bzip2 libbz2-dev
 apt-get -y install libjansson-dev
 # * Linux FUSE
 apt-get -y install fuse libfuse-dev
+# * ZStandard compression
+apt-get -y install zstd
 
 # ----------------------------
 # Clean and Upgrade libs:

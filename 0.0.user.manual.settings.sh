@@ -16,7 +16,9 @@ HADOOP_VERSION='3.0.0-alpha2'
 # Hadoop Code
 HADOOP_CODE_LOCATION=`cd ~;pwd`     # default
 HADOOP_CODE_PATH=${HADOOP_CODE_LOCATION}'/hadoop-'${HADOOP_VERSION}
+HADOOP_SRC_CODE_PATH=${HADOOP_CODE_LOCATION}'/hadoop-'${HADOOP_VERSION}'-src'
 mkdir -p ${HADOOP_CODE_PATH}
+mkdir -p ${HADOOP_SRC_CODE_PATH}
 
 # Hadoop cluster mode
 # [
