@@ -1,5 +1,8 @@
-# hadoop-yarn-devcmd
-Automatic deployment, configuration, regression testing and BVT(Build Verification Test)
+# Hadoop-build-env
+
+`Automatically Deploy` and `Configure`
+
+`Automatically Run Benchmarks` and `Give Performance Report`
 
 # [Notes](./NOTES.md)
 
