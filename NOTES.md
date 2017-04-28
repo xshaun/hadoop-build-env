@@ -30,7 +30,8 @@ done
 ## Git
 1. 创建并跟踪远程一个分支
 ```bash
-git checkout -b YYY origin/YYY
+git checkout -b <local branch> origin/<branch name>
+git checkout -b <local branch> <tag name>
 ```
 
 2. 删除远程分支和tag

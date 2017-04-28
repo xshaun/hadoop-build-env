@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Recommend trusty (14.04LTS)
+
 set -e
 
 # APT='apt-get'
@@ -22,7 +24,18 @@ apt-get -y install maven
 # * Native libraries
 apt-get -y install build-essential autoconf automake libtool cmake zlib1g-dev pkg-config libssl-dev
 # * ProtocolBuffer 2.5.0 (required)
-apt-get -y install libprotobuf-dev protobuf-compiler
+if [[ ! `apt-get -y install libprotobuf-dev=2.5.0-9ubuntu1 protobuf-compiler=2.5.0-9ubuntu1` ]]; then
+    curl -sSL 'https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz' | tar -C ~ -xzv
+
+    cd ~/protobuf-2.5.0
+    ./autogen.sh  &&  ./configure --prefix=/usr
+
+    make  &&  make install
+    # protoc --version
+
+    cd ~/protobuf-2.5.0/java
+    mvn install
+fi
 
 # ----------------------------
 # Optional packages:
