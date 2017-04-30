@@ -9,6 +9,8 @@ set -e
 # ----------------------------
 # Installing required packages
 #
+# * Basic
+apt-get -y install ssh pdsh curl
 # * Oracle JDK 1.8 (preferred)
 apt-get -y purge openjdk*
 add-apt-repository -y ppa:webupd8team/java
@@ -17,8 +19,6 @@ echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /u
 apt-get -y install oracle-java8-installer --allow-unauthenticated
 apt-get -y install oracle-java8-set-default --allow-unauthenticated
 apt-get -y install software-properties-common
-# * Basic
-apt-get -y install ssh pdsh curl build-essential
 # * Maven
 apt-get -y install maven
 # * Native libraries
@@ -50,6 +50,10 @@ apt-get -y install libjansson-dev
 apt-get -y install fuse libfuse-dev
 # * ZStandard compression
 apt-get -y install zstd
+# * Findbugs (if running findbugs)
+curl -sSL 'https://jaist.dl.sourceforge.net/project/findbugs/findbugs/3.0.1/findbugs-noUpdateChecks-3.0.1.tar.gz' | tar -C '/opt' -xzv
+echo 'export FINDBUGS_HOME=/opt/findbugs-3.0.1' >> ~/.profile
+export FINDBUGS_HOME=/opt/findbugs-3.0.1
 
 # ----------------------------
 # Clean and Upgrade libs:
