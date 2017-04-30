@@ -18,7 +18,7 @@ apt-get -y install oracle-java8-installer --allow-unauthenticated
 apt-get -y install oracle-java8-set-default --allow-unauthenticated
 apt-get -y install software-properties-common
 # * Basic
-apt-get -y install ssh pdsh curl
+apt-get -y install ssh pdsh curl build-essential
 # * Maven
 apt-get -y install maven
 # * Native libraries
