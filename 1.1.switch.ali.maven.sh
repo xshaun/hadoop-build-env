@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+source 0.*
 
 set -e
 

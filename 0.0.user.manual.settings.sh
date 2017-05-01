@@ -24,6 +24,25 @@ mkdir -p ${HADOOP_SRC_CODE_PATH}
 HADOOP_CLUSTER_MODE='PSEUDO_DIS_MODE'
 # * HADOOP_CLUSTER_MODE='FULLY_DIS_MODE'
 # ]
+#
+#
+if [[ 'FULLY_DIS_MODE' == ${HADOOP_CLUSTER_MODE} ]]; then
+
+    declare -A HADOOP_FDM_NODES
+
+    HADOOP_FDM_NODES+=([num]=3);
+    nlist=(
+        'root@192.168.4.201'
+        'root@192.168.4.202'
+        'root@192.168.4.203'
+    );
+    HADOOP_FDM_NODES+=([list]=nlist);
+    HADOOP_FDM_NODES+=([pw]='123456');
+    HADOOP_FDM_NODES+=([rm]='192.168.4.201');
+    HADOOP_FDM_NODES+=([dn]='192.168.4.201');
+    HADOOP_FDM_NODES+=([sdn]='192.168.4.201');
+
+fi
 
 
 # -----------------------------

@@ -51,34 +51,3 @@ ls ${HADOOP_CODE_PATH}/sbin/*-yarn.sh | cat | while read FILE ; do
     done
 done
 
-# ----------------------------
-# Setup passphraseless ssh
-#   ssh localhost without a passphrase
-#   -- ssh localhost # check
-if [[ ! -f ~/.ssh/id_rsa.pub ]]; then
-    ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-fi
-if [[ ! -f ~/.ssh/authorized_keys ]]; then
-    touch ~/.ssh/authorized_keys
-fi
-grep "`cat ~/.ssh/id_rsa.pub`" ~/.ssh/authorized_keys > /dev/null
-if [[ 0 != $? ]]; then
-    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-fi
-chmod 700 ~/.ssh
-chmod 644 ~/.ssh/authorized_keys
-
-# ----------------------------
-# Fix issues:
-# ----------------------------
-#   pdsh set rsh to connect default,
-#       reset ssh and reconnect terminal
-#   -- echo 'export PDSH_RCMD_TYPE=ssh' >>  ~/.profile # add
-#   -- pdsh -w localhost -l root uptime # test
-FILE=~/.profile
-grep 'export PDSH_RCMD_TYPE=' ${FILE} > /dev/null
-if [[ 0 == $? ]]; then
-    sed -i 's#.*export PDSH_RCMD_TYPE=.*#export PDSH_RCMD_TYPE=ssh#g' ${FILE}
-else
-    echo 'export PDSH_RCMD_TYPE=ssh' >> ${FILE}
-fi
