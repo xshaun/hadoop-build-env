@@ -2,12 +2,10 @@
 
 # -----------------------------
 # >> User vars <<
+# -----------------------------
 
 # Recent released version
 # [
-# * HADOOP_VERSION='2.5.2'
-# * HADOOP_VERSION='2.6.5'
-# * HADOOP_VERSION='2.7.3'
 # * HADOOP_VERSION='2.8.0'
 # * HADOOP_VERSION='3.0.0-alpha1'
 HADOOP_VERSION='3.0.0-alpha2'
@@ -30,6 +28,7 @@ HADOOP_CLUSTER_MODE='PSEUDO_DIS_MODE'
 
 # -----------------------------
 # >> Hadoop original env vars <<
+# -----------------------------
 
 # Hadoop Opportunistic container enable/disable
 HADOOP_OPPORTUNISTIC_CONTAINER_ENABLE=true
