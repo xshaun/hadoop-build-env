@@ -2,6 +2,8 @@
 #
 source 0.*
 
+set -e
+
 # ----------------------------------------------------------------------------------
 # Maven main modules:
 #
@@ -53,8 +55,8 @@ cd ${HADOOP_SRC_CODE_PATH}/hadoop-maven-plugins/ && mvn install
 #
 # Then, generate eclipse/idea project files.
 #
-#cd ${HADOOP_SRC_CODE_PATH}/ && mvn eclipse:eclipse -DskipTests
-cd ${HADOOP_SRC_CODE_PATH}/ && mvn idea:idea -DskipTests
+cd ${HADOOP_SRC_CODE_PATH}/ && mvn eclipse:eclipse -DskipTests
+#cd ${HADOOP_SRC_CODE_PATH}/ && mvn idea:idea -DskipTests
 #
 # At last, import to eclipse/idea by specifying the root directory of the project via
 # [File] > [Import] > [Existing Projects into Workspace].

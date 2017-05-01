@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 ./0.0.user.manual.settings.sh
 ./1.0.pre.src.requisites.sh
 ./1.1.switch.ali.maven.sh
