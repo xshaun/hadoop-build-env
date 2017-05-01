@@ -10,5 +10,5 @@ if [[ ! -f "${HADOOP_SRC_CODE_PATH}/hadoop-dist/target/hadoop-${HADOOP_VERSION}.
 fi
 
 if [[ 'PSEUDO_DIS_MODE' == ${HADOOP_CLUSTER_MODE} ]]; then
-    tar -zxvf ${HADOOP_SRC_CODE_PATH}/hadoop-dist/target/hadoop-${HADOOP_VERSION}.tar.gz -C ${HADOOP_CODE_LOCATION}
+    tar -zxv -C ${HADOOP_CODE_LOCATION} -f ${HADOOP_SRC_CODE_PATH}/hadoop-dist/target/hadoop-${HADOOP_VERSION}.tar.gz hadoop-${HADOOP_VERSION}/share/*
 fi
