@@ -4,7 +4,7 @@ source 0.*
 
 # Recommend trusty (14.04LTS)
 
-set -e
+#set -e
 
 # APT='apt-get'
 
@@ -26,16 +26,17 @@ apt-get -y install maven
 # * Native libraries
 apt-get -y install build-essential autoconf automake libtool cmake zlib1g-dev pkg-config libssl-dev
 # * ProtocolBuffer 2.5.0 (required)
-if [[ ! `apt-get -y install libprotobuf-dev=2.5.0-9ubuntu1 protobuf-compiler=2.5.0-9ubuntu1` ]]; then
-    curl -sSL 'https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz' | tar -C ~ -xzv
+apt-get -y install libprotobuf-dev=2.5.0-9ubuntu1 protobuf-compiler=2.5.0-9ubuntu1
+if [[ 0 != $? && ! -d '/opt/protobuf-2.5.0/' ]]; then
+    curl -sSL 'https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz' | tar -C /opt -xzv
 
-    cd ~/protobuf-2.5.0
+    cd /opt/protobuf-2.5.0
     ./autogen.sh  &&  ./configure --prefix=/usr
 
     make  &&  make install
     # protoc --version
 
-    cd ~/protobuf-2.5.0/java
+    cd /opt/protobuf-2.5.0/java
     mvn install
 fi
 
@@ -53,8 +54,10 @@ apt-get -y install fuse libfuse-dev
 # * ZStandard compression
 apt-get -y install zstd
 # * Findbugs (if running findbugs)
-curl -sSL 'https://jaist.dl.sourceforge.net/project/findbugs/findbugs/3.0.1/findbugs-noUpdateChecks-3.0.1.tar.gz' | tar -C '/opt' -xzv
-export FINDBUGS_HOME=/opt/findbugs-3.0.1
+if [[ ! -d '/opt/findbugs-3.0.1' ]]; then
+    curl -sSL 'https://jaist.dl.sourceforge.net/project/findbugs/findbugs/3.0.1/findbugs-noUpdateChecks-3.0.1.tar.gz' | tar -C '/opt' -xzv
+    export FINDBUGS_HOME=/opt/findbugs-3.0.1
+fi
 
 # ----------------------------
 # Fix issues / Reset
@@ -64,7 +67,8 @@ export FINDBUGS_HOME=/opt/findbugs-3.0.1
 #   -- echo 'export PDSH_RCMD_TYPE=ssh' >>  ~/.profile # add
 #   -- pdsh -w localhost -l root uptime # test
 FILE=~/.profile
-if [[ ! `grep 'export PDSH_RCMD_TYPE=' ${FILE} > /dev/null` ]]; then
+grep 'export PDSH_RCMD_TYPE=' ${FILE} > /dev/null
+if [[ 0 == $? ]]; then
     sed -i 's#.*export PDSH_RCMD_TYPE=.*#export PDSH_RCMD_TYPE=ssh#g' ${FILE}
 else
     echo 'export PDSH_RCMD_TYPE=ssh' >> ${FILE}
@@ -72,7 +76,8 @@ fi
 #
 # * set findbugs home
 FILE=~/.profile
-if [[ ! `grep 'export FINDBUGS_HOME=' ${FILE} > /dev/null` ]]; then
+grep 'export FINDBUGS_HOME=' ${FILE} > /dev/null
+if [[ 0 == $? ]]; then
     sed -i 's#.*export FINDBUGS_HOME=.*#export FINDBUGS_HOME=/opt/findbugs-3.0.1#g' ${FILE}
 else
     echo 'export FINDBUGS_HOME=/opt/findbugs-3.0.1' >> ${FILE}
