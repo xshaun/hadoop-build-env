@@ -32,7 +32,7 @@ run, benchmark, performance log are in cluster-PCs.
 
 1. setup `HADOOP_CLUSTER_MODE='FULLY_DIS_MODE'`
 2. setup `HADOOP_FDM_NODES`
-3. run start-all.sh
+3. run start-src.sh
 
 ```
 
