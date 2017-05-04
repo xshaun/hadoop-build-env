@@ -12,11 +12,12 @@ Users need to change/assign variables in `0.*.sh` script files, and run script b
 ```
 run, compile, benchmark and all actions are only in your dev-PC.
 
-    user ---> |__|
-
+           run|compile|bench|report
+    user ------> |__|
+                dev-pc
 
 1. setup `HADOOP_CLUSTER_MODE='PSEUDO_DIS_MODE'`
-2. run start-all.sh
+2. run install.sh run && install.sh src
 ```
 
 *FULLY_DIS_MODE*
@@ -25,14 +26,15 @@ run, compile, benchmark and all actions are only in your dev-PC.
 compile, view report are only in yout dev-PC.
 run, benchmark, performance log are in cluster-PCs.
 
-                                 |_|_|_|_|_|    
+                                  run|bench
+         compile|report          |_|_|_|_|_|    
     user ---> |__| ----------->  |_|_|_|_|_|
              dev-pc   deploy     |_|_|_|_|_|
                       *.jar     hadoop cluster     
 
 1. setup `HADOOP_CLUSTER_MODE='FULLY_DIS_MODE'`
 2. setup `HADOOP_FDM_NODES`
-3. run start-src.sh
+3. run install.sh src
 
 ```
 
