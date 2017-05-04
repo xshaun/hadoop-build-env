@@ -36,14 +36,17 @@ run, benchmark, performance log are in cluster-PCs.
 
 ```
 
-### Official Docs
+## Notes
+
+[Git & Bash](./NOTES-Git-Bash.md)
+
+[Compile](./NOTES-Compile.md)
+
+## References
 
 [Hadoop: BUILDING.txt](https://git-wip-us.apache.org/repos/asf?p=hadoop.git;a=blob;f=BUILDING.txt)
 
 [Hadoop: How To Contribute](https://wiki.apache.org/hadoop/HowToContribute)
 
-
-### Notes
-[Git & Bash](./NOTES-Git-Bash.md)
-
+[Book: Apache Hadoop YARN](http://yarn-book.com/)
 

@@ -2,80 +2,71 @@
 #
 source 0.*
 
-_XML_FILE_HEADER='<?xml version="1.0" encoding="UTF-8"?>'"\n"'<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>'
+set -e
+
+# Default XML
+cp ./default-xml/core-default.xml ${HADOOP_CODE_PATH}'/etc/hadoop/core-site.xml'
+cp ./default-xml/hdfs-default.xml ${HADOOP_CODE_PATH}'/etc/hadoop/hdfs-site.xml'
+cp ./default-xml/yarn-default.xml ${HADOOP_CODE_PATH}'/etc/hadoop/yarn-site.xml'
+cp ./default-xml/mapred-default.xml ${HADOOP_CODE_PATH}'/etc/hadoop/mapred-site.xml'
 
 # >> Pseudo-Distributed Operation <<
 #
 if [[ 'PSEUDO_DIS_MODE' == ${HADOOP_CLUSTER_MODE} ]]; then
 
-# * etc/hadoop/core-site.xml
-echo -e "\
-${_XML_FILE_HEADER}
-<configuration>
-    <property>
-        <name>fs.defaultFS</name>
-        <value>hdfs://localhost:9000</value>
-    </property>
-</configuration>
-" > ${HADOOP_CODE_PATH}'/etc/hadoop/core-site.xml'
+    # * etc/hadoop/core-site.xml
+    put_config_xml  \
+        --file ${HADOOP_CODE_PATH}'/etc/hadoop/core-site.xml'   \
+        --property 'fs.defaultFS'   \
+        --value 'hdfs://localhost:9000'
 
-# * etc/hadoop/hdfs-site.xml
-mkdir -p ${HADOOP_CODE_LOCATION}'/hadoop_mydata/hdfs/namenode'
-mkdir -p ${HADOOP_CODE_LOCATION}'/hadoop_mydata/hdfs/datanode'
+    # * etc/hadoop/hdfs-site.xml
+    mkdir -p ${HADOOP_CODE_LOCATION}'/hadoop_mydata/hdfs/namenode'
+    mkdir -p ${HADOOP_CODE_LOCATION}'/hadoop_mydata/hdfs/datanode'
 
-echo -e "\
-${_XML_FILE_HEADER}
-<configuration>
-    <property>
-        <name>dfs.replication</name>
-        <value>1</value>
-    </property>
-    <property>
-        <name>dfs.namenode.name.dir</name>
-        <value>file:${HADOOP_CODE_LOCATION}/hadoop_mydata/hdfs/namenode</value>
-    </property>
-    <property>
-        <name>dfs.datanode.data.dir</name>
-        <value>file:${HADOOP_CODE_LOCATION}/hadoop_mydata/hdfs/datanode</value>
-    </property>
-</configuration>
-" > ${HADOOP_CODE_PATH}'/etc/hadoop/hdfs-site.xml'
+    put_config_xml  \
+        --file ${HADOOP_CODE_PATH}'/etc/hadoop/hdfs-site.xml'   \
+        --property 'dfs.replication'   \
+        --value '1'
 
-# *Format the filesystem:
-${HADOOP_CODE_PATH}/bin/hdfs namenode -format -nonInteractive
+    put_config_xml  \
+        --file ${HADOOP_CODE_PATH}'/etc/hadoop/hdfs-site.xml'   \
+        --property 'dfs.namenode.name.dir'   \
+        --value "file:${HADOOP_CODE_LOCATION}/hadoop_mydata/hdfs/namenode"
 
-fi #<<IF END>> if [[ 'PSEUDO_DIS_MODE' == ${HADOOP_CLUSTER_MODE} ]]; then
+    put_config_xml  \
+        --file ${HADOOP_CODE_PATH}'/etc/hadoop/hdfs-site.xml'   \
+        --property 'dfs.datanode.data.dir'   \
+        --value "file:${HADOOP_CODE_LOCATION}/hadoop_mydata/hdfs/datanode"
+
+    # *Format the filesystem:
+    ${HADOOP_CODE_PATH}/bin/hdfs namenode -format -nonInteractive
 
 
-if [[ '3.0.0-alpha2' == ${HADOOP_VERSION} ]]; then
-# Enabling Opportunistic Containers
-#
-# * etc/hadoop/yarn-site.xml
-echo -e "\
-${_XML_FILE_HEADER}
-<configuration>
-    <property>
-        <name>yarn.resourcemanager.opportunistic-container-allocation.enabled</name>
-        <value>${HADOOP_OPPORTUNISTIC_CONTAINER_ENABLE}</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.opportunistic-containers-max-queue-length</name>
-        <value>20</value>
-    </property>
-" > ${HADOOP_CODE_PATH}'/etc/hadoop/yarn-site.xml'
-# Distributed scheduling
-#
-# * etc/hadoop/yarn-site.xml
-echo -e "\
-    <property>
-        <name>yarn.nodemanager.distributed-scheduling.enabled</name>
-        <value>${HADOOP_DISTRIBUTED_SCHEDULING_ENABLE}</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.amrmproxy.enabled</name>
-        <value>${HADOOP_DISTRIBUTED_SCHEDULING_ENABLE}</value>
-    </property>
-</configuration>
-" >> ${HADOOP_CODE_PATH}'/etc/hadoop/yarn-site.xml'
+    if [[ '3.0.0-alpha2' == ${HADOOP_VERSION} ]]; then
+        # Enabling Opportunistic Containers
+        #
+        put_config_xml  \
+            --file ${HADOOP_CODE_PATH}'/etc/hadoop/yarn-site.xml'   \
+            --property 'yarn.resourcemanager.opportunistic-container-allocation.enabled'   \
+            --value "${HADOOP_OPPORTUNISTIC_CONTAINER_ENABLE}"
 
-fi #<<IF END>> if [[ '3.0.0-alpha2' == ${HADOOP_VERSION} ]]; then
+        put_config_xml  \
+            --file ${HADOOP_CODE_PATH}'/etc/hadoop/yarn-site.xml'   \
+            --property 'yarn.nodemanager.opportunistic-containers-max-queue-length'   \
+            --value '20'
+
+        # Distributed scheduling
+        #
+        put_config_xml  \
+            --file ${HADOOP_CODE_PATH}'/etc/hadoop/yarn-site.xml'   \
+            --property 'yarn.nodemanager.distributed-scheduling.enabled'   \
+            --value "${HADOOP_DISTRIBUTED_SCHEDULING_ENABLE}"
+
+        put_config_xml  \
+            --file ${HADOOP_CODE_PATH}'/etc/hadoop/yarn-site.xml'   \
+            --property 'yarn.nodemanager.amrmproxy.enabled'   \
+            --value "${HADOOP_DISTRIBUTED_SCHEDULING_ENABLE}"
+    fi
+
+fi
