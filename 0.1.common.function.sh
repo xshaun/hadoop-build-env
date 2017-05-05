@@ -202,11 +202,13 @@ END
     format_file ${file}
 }
 
+# Usage:
+#   format_file <file.xml>
 #
 format_file()
 {
     local file=${1}
-    xmllint --format ${file} > ${file}'tmp' && mv ${file}'tmp' ${file}
+    xmllint --format ${file} --output ${file}
 }
 
 # ---------------------
