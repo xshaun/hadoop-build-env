@@ -62,11 +62,11 @@ fi
 # * pdsh set rsh to connect default,
 #       reset ssh and reconnect terminal
 #   -- pdsh -w localhost -l root uptime # test
-put_config_line --filename '~/.profile' --property 'PDSH_RCMD_TYPE' --value 'ssh' --prefix 'export'
+put_config_line --file ~/.profile --property 'PDSH_RCMD_TYPE' --value 'ssh' --prefix 'export'
 
 #
 # * set findbugs home
-put_config_line --filename '~/.profile' --property 'FINDBUGS_HOME' --value '/opt/findbugs-3.0.1' --prefix 'export'
+put_config_line --file ~/.profile --property 'FINDBUGS_HOME' --value '/opt/findbugs-3.0.1' --prefix 'export'
 
 # ----------------------------
 # Clean and Upgrade libs:
