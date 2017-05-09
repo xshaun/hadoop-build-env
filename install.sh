@@ -31,6 +31,12 @@ cmdlog()
     echo "$(date +%Y-%m-%d:%H:%M:%S) Executing : ${1}" | tee -a ${stdout} ${stderr}
     /bin/bash ./${1} 1>>${stdout} 2>>${stderr}
     echo "$(date +%Y-%m-%d:%H:%M:%S) Executed : ${1}" | tee -a ${stdout} ${stderr}
+
+    # Successful Completion
+    if [[ ${2} == 'final' ]]; then
+        rm -f ${progress}
+        echo "$(date +%Y-%m-%d:%H:%M:%S) SUCCESSFUL COMPLETION"
+    fi
 }
 
 # Run:
@@ -45,7 +51,7 @@ if [[ ${1} == 'run' ]]; then
     cmdlog 2.0.run.download.code.sh
     cmdlog 2.1.run.conf.requisites.sh
     cmdlog 2.2.run.auxconf.default.xml.sh
-    cmdlog 2.3.run.auxconf.mapred.xml.sh
+    cmdlog 2.3.run.auxconf.mapred.xml.sh 'final'
 
     exit 0
 fi
@@ -60,7 +66,7 @@ if [[ ${1} == 'src' ]]; then
 
     cmdlog 3.0.src.download.code.sh
     cmdlog 3.1.src.compile.code.sh
-    cmdlog 3.2.src.deploy.code.sh
+    cmdlog 3.2.src.deploy.code.sh 'final'
 
     exit 0
 fi
@@ -78,7 +84,7 @@ if [[ ${1} == 'all' ]]; then
 
     cmdlog 3.0.src.download.code.sh
     cmdlog 3.1.src.compile.code.sh
-    cmdlog 3.2.src.deploy.code.sh
+    cmdlog 3.2.src.deploy.code.sh 'final'
 
     exit 0
 fi

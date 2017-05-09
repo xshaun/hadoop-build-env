@@ -40,7 +40,7 @@ if [[ 'PSEUDO_DIS_MODE' == ${HADOOP_CLUSTER_MODE} ]]; then
         --value "file:${HADOOP_CODE_LOCATION}/hadoop_mydata/hdfs/datanode"
 
     # *Format the filesystem:
-    ${HADOOP_CODE_PATH}/bin/hdfs namenode -format -nonInteractive
+    ${HADOOP_CODE_PATH}/bin/hdfs namenode -format -force
 
 
     if [[ '3.0.0-alpha2' == ${HADOOP_VERSION} ]]; then
