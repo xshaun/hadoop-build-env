@@ -25,7 +25,7 @@ apt-get -y install maven
 apt-get -y install build-essential autoconf automake libtool cmake zlib1g-dev pkg-config libssl-dev
 # * ProtocolBuffer 2.5.0 (required)
 apt-get -y install libprotobuf-dev=2.5.0-9ubuntu1 protobuf-compiler=2.5.0-9ubuntu1
-if [[ 0 != $? && ! -d '/opt/protobuf-2.5.0/' ]]; then
+if [[ 0 != $? ]]; then
     curl -sSL 'https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz' | tar -C /opt -xzv
 
     cd /opt/protobuf-2.5.0

@@ -13,7 +13,7 @@ fi
 if [[ ! -f ~/.ssh/authorized_keys ]]; then
     touch ~/.ssh/authorized_keys
 fi
-grep "`cat ~/.ssh/id_rsa.pub`" ~/.ssh/authorized_keys > /dev/null
+grep "`cat ~/.ssh/id_rsa.pub`" ~/.ssh/authorized_keys
 if [[ 0 != $? ]]; then
     cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 fi
