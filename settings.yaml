@@ -1,0 +1,26 @@
+# 
+
+mode: pseudo-dis # pseudo-dis, fully-dis
+
+codepath: 't'
+
+roles:
+  'rm': # reource manager
+    - 'host1' # first hostname
+    - 'host2' # second hostname
+  'nms': # node managers
+    - 'nm1' 
+    - 'nm2'
+
+steps:
+  - 'pre_compile_env'      # prerequisites while compiling hadoop
+  - 'pre-run-env'          # prerequisites while running hadoop
+  - 'code-clean-folder'    # remove all files under codepath folder
+  - 'code-download-bin'    # download binary code into codepath
+  - 'code-download-src'    # download source code into codepath
+  - 'code-clean-bin'       # mvn clean compiled temporary files
+  - 'code-compile'         # compile source code under codepath
+  - 'deployment'           # deploy all roles
+  - 'startup'              # start hadoop
+  - 'launch-examples'      # run some examples for testing
+  - 'shutdown'             # stop hadoop
