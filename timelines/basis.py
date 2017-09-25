@@ -56,9 +56,8 @@ class Commands(object):
         echo = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=True)
         sudo = subprocess.Popen(['sudo', arg], 
             stdin=echo.stdout, stdout=subprocess.PIPE, 
-            shell=True, cwd='../')
-        end_of_pipe = sudo.stdout
-        print(end_of_pipe.read())
-        print(sudo)
+            shell=True, cwd='./utility/')
+        sudo.wait()
+        return sudo.returncode
         
 

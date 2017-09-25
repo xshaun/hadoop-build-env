@@ -7,9 +7,9 @@ class CustomEvent(BasisEvent):
     
     #override   
     def action(ys):
-        debian_arg = '/bin/bash ./t.pre_runtime_env.sh'
+        debian_shell = 't.pre_runtime_env.sh'
 
-        res = cmd.sudo(debian_arg, 'xboy')
+        res = cmd.sudo(debian_shell, 'xboy')
         if res != 0:
             return False
         return True
