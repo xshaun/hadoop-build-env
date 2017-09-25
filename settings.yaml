@@ -17,14 +17,14 @@ roles:
     - 'nm2'
 
 timelines:
-  - 'pre_compile_env'      # prerequisites while compiling hadoop
+#  - 'pre_compile_env'      # prerequisites while compiling hadoop
   - 'pre_runtime_env'      # prerequisites while running hadoop
-  - 'code_clean_folder'    # remove all files under codepath folder
-  - 'code_download_bin'    # download binary code into codepath
-  - 'code_download_src'    # download source code into codepath
-  - 'code_clean_bin'       # mvn clean compiled temporary files
-  - 'code_compile'         # compile source code under codepath
-  - 'deployment'           # deploy all roles
-  - 'startup'              # start hadoop
-  - 'launch_examples'      # run some examples for testing
-  - 'shutdown'             # stop hadoop
+#  - 'code_clean_folder'    # remove all files under codepath folder
+#  - 'code_download_bin'    # download binary code into codepath
+#  - 'code_download_src'    # download source code into codepath
+#  - 'code_clean_bin'       # mvn clean compiled temporary files
+#  - 'code_compile'         # compile source code under codepath
+#  - 'deployment'           # deploy all roles
+#  - 'startup'              # start hadoop
+#  - 'launch_examples'      # run some examples for testing
+#  - 'shutdown'             # stop hadoop

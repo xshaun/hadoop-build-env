@@ -38,7 +38,7 @@ class CustomEvent(BasisEvent):
         arg = _debian_system_scripts
 
         res = cmd.sudo(arg, 'xboy')
-        if res != 0 
+        if res != 0:
             return False
         return True
 
