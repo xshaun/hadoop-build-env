@@ -1,7 +1,6 @@
 #!/usr/bin/env python3 -B
 
-import time
-import subprocess
+import time, subprocess
 
 class BasisEvent(object):
     """
@@ -17,14 +16,15 @@ class BasisEvent(object):
 
     def action(self):
         """ must be override, must return True or False """
-        return False
+        return True
 
     def finite(self):
         """ try to run several times despite failed """
         for x in range(self.attempts):
             if self.action():
-                break
+                return True
             time.sleep(self.interval) 
+        return False
 
     def loop(self):
         """ try to run until succeed """
@@ -37,7 +37,7 @@ class BasisEvent(object):
         self.attempts = 1
         return self.finite()
 
-    def run(self, attempts=5, interval=5):
+    def occur(self, attempts=5, interval=5):
         """ default runtime as finite method with 5 attempts"""
         self.interval = interval
         if attempts <= 0 :
@@ -54,7 +54,7 @@ class Commands(object):
     @staticmethod
     def sudo(arg, pwd):
         echo = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE)
-        sudo = subprocess.Popen(arg, stdin=echo.stdout, stdout=subprocess.PIPE)
+        sudo = subprocess.Popen(['sudo su', arg, 'exit'], stdin=echo.stdout, stdout=subprocess.PIPE)
         end_of_pipe = sudo.stdout
         print(end_of_pipe.read())
         print(sudo)

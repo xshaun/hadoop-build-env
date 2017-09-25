@@ -3,10 +3,10 @@
 from timelines.basis import BasisEvent
 from timelines.basis import Commands as cmd
 
-_debian_system_scripts = """ # SHELL SCRIPTS
+_debian_system_scripts = """
+# SHELL SCRIPTS
 # ----------------------------
 # Recommend trusty (14.04LTS)
-sudo su
 
 # ----------------------------
 # Installing required packages
@@ -28,7 +28,6 @@ apt-get -y upgrade
 apt-get -y autoremove
 apt-get -y autoclean
 
-exit
 """
 
 class CustomEvent(BasisEvent):
@@ -37,12 +36,12 @@ class CustomEvent(BasisEvent):
     def action(ys):
         arg = _debian_system_scripts
 
-        res = cmd.sudo(arg, 'xboy')
+        res = cmd.do(arg)
         if res != 0:
             return False
         return True
 
 def pre_runtime_env(ys):
-    return CustomEvent(ys).run(3, 3)
+    return CustomEvent(ys).occur(attempts=3, interval=3)
 
 
