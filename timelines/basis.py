@@ -54,7 +54,7 @@ class Commands(object):
     @staticmethod
     def sudo(arg, pwd):
         echo = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE)
-        sudo = subprocess.Popen(['sudo su', arg, 'exit'], stdin=echo.stdout, stdout=subprocess.PIPE)
+        sudo = subprocess.Popen(['sudo', arg], stdin=echo.stdout, stdout=subprocess.PIPE)
         end_of_pipe = sudo.stdout
         print(end_of_pipe.read())
         print(sudo)

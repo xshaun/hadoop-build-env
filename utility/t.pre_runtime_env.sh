@@ -1,7 +1,5 @@
 #!/bin/bash
 #
-source 0.*
-
 # Recommend trusty (14.04LTS)
 
 # APT='apt-get'
