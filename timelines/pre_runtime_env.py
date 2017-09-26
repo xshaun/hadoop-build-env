@@ -7,9 +7,11 @@ class CustomEvent(BasisEvent):
 
     #override
     def action(ys):
-        debian_shell = './t.pre_runtime_env.sh'
+        logger.info('--> timelines.pre_runtime_env <--')
 
-        res = cmd.sudo(debian_shell, 'xboy')
+        debian_shell = 't.pre_runtime_env.sh'
+
+        res = cmd.sudo(debian_shell, ys['ag_pwd'])
         if res != 0:
             return False
         return True

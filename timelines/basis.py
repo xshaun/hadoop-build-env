@@ -67,20 +67,27 @@ class BasisEvent(object):
 class Commands(object):
     @staticmethod
     def do(arg):
-        return subprocess.call(arg, shell=True)
+        logger.info('commands.do: ' + arg)
+
+        retcode = subprocess.call(arg, shell=True)
+        
+        logger.info('commands.do.returncode: ' + retcode)
+        return retcode
 
     @staticmethod
     def sudo(arg, pwd):
+        logger.info('commands.sudo: ' + arg)
+
         echo = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
-        #logger.info('echo:' + str(echo.stdout.read()))
         sudo = subprocess.Popen(['sudo','-S', '/bin/sh', '-c', arg],
             stdin=echo.stdout, stdout=subprocess.PIPE,
             shell=False, cwd='./utility/')
         sudo.wait()
-        #logger.info('returncode:' + str(sudo.returncode))
-        logger.info('sudo.stdout:')
+
+        logger.info('commands.sudo.stdout: ')
         for line in str(sudo.stdout.read()).split('\\n'):
             logger.info(line)
-        logger.info(sudo.returncode)
+        logger.info('commands.sudo.returncode: ' + sudo.returncode)
+
         return sudo.returncode
 

@@ -6,11 +6,13 @@ mode: 'pseudo_dis' # ['pseudo_dis' | 'fully_dis']
 codepath: '/rose_on_hadoop/'
 
 roles:
-  'ag': 'localhost' # admin gateway
+  'ag': 'localhost' # admin gateway. must
+  'ag_pwd': 'xboy'
 
   'rm': # reource manager
     - 'host1' # first hostname
     - 'host2' # second hostname
+  'rm_pwd': 123456
 
   'nms': # node managers
     - 'nm1' 

@@ -3,16 +3,18 @@
 from timelines.basis import BasisEvent
 from timelines.basis import Commands as cmd
 
-
 class CustomEvent(BasisEvent):
     
-    #override   
+    #override
     def action(ys):
-        # res = cmd.shell('ls ./pre.runtime')
-        # print(res)
-        # print(b)
+        logger.info('--> timelines.pre_compile_env <--')
 
+        debian_shell = 't.pre_compile_env.sh'
+
+        res = cmd.sudo(debian_shell, ys['ag_pwd'])
+        if res != 0:
+            return False
         return True
 
 def pre_compile_env(ys):
-    CustomEvent(ys).run()
+    return CustomEvent(ys).occur(attempts=3, interval=3)
