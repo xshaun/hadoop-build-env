@@ -8,14 +8,19 @@ class CustomEvent(BasisEvent):
 
     #override
     def action(self):
-        logger.info('--> timelines.pre_compile_env <--')
+        logger.info('--> timelines.ag.compile_prerequisites <--')
 
-        debian_shell = '/bin/sh -c ./t.pre_compile_env.sh'
+        debian_shell = '/bin/sh -c ./utility/t.switch_ali_maven.sh'
+        res = cmd.do(debian_shell)
+        if res != 0:
+            return False
 
+        debian_shell = '/bin/sh -c ./utility/t.pre_compile_env.sh'
         res = cmd.sudo(debian_shell, self.ys['pwds']['ag'])
         if res != 0:
             return False
+
         return True
 
-def pre_compile_env(ys):
+def compile_prerequisites(ys):
     return CustomEvent(ys).occur(attempts=3, interval=3)

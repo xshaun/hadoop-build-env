@@ -7,8 +7,8 @@ import time, subprocess, logging, logging.config
 #---------------------------------------------------------------------------
 
 #
-#_logging_config is used to configue logging
-#_logging_logger is used to get a logger
+# _logging_config is used to configue logging
+# _logging_logger is used to get a logger
 #
 _logging_config = './config/logging.config'
 _logging_logger = 'develop'
@@ -69,7 +69,7 @@ class Commands(object):
     def do(arg):
         logger.info('commands.do: ' + arg)
 
-        retcode = subprocess.call(arg, shell=True)
+        retcode = subprocess.call(arg, shell=True, cwd='./')
 
         logger.info('commands.do.returncode: ' + retcode)
         return retcode
@@ -80,8 +80,7 @@ class Commands(object):
 
         echo = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
         sudo = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
-            stdin=echo.stdout, stdout=subprocess.PIPE,
-            shell=False, cwd='./utility/')
+            stdin=echo.stdout, stdout=subprocess.PIPE, shell=False, cwd='./')
         sudo.wait()
 
         stdout = str(sudo.stdout.read()).replace('\\n','\n')

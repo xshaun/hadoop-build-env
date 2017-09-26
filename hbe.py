@@ -94,7 +94,7 @@ def main():
     try:
         for event in ys['timelines']:
             obj = __import__("timelines.%s" % (event), fromlist=True)
-            func = getattr(obj, event)
+            func = getattr(obj, event.split('.')[-1]) # function name
             if not func(ys):
                 raise Exception("errors occurs in timelines.%s" % (event))
     except Exception as e:

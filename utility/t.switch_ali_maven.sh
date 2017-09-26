@@ -1,7 +1,5 @@
 #!/bin/bash
 #
-source 0.*
-
 set -e
 
 # Add Maven Settings to {user home}/.m2/settings.xml

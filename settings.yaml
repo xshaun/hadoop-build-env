@@ -1,32 +1,45 @@
 # 
 
----
 mode: 'pseudo_dis' # ['pseudo_dis' | 'fully_dis']
 
-codepath: '/rose_on_hadoop/'
+codepath: '/rose_on_hadoop/' # absolute path 
 
+#
+# ag: admin gateway.
+# rm: reource manager
+# nms: node managers
+#
 roles:
-  'ag': 'localhost' # admin gateway. must
+  'ag': 
+    'host': localhost' #  must
+    'pwd': 'xboy'
 
-  'rm': # reource manager
-    - 'localhost' # first hostname
-    - 'localhost' # second hostname
+  'rm':
+    'hosts':
+      - 'localhost' # first hostname
+      - 'localhost' # second hostname
+    'pwd': 'xboy'
 
-  'nms': # node managers
-    - 'localhost' 
-    - 'localhost'
+  'nms':
+    'hosts':
+      - 'localhost' 
+      - 'localhost'
+    'pwd': 'xboy'
 
-pwds:
-  'ag': 'xboy'
-
+#
+# Naming Rules: R.?.F
+#   R -> one role, the script runs in R.
+#   ? -> custom notes.
+#   F -> (must be)function name. 
+#
 timelines:
-    #  - 'pre_compile_env'      # prerequisites while compiling hadoop
-  - 'pre_runtime_env'      # prerequisites while running hadoop
-#  - 'code_clean_folder'    # remove all files under codepath folder
-#  - 'code_download_bin'    # download binary code into codepath
-#  - 'code_download_src'    # download source code into codepath
-#  - 'code_clean_bin'       # mvn clean compiled temporary files
-#  - 'code_compile'         # compile source code under codepath
+  - 'ag.compile_prerequisites'    # install prerequisites used to compile hadoop
+  - 'ag.clear_codepath'           # remove all files under codepath folder
+  - 'ag.download_bin_code'        # download binary code into codepath
+  - 'ag.download_src_code'        # download source code into codepath
+  - 'ag.compile_src_code'         # compile source code under codepath folder
+  
+#  - 'pre_runtime_env'      # prerequisites while running hadoop
 #  - 'deployment'           # deploy all roles
 #  - 'startup'              # start hadoop
 #  - 'launch_examples'      # run some examples for testing
