@@ -7,19 +7,20 @@ codepath: '/rose_on_hadoop/'
 
 roles:
   'ag': 'localhost' # admin gateway. must
-  'ag_pwd': 'xboy'
 
   'rm': # reource manager
     - 'host1' # first hostname
     - 'host2' # second hostname
-  'rm_pwd': 123456
 
   'nms': # node managers
     - 'nm1' 
     - 'nm2'
 
+pwds:
+  'ag': 'xboy'
+
 timelines:
-#  - 'pre_compile_env'      # prerequisites while compiling hadoop
+    #  - 'pre_compile_env'      # prerequisites while compiling hadoop
   - 'pre_runtime_env'      # prerequisites while running hadoop
 #  - 'code_clean_folder'    # remove all files under codepath folder
 #  - 'code_download_bin'    # download binary code into codepath

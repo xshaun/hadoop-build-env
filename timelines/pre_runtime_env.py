@@ -2,16 +2,17 @@
 
 from timelines.basis import BasisEvent
 from timelines.basis import Commands as cmd
+from timelines.basis import logger
 
 class CustomEvent(BasisEvent):
 
     #override
-    def action(ys):
+    def action(self):
         logger.info('--> timelines.pre_runtime_env <--')
 
         debian_shell = 't.pre_runtime_env.sh'
 
-        res = cmd.sudo(debian_shell, ys['ag_pwd'])
+        res = cmd.sudo(debian_shell, self.ys['pwds']['ag'])
         if res != 0:
             return False
         return True

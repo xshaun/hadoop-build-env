@@ -70,7 +70,7 @@ class Commands(object):
         logger.info('commands.do: ' + arg)
 
         retcode = subprocess.call(arg, shell=True)
-        
+
         logger.info('commands.do.returncode: ' + retcode)
         return retcode
 
@@ -79,15 +79,15 @@ class Commands(object):
         logger.info('commands.sudo: ' + arg)
 
         echo = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
-        sudo = subprocess.Popen(['sudo','-S', '/bin/sh', '-c', arg],
+        #sudo = subprocess.Popen(['sudo', '-S', 'ls', '/'],
+        sudo = subprocess.Popen(['sudo', '-S', '/bin/sh', '-c', './', arg],
             stdin=echo.stdout, stdout=subprocess.PIPE,
             shell=False, cwd='./utility/')
         sudo.wait()
 
-        logger.info('commands.sudo.stdout: ')
-        for line in str(sudo.stdout.read()).split('\\n'):
-            logger.info(line)
-        logger.info('commands.sudo.returncode: ' + sudo.returncode)
+        logger.info('commands.sudo.stdout: \n')
+        logger.info(str(sudo.stdout.read()).replace('\\n','\n'))
+        logger.info('commands.sudo.returncode: ' + str(sudo.returncode))
 
         return sudo.returncode
 
