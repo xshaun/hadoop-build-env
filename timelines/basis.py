@@ -1,6 +1,24 @@
 #!/usr/bin/env python3 -B
 
-import time, subprocess
+import time, subprocess, logging, logging.config
+
+#---------------------------------------------------------------------------
+#   Definitions
+#---------------------------------------------------------------------------
+
+#
+#_logging_config is used to configue logging
+#_logging_logger is used to get a logger
+#
+_logging_config = './config/logging.config'
+_logging_logger = 'develop'
+
+#---------------------------------------------------------------------------
+#   Core Logic
+#---------------------------------------------------------------------------
+
+logging.config.fileConfig(_logging_config)
+logger = logging.getLogger(_logging_logger)
 
 class BasisEvent(object):
     """
@@ -54,15 +72,15 @@ class Commands(object):
     @staticmethod
     def sudo(arg, pwd):
         echo = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
-        #print('echo:' + str(echo.stdout.read()))
+        #logger.info('echo:' + str(echo.stdout.read()))
         sudo = subprocess.Popen(['sudo','-S', '/bin/sh', '-c', arg],
             stdin=echo.stdout, stdout=subprocess.PIPE,
             shell=False, cwd='./utility/')
         sudo.wait()
-        #print('returncode:' + str(sudo.returncode))
-        print('sudo.stdout:')
-
-        map(print, [i for i in str(sudo.stdout.read()).split('\\n')])
-        print(sudo.returncode)
+        #logger.info('returncode:' + str(sudo.returncode))
+        logger.info('sudo.stdout:')
+        for line in str(sudo.stdout.read()).split('\\n'):
+            logger.info(line)
+        logger.info(sudo.returncode)
         return sudo.returncode
 
