@@ -9,12 +9,12 @@ roles:
   'ag': 'localhost' # admin gateway. must
 
   'rm': # reource manager
-    - 'host1' # first hostname
-    - 'host2' # second hostname
+    - 'localhost' # first hostname
+    - 'localhost' # second hostname
 
   'nms': # node managers
-    - 'nm1' 
-    - 'nm2'
+    - 'localhost' 
+    - 'localhost'
 
 pwds:
   'ag': 'xboy'

@@ -10,7 +10,7 @@ class CustomEvent(BasisEvent):
     def action(self):
         logger.info('--> timelines.pre_compile_env <--')
 
-        debian_shell = 't.pre_compile_env.sh'
+        debian_shell = '/bin/sh -c ./t.pre_compile_env.sh'
 
         res = cmd.sudo(debian_shell, self.ys['pwds']['ag'])
         if res != 0:
