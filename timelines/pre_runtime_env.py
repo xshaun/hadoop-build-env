@@ -4,10 +4,10 @@ from timelines.basis import BasisEvent
 from timelines.basis import Commands as cmd
 
 class CustomEvent(BasisEvent):
-    
-    #override   
+
+    #override
     def action(ys):
-        debian_shell = 't.pre_runtime_env.sh'
+        debian_shell = './t.pre_runtime_env.sh'
 
         res = cmd.sudo(debian_shell, 'xboy')
         if res != 0:

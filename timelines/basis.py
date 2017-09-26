@@ -23,13 +23,13 @@ class BasisEvent(object):
         for x in range(self.attempts):
             if self.action():
                 return True
-            time.sleep(self.interval) 
+            time.sleep(self.interval)
         return False
 
     def loop(self):
         """ try to run until succeed """
         while not self.action():
-            time.sleep(self.interval) 
+            time.sleep(self.interval)
         return True
 
     def once(self):
@@ -48,16 +48,21 @@ class BasisEvent(object):
 
 class Commands(object):
     @staticmethod
-    def do(arg): 
+    def do(arg):
         return subprocess.call(arg, shell=True)
 
     @staticmethod
     def sudo(arg, pwd):
-        echo = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=True)
-        sudo = subprocess.Popen(['sudo', arg], 
-            stdin=echo.stdout, stdout=subprocess.PIPE, 
-            shell=True, cwd='./utility/')
+        echo = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
+        #print('echo:' + str(echo.stdout.read()))
+        sudo = subprocess.Popen(['sudo','-S', '/bin/sh', '-c', arg],
+            stdin=echo.stdout, stdout=subprocess.PIPE,
+            shell=False, cwd='./utility/')
         sudo.wait()
+        #print('returncode:' + str(sudo.returncode))
+        print('sudo.stdout:')
+
+        map(print, [i for i in str(sudo.stdout.read()).split('\\n')])
+        print(sudo.returncode)
         return sudo.returncode
-        
 
