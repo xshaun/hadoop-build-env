@@ -53,11 +53,10 @@ logger = logging.getLogger(__logging_logger)
 
 
 def __parse_settings(abspath_filename):
-    if not os.path.isfile(abspath_filename):
-        logger.error('not found the setting file.')
-        return None
-
     try:
+        if not os.path.isfile(abspath_filename):
+            raise Exception('not found the setting file.')
+    
         file = open(abspath_filename)
         ys = yaml.load(file)  # setting file with yaml format
 
@@ -70,33 +69,32 @@ def __parse_settings(abspath_filename):
         # checker
         for item in ('mode', 'codepath', 'roles', 'timelines'):
             if item not in ys:
-                logger.error("not found field '%s' in setting file." % (item))
-                return None
+                raise Exception("not found field '%s' in setting file." % (item))
 
         # checker
         if ys['mode'] not in ('pseudo_dis', 'fully_dis'):
-            logger.error("ys['mode'] has an illegal value in setting file.")
-            return None
+            raise Exception("ys['mode'] has an illegal value in setting file.")
 
         # checker
         if ys['mode'] is 'pseudo_dis' and (
             len(ys['roles']['rm']['hosts']) != 1 or ys['roles']['rm'] is not ys['roles']['nm']):
-            logger.error(
+            raise Exception(
                 'rm and nms must only have one, and same value under pseudo_dis mode in setting file.')
-            return None
 
         return ys
 
     except Exception as e:
-        logger.error('catched exceptions while loading setting file.')
+        logger.error("catched exceptions while loading setting file: %s" % (str(e)))
 
     return None
 
 
 def main():
-    try:
-        ys = __parse_settings(os.path.abspath(__settings_file))
+    ys = __parse_settings(os.path.abspath(__settings_file))
+    if ys is None:
+        return 0
 
+    try:
         for event in ys['timelines']:
             obj = __import__("timelines.%s" % (event), fromlist=True)
             func = getattr(obj, event.split('.')[-1])  # function name
