@@ -3,11 +3,13 @@
 from timelines.basis import BasisEvent
 from timelines.basis import Commands as cmd
 from timelines.basis import logger
-import os, shutil
+import os
+import shutil
+
 
 class CustomEvent(BasisEvent):
 
-    #override
+    # override
     def action(self):
         logger.info('--> timelines.ag.clear_codepath <--')
 
@@ -17,21 +19,23 @@ class CustomEvent(BasisEvent):
             os.makedirs(codefolder)
 
         if not os.path.isdir(codefolder):
-            logger.error('\'codepath\' does not indicate a folder in setting file.')
+            logger.error(
+                '\'codepath\' does not indicate a folder in setting file.')
             return False
 
-        for item in os.listdir(codefolder):  
+        for item in os.listdir(codefolder):
             itemsrc = os.path.join(codefolder, item)
             if os.path.isdir(itemsrc):
                 shutil.rmtree(itemsrc)
             else:
                 os.remove(itemsrc)
 
-        if len(os.listdir(codefolder)) > 0 :
+        if len(os.listdir(codefolder)) > 0:
             logger.error('failed to clear \'codepath\' shown in setting file.')
             return False
 
         return True
+
 
 def clear_codepath(ys):
     return CustomEvent(ys).occur(attempts=3, interval=3)

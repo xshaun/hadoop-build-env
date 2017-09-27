@@ -14,9 +14,10 @@ import os
 #
 _version = '3.0.0-alpha4'
 
+
 class CustomEvent(BasisEvent):
 
-    #override
+    # override
     def action(self):
         logger.info('--> timelines.ag.download_src_code <--')
 
@@ -26,19 +27,23 @@ class CustomEvent(BasisEvent):
             os.makedirs(codefolder)
 
         if not os.path.isdir(codefolder):
-            logger.error('\'codepath\' does not indicate a folder in setting file.')
+            logger.error(
+                '\'codepath\' does not indicate a folder in setting file.')
             return False
 
-        linkaddress = "http://www-eu.apache.org/dist/hadoop/common/hadoop-{0}/hadoop-{0}-src.tar.gz".format(_version)
-        download = "curl -sSL {0} | tar -C {1} -xzv".format(linkaddress, codefolder)
-        movedir = "mv {0}/* {1} && rmdir {0} ".format(
-            os.path.join(codefolder, "hadoop-%s-src" % (_version)), codefolder)
+        linkaddress = "http://www-eu.apache.org/dist/hadoop/common/hadoop-{0}/hadoop-{0}-src.tar.gz".format(
+            _version)
+        download = "curl -sSL {0} | tar -C {1} -xzv".format(
+            linkaddress, codefolder)
+        movedir = "mv {0}/* {1} && rmdir {0} ".format(os.path.join(
+            codefolder, "hadoop-%s-src" % (_version)), codefolder)
 
         retcode = cmd.do("%s && %s" % (download, movedir))
         if retcode != 0:
             return False
 
         return True
+
 
 def download_src_code(ys):
     return CustomEvent(ys).occur(attempts=3, interval=3)

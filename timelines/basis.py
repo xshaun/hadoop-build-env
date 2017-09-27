@@ -1,6 +1,10 @@
 #!/usr/bin/env python3 -B
 
-import sys, time, subprocess, logging, logging.config
+import sys
+import time
+import subprocess
+import logging
+import logging.config
 
 #---------------------------------------------------------------------------
 #   Definitions
@@ -20,6 +24,7 @@ _logging_logger = 'develop'
 logging.config.fileConfig(_logging_config)
 logger = logging.getLogger(_logging_logger)
 
+
 class BasisEvent(object):
     """
     @attributes:
@@ -27,10 +32,11 @@ class BasisEvent(object):
      attempts:  times trying to do
      interval:  pause time while failed to run
     """
+
     def __init__(self, ys):
         self.ys = ys
         self.attempts = 0
-        self.interval = 0 # seconds
+        self.interval = 0  # seconds
 
     def action(self):
         """ must be override, must return True or False """
@@ -58,26 +64,27 @@ class BasisEvent(object):
     def occur(self, attempts=5, interval=5):
         """ default runtime as finite method with 5 attempts"""
         self.interval = interval
-        if attempts <= 0 :
+        if attempts <= 0:
             return self.loop()
         else:
             self.attempts = attempts
             return self.finite()
 
+
 class Commands(object):
-    
+
     @staticmethod
     def do(arg):
         logger.info('commands.do: ' + arg)
-        
+
         # @TODO
         # redirect stdout to logger
         sys.stdout
 
-        process = subprocess.Popen(arg, 
-            stdout=sys.stdout, stderr=sys.stdout, 
-            shell=True, cwd='./')
-        
+        process = subprocess.Popen(arg,
+                                   stdout=sys.stdout, stderr=sys.stdout,
+                                   shell=True, cwd='./')
+
         process.wait()
         # process_output, = process.communicate()
         # logger.info("commands.do.stdout: \n %s" % (process_output))
@@ -94,12 +101,12 @@ class Commands(object):
         # redirect stdout to logger
         sys.stdout
 
-        echopwd = subprocess.Popen(['echo', pwd], 
-            stdout=subprocess.PIPE, shell=True)
+        echopwd = subprocess.Popen(['echo', pwd],
+                                   stdout=subprocess.PIPE, shell=True)
         process = subprocess.Popen(arg,
-            stdin=echopwd.stdout, stdout=sys.stdout, stderr=sys.stdout, 
-            shell=True, cwd='./')
-        
+                                   stdin=echopwd.stdout, stdout=sys.stdout, stderr=sys.stdout,
+                                   shell=True, cwd='./')
+
         echopwd.stdout.close()
         process.wait()
         # process_output, = process.communicate()
@@ -108,5 +115,3 @@ class Commands(object):
         retcode = process.returncode
         logger.info("commands.do.returncode: %d" % (retcode))
         return retcode
-
-

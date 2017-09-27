@@ -22,7 +22,10 @@ Copyright (C) 2017 xiaoyang.xshaun. All Rights Reserved.
 To use, simply 'python3 -B ./hbe.py'
 """
 
-import os, yaml, logging, logging.config
+import os
+import yaml
+import logging
+import logging.config
 
 #---------------------------------------------------------------------------
 #   Definitions
@@ -36,7 +39,7 @@ __logging_config = './config/logging.config'
 __logging_logger = 'develop'
 
 #
-#__settings_file indicates where is 
+#__settings_file indicates where is
 #
 __settings_file = './settings.yaml'
 
@@ -48,6 +51,7 @@ __settings_file = './settings.yaml'
 logging.config.fileConfig(__logging_config)
 logger = logging.getLogger(__logging_logger)
 
+
 def __parse_settings(abspath_filename):
     if not os.path.isfile(abspath_filename):
         logger.error('not found the setting file.')
@@ -55,54 +59,56 @@ def __parse_settings(abspath_filename):
 
     try:
         file = open(abspath_filename)
-        ys = yaml.load(file) # setting file with yaml format
+        ys = yaml.load(file)  # setting file with yaml format
 
         """
         @annotation:
             to detect necessary fields within setting file.
             to judge whether each field value is legal.
         """
-        
+
         # checker
         for item in ('mode', 'codepath', 'roles', 'timelines'):
             if item not in ys:
-                logger.error('not found field \'' + item + '\' in setting file.')
+                logger.error('not found field \'' +
+                             item + '\' in setting file.')
                 return None
-        
+
         # checker
         if ys['mode'] not in ('pseudo_dis', 'fully_dis'):
-            logger.error('ys[\'mode\'] has an illegal value \' in setting file.')
+            logger.error(
+                'ys[\'mode\'] has an illegal value \' in setting file.')
             return None
 
         # checker
         if ys['mode'] is 'pseudo_dis' and (
-            len(ys['roles']['rm']) != 1 or ys['roles']['rm'] is not ys['roles']['nm']):
-            logger.error('rm and nms must only have one, and same value under pseudo_dis mode in setting file.')
+                len(ys['roles']['rm']) != 1 or ys['roles']['rm'] is not ys['roles']['nm']):
+            logger.error(
+                'rm and nms must only have one, and same value under pseudo_dis mode in setting file.')
             return None
 
         return ys
 
     except Exception as e:
         logger.error('catched exceptions while loading setting file.')
-    
+
     return None
 
 
-def main(): 
+def main():
     ys = __parse_settings(os.path.abspath(__settings_file))
 
     try:
         for event in ys['timelines']:
             obj = __import__("timelines.%s" % (event), fromlist=True)
-            func = getattr(obj, event.split('.')[-1]) # function name
+            func = getattr(obj, event.split('.')[-1])  # function name
             if not func(ys):
                 raise Exception("errors occurs in timelines.%s" % (event))
     except Exception as e:
         logger.error(str(e))
     finally:
         return 0
-    
+
 
 if __name__ == '__main__':
     main()
-

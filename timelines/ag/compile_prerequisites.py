@@ -4,9 +4,10 @@ from timelines.basis import BasisEvent
 from timelines.basis import Commands as cmd
 from timelines.basis import logger
 
+
 class CustomEvent(BasisEvent):
 
-    #override
+    # override
     def action(self):
         logger.info('--> timelines.ag.compile_prerequisites <--')
 
@@ -21,6 +22,7 @@ class CustomEvent(BasisEvent):
             return False
 
         return True
+
 
 def compile_prerequisites(ys):
     return CustomEvent(ys).occur(attempts=3, interval=3)

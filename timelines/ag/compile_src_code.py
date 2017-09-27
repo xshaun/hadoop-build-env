@@ -5,9 +5,10 @@ from timelines.basis import Commands as cmd
 from timelines.basis import logger
 import os
 
+
 class CustomEvent(BasisEvent):
 
-    #override
+    # override
     def action(self):
         logger.info('--> timelines.ag.compile_src_code <--')
 
@@ -18,14 +19,15 @@ class CustomEvent(BasisEvent):
             && mvn clean \
             && mvn eclipse:eclipse -DskipTests \
             && mvn dependency-check:aggregate \
-            && mvn package -Pdist,native,docs,src -DskipTests -Dtar" % (
-                os.path.join(codefolder, 'hadoop-maven-plugins'), codefolder)
+            && mvn package -Pdist,native,docs,src -DskipTests -Dtar".format(
+            os.path.join(codefolder, 'hadoop-maven-plugins'), codefolder)
 
         retcode = cmd.do(maven_shell)
         if retcode != 0:
             return False
 
         return True
+
 
 def compile_src_code(ys):
     return CustomEvent(ys).occur(attempts=5, interval=10)
