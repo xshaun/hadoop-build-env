@@ -64,11 +64,24 @@ class BasisEvent(object):
             self.attempts = attempts
             return self.finite()
 
+class _StdOutWrapper(object):
+    """
+        Call wrapper for stdout
+    """
+    def write(self, s):
+        logger.info(s)
+
+class _StdErrWrapper(object):
+    """
+        Call wrapper for stderr
+    """
+    def write(self, s):
+        logger.error(s)
 
 class Commands(object):
-    __stdout__ = self._StdOutWrapper()
+    __stdout__ = _StdOutWrapper()
 
-    __stderr__ = self._StdErrWrapper()
+    __stderr__ = _StdErrWrapper()
     
     @staticmethod
     def do(arg):
@@ -100,19 +113,5 @@ class Commands(object):
         retcode = process.returncode
         logger.info("commands.do.returncode: %d" % (retcode))
         return retcode
-
-    class _StdOutWrapper(object):
-        """
-            Call wrapper for stdout
-        """
-        def write(self, s):
-            logger.info(s)
-
-    class _StdErrWrapper(object):
-        """
-            Call wrapper for stderr
-        """
-        def write(self, s):
-            logger.error(s)
 
 
