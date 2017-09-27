@@ -64,14 +64,14 @@ class BasisEvent(object):
             self.attempts = attempts
             return self.finite()
 
-class __StdOutWrapper:
+class _StdOutWrapper(sys.stdout):
     """
         Call wrapper for stdout
     """
     def write(self, s):
         logger.info(s)
 
-class __StdErrWrapper:
+class _StdErrWrapper(sys.stdout):
     """
         Call wrapper for stderr
     """
@@ -100,7 +100,7 @@ class Commands(object):
 
         echopwd = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
-            stdin=echopwd.stdout, stdout=__StdOutWrapper(), stderr=__StdErrWrapper(), shell=False, cwd='./')
+            stdin=echopwd.stdout, stdout=_StdOutWrapper(), stderr=_StdErrWrapper(), shell=False, cwd='./')
         
         process.wait()
         # process_output, = process.communicate()
