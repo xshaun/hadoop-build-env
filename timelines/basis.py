@@ -83,11 +83,12 @@ class Commands(object):
     def do(arg):
         logger.info('commands.do: ' + arg)
 
-        process = subprocess.Popen(arg, 
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True, cwd='./')
+        process = subprocess.Popen(arg.split(' '), 
+            stdout=__StdOutWrapper(), stderr=__StdErrWrapper(), shell=True, cwd='./')
         
-        process_output, = process.communicate()
-        logger.info("commands.do.stdout: \n %s" % (process_output))
+        process.wait()
+        # process_output, = process.communicate()
+        # logger.info("commands.do.stdout: \n %s" % (process_output))
 
         retcode = process.returncode
         logger.info("commands.do.returncode: %d" % (retcode))
