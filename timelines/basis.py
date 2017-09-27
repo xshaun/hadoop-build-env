@@ -78,9 +78,9 @@ class Commands(object):
             stdout=sys.stdout, stderr=sys.stdout, 
             shell=False, cwd='./')
         
-        # process.wait()
-        process_output, = process.communicate()
-        logger.info("commands.do.stdout: \n %s" % (process_output))
+        process.wait()
+        # process_output, = process.communicate()
+        # logger.info("commands.do.stdout: \n %s" % (process_output))
 
         retcode = process.returncode
         logger.info("commands.do.returncode: %d" % (retcode))
