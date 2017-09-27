@@ -22,7 +22,7 @@ class CustomEvent(BasisEvent):
             "mvn eclipse:eclipse -DskipTests",
             "mvn dependency-check:aggregate",
             "mvn package -Pdist,native,docs,src -DskipTests -Dtar"
-            ])
+        ])
 
         retcode = cmd.do(maven_shell)
         if retcode != 0:

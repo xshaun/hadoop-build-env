@@ -105,7 +105,7 @@ class Commands(object):
         echopwd = subprocess.Popen(
             ['echo', pwd], stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(
-            arg, stdin=echopwd.stdout, stdout=sys.stdout, shell=True, cwd='./')
+            arg, stdin=echopwd.stdout, stdout=sys.stdout, shell=True, cwd='./', executable="/bin/bash")
 
         process.wait()
         # process_output, = process.communicate()
