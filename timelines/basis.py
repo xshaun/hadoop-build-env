@@ -66,9 +66,9 @@ class BasisEvent(object):
 
 
 class Commands(object):
-    __stdout__ = Class._StdOutWrapper()
+    __stdout__ = self._StdOutWrapper()
 
-    __stderr__ = Class._StdErrWrapper()
+    __stderr__ = self._StdErrWrapper()
     
     @staticmethod
     def do(arg):
