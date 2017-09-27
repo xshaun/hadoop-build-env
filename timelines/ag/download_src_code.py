@@ -30,9 +30,10 @@ class CustomEvent(BasisEvent):
             return False
 
         linkaddress = "http://www-eu.apache.org/dist/hadoop/common/hadoop-{0}/hadoop-{0}-src.tar.gz".format(_version)
-        shell = "curl -sSL {0} | tar -C {1} -xzv".format(linkaddress, codefolder)
-        
-        retcode = cmd.do(shell)
+        download = "curl -sSL {0} | tar -C {1} -xzv".format(linkaddress, codefolder)
+        movedir = "mv hadoop-{0}-src/* ./ && rmdir ./hadoop-{0}-src".format(_version)
+
+        retcode = cmd.do("%s && %s" % (download, movedir))
         if retcode != 0:
             return False
 
