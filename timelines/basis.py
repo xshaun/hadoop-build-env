@@ -74,7 +74,7 @@ class Commands(object):
         # redirect stdout to logger
         sys.stdout
 
-        process = subprocess.call(arg, 
+        process = subprocess.Popen(arg, 
             stdout=sys.stdout, stderr=sys.stdout, 
             shell=True, cwd='./')
         
