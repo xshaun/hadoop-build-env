@@ -81,12 +81,17 @@ class StreamToLogger(object):
     def flush(self):
         pass
 
+    def fileno(self):
+        pass
+
 class Commands(object):
     
     @staticmethod
     def do(arg):
         logger.info('commands.do: ' + arg)
-        sys.stdout = StreamToLogger(logger)
+        t = StreamToLogger(logger)
+        t.fileno = sys.stdout.fileno
+        sys.stdout = t
 
         process = subprocess.Popen(arg.split(' '), 
             stdout=sys.stdout, stderr=sys.stdout, 
