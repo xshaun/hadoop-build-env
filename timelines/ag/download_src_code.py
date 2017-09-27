@@ -19,7 +19,7 @@ class CustomEvent(BasisEvent):
     def action(self):
         logger.info('--> timelines.ag.download_src_code <--')
 
-        folder = ys['codepath']
+        folder = self.ys['codepath']
 
         if not os.path.exists(folder):
             os.makedirs(folder)

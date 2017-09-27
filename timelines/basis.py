@@ -79,16 +79,16 @@ class Commands(object):
         logger.info('commands.sudo: ' + arg)
 
         echopwd = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
-        prosudo = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
+        process = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
             stdin=echopwd.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False, cwd='./')
         
         logger.info('commands.sudo.stdout: \n')
-        with prosudo.stdout:
-            logger.info(prosudo.stdout)
+        with process.stdout:
+            output = str(process.stdout.read()).replace('\\n','\n')
+            logger.info(output)
 
-        prosudo.wait()
-        rescode = prosudo.returncode
+        process.wait()
+        retcode = process.returncode
 
-        logger.info('commands.sudo.returncode: ' + str(rescode))
-        return rescode
-
+        logger.info('commands.sudo.returncode: ' + str(retcode))
+        return retcode

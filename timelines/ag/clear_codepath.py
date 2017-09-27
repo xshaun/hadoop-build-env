@@ -11,7 +11,7 @@ class CustomEvent(BasisEvent):
     def action(self):
         logger.info('--> timelines.ag.clear_codepath <--')
 
-        folder = ys['codepath']
+        folder = self.ys['codepath']
 
         if not os.path.exists(folder):
             os.makedirs(folder)
