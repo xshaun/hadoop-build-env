@@ -76,7 +76,7 @@ class Commands(object):
 
         process = subprocess.Popen(arg.split(' '), 
             stdout=sys.stdout, stderr=sys.stdout, 
-            shell=True, cwd='./')
+            shell=False, cwd='./')
         
         # process.wait()
         process_output, = process.communicate()
