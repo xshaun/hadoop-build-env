@@ -18,7 +18,7 @@ class CustomEvent(BasisEvent):
             "cd %s" % (os.path.join(codefolder, 'hadoop-maven-plugins')),
             "mvn install",
             "cd %s" % (codefolder),
-            "mvn clean"
+            "mvn clean",
             "mvn eclipse:eclipse -DskipTests",
             "mvn dependency-check:aggregate",
             "mvn package -Pdist,native,docs,src -DskipTests -Dtar"
