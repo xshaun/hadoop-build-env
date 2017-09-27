@@ -8,6 +8,21 @@ codepath: '/opt/rose-on-hadoop-dev/' # absolute path
 # ag: admin gateway.
 # rm: reource manager
 # nm: node manager
+# 
+# For example: under pseudo_dis mode
+#
+# roles:
+#   'ag': 
+#     'host': 'localhost'
+#     'pwd': 'xboy'
+#   'rm':
+#     'hosts':
+#       - 'localhost'
+#     'pwd': 'xboy'
+#   'nm':
+#     'hosts':
+#       - 'localhost'
+#     'pwd': 'xboy'
 #
 roles:
   'ag': 
@@ -17,7 +32,6 @@ roles:
   'rm':
     'hosts':
       - 'localhost' # first hostname
-      - 'localhost' # second hostname
     'pwd': 'xboy'
 
   'nm':
