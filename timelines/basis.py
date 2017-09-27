@@ -108,7 +108,6 @@ class Commands(object):
             arg, stdin=echopwd.stdout, stdout=sys.stdout, shell=True, cwd='./')
 
         process.wait()
-        echopwd.stdout.close()
         # process_output, = process.communicate()
         # logger.info("commands.do.stdout: \n %s" % (process_output))
 

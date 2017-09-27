@@ -70,19 +70,17 @@ def __parse_settings(abspath_filename):
         # checker
         for item in ('mode', 'codepath', 'roles', 'timelines'):
             if item not in ys:
-                logger.error('not found field \'' +
-                             item + '\' in setting file.')
+                logger.error("not found field '%s' in setting file." % (item))
                 return None
 
         # checker
         if ys['mode'] not in ('pseudo_dis', 'fully_dis'):
-            logger.error(
-                'ys[\'mode\'] has an illegal value \' in setting file.')
+            logger.error("ys['mode'] has an illegal value in setting file.")
             return None
 
         # checker
         if ys['mode'] is 'pseudo_dis' and (
-                len(ys['roles']['rm']) != 1 or ys['roles']['rm'] is not ys['roles']['nm']):
+            len(ys['roles']['rm']['hosts']) != 1 or ys['roles']['rm'] is not ys['roles']['nm']):
             logger.error(
                 'rm and nms must only have one, and same value under pseudo_dis mode in setting file.')
             return None
@@ -96,9 +94,9 @@ def __parse_settings(abspath_filename):
 
 
 def main():
-    ys = __parse_settings(os.path.abspath(__settings_file))
-
     try:
+        ys = __parse_settings(os.path.abspath(__settings_file))
+
         for event in ys['timelines']:
             obj = __import__("timelines.%s" % (event), fromlist=True)
             func = getattr(obj, event.split('.')[-1])  # function name

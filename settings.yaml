@@ -11,7 +11,7 @@ codepath: '/opt/rose-on-hadoop-dev/' # absolute path
 #
 roles:
   'ag': 
-    'host': localhost' #  must
+    'host': 'localhost' #  must
     'pwd': 'xboy'
 
   'rm':
