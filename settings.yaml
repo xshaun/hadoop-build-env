@@ -33,9 +33,9 @@ roles:
 #   F -> (must be)function name. 
 #
 timelines:
-#  - 'ag.compile_prerequisites'    # install prerequisites used to compile hadoop
+  - 'ag.compile_prerequisites'    # install prerequisites used to compile hadoop
   - 'ag.clear_codepath'           # remove all files under codepath folder
-  - 'ag.download_bin_code'        # download binary code into codepath
+  # - 'ag.download_bin_code'        # download binary code into codepath
   - 'ag.download_src_code'        # download source code into codepath
   - 'ag.compile_src_code'         # compile source code under codepath folder
   
