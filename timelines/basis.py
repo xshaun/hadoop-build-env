@@ -94,7 +94,8 @@ class Commands(object):
         # redirect stdout to logger
         sys.stdout
 
-        echopwd = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
+        echopwd = subprocess.Popen(['echo', pwd], 
+            stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
             stdin=echopwd.stdout, stdout=sys.stdout, stderr=sys.stdout, 
             shell=False, cwd='./')

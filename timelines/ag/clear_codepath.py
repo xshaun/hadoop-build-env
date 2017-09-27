@@ -3,7 +3,7 @@
 from timelines.basis import BasisEvent
 from timelines.basis import Commands as cmd
 from timelines.basis import logger
-import shutil
+import os, shutil
 
 class CustomEvent(BasisEvent):
 

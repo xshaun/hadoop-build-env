@@ -3,6 +3,7 @@
 from timelines.basis import BasisEvent
 from timelines.basis import Commands as cmd
 from timelines.basis import logger
+import os
 
 #---------------------------------------------------------------------------
 #   Definitions
