@@ -76,8 +76,8 @@ def __parse_settings(abspath_filename):
             raise Exception("ys['mode'] has an illegal value in setting file.")
 
         # checker
-        if ys['mode'] is 'pseudo_dis' and (
-            len(ys['roles']['rm']['hosts']) != 1 or ys['roles']['rm'] is not ys['roles']['nm']):
+        if ys['mode'] == 'pseudo_dis' and (
+            len(ys['roles']['rm']['hosts']) != 1 or ys['roles']['rm'] != ys['roles']['nm']):
             raise Exception(
                 'rm and nms must only have one, and same value under pseudo_dis mode in setting file.')
 
