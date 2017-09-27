@@ -10,9 +10,9 @@ import os
 #---------------------------------------------------------------------------
 
 #
-# __version indicates downloading binary code version
+# _version indicates downloading binary code version
 #
-__version = '3.0.0-alpha4'
+_version = '3.0.0-alpha4'
 
 class CustomEvent(BasisEvent):
 
@@ -20,20 +20,20 @@ class CustomEvent(BasisEvent):
     def action(self):
         logger.info('--> timelines.ag.download_bin_code <--')
 
-        folder = self.ys['codepath']
+        codefolder = self.ys['codepath']
 
-        if not os.path.exists(folder):
-            os.makedirs(folder)
+        if not os.path.exists(codefolder):
+            os.makedirs(codefolder)
 
-        if not os.path.isdir(folder):
+        if not os.path.isdir(codefolder):
             logger.error('\'codepath\' does not indicate a folder in setting file.')
             return False
 
-        loadpath = "http://www-eu.apache.org/dist/hadoop/common/hadoop-{0}/hadoop-{0}.tar.gz" % (__version)
+        linkaddress = "http://www-eu.apache.org/dist/hadoop/common/hadoop-{0}/hadoop-{0}.tar.gz".format(_version)
+        shell = "curl -sSL {0} | tar -C {1} -xzv".format(linkaddress, codefolder)
 
-        shell = "curl -sSL {0} | tar -C {1} -xzv" % (loadpath, folder)
-        res = cmd.do(shell)
-        if res != 0:
+        retcode = cmd.do(shell)
+        if retcode != 0:
             return False
 
         return True

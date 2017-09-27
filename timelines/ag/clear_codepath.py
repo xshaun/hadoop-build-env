@@ -11,23 +11,23 @@ class CustomEvent(BasisEvent):
     def action(self):
         logger.info('--> timelines.ag.clear_codepath <--')
 
-        folder = self.ys['codepath']
+        codefolder = self.ys['codepath']
 
-        if not os.path.exists(folder):
-            os.makedirs(folder)
+        if not os.path.exists(codefolder):
+            os.makedirs(codefolder)
 
-        if not os.path.isdir(folder):
+        if not os.path.isdir(codefolder):
             logger.error('\'codepath\' does not indicate a folder in setting file.')
             return False
 
-        for item in os.listdir(folder):  
-            itemsrc = os.path.join(folder, item)
+        for item in os.listdir(codefolder):  
+            itemsrc = os.path.join(codefolder, item)
             if os.path.isdir(itemsrc):
                 shutil.rmtree(itemsrc)
             else:
                 os.remove(itemsrc)
 
-        if len(os.listdir(folder)) > 0 :
+        if len(os.listdir(codefolder)) > 0 :
             logger.error('failed to clear \'codepath\' shown in setting file.')
             return False
 

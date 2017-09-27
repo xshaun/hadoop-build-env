@@ -11,7 +11,7 @@ class CustomEvent(BasisEvent):
     def action(self):
         logger.info('--> timelines.ag.compile_src_code <--')
 
-        folder = self.ys['codepath']
+        codefolder = self.ys['codepath']
 
         maven_shell = "cd {0} && mvn install \
             && cd {1} \
@@ -19,10 +19,10 @@ class CustomEvent(BasisEvent):
             && mvn eclipse:eclipse -DskipTests \
             && mvn dependency-check:aggregate \
             && mvn package -Pdist,native,docs,src -DskipTests -Dtar" % (
-                os.path.join(folder, 'hadoop-maven-plugins'), folder)
+                os.path.join(codefolder, 'hadoop-maven-plugins'), codefolder)
 
-        res = cmd.do(maven_shell)
-        if res != 0:
+        retcode = cmd.do(maven_shell)
+        if retcode != 0:
             return False
 
         return True
