@@ -68,15 +68,15 @@ class _StdOutWrapper(object):
     """
         Call wrapper for stdout
     """
-    def write(self, s):
-        logger.info(s)
+    def write(self, msg):
+        logger.info(msg)
 
 class _StdErrWrapper(object):
     """
         Call wrapper for stderr
     """
-    def write(self, s):
-        logger.error(s)
+    def write(self, msg):
+        logger.error(msg)
 
 class Commands(object):
     __stdout__ = _StdOutWrapper()
@@ -88,7 +88,8 @@ class Commands(object):
         logger.info('commands.do: ' + arg)
 
         process = subprocess.Popen(arg.split(' '), 
-            stdout=__stdout__, stderr=__stderr__, shell=True, cwd='./')
+            stdout=Commands.__stdout__, stderr=Commands.__stderr__, 
+            shell=True, cwd='./')
         
         process.wait()
         # process_output, = process.communicate()
@@ -104,7 +105,8 @@ class Commands(object):
 
         echopwd = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
-            stdin=echopwd.stdout, stdout=__stdout__, stderr=__stderr__, shell=False, cwd='./')
+            stdin=echopwd.stdout, stdout=Commands.__stdout__, stderr=Commands.__stderr__, 
+            shell=False, cwd='./')
         
         process.wait()
         # process_output, = process.communicate()
