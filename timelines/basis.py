@@ -64,26 +64,26 @@ class BasisEvent(object):
             self.attempts = attempts
             return self.finite()
 
-class _StdOutWrapper(object):
-    """
-        Call wrapper for stdout
-    """
-    def write(self, msg):
-        logger.info(msg)
 
-class _StdErrWrapper(object):
+class StreamToLogger(object):
     """
-        Call wrapper for stderr
+    Fake file-like stream object that redirects writes to a logger instance.
     """
-    def write(self, msg):
-        logger.error(msg)
+    def __init__(self, logger, log_level=logging.INFO):
+        self.logger = logger
+        self.log_level = log_level
+        self.linebuf = ''
+
+    def write(self, buf):
+        for line in buf.rstrip().splitlines():
+            self.logger.log(self.log_level, line.rstrip())
 
 class Commands(object):
     
     @staticmethod
     def do(arg):
         logger.info('commands.do: ' + arg)
-        sys.stdout = _StdOutWrapper()
+        sys.stdout = StreamToLogger(logger)
 
         process = subprocess.Popen(arg.split(' '), 
             stdout=sys.stdout, stderr=sys.stdout, 
@@ -100,7 +100,7 @@ class Commands(object):
     @staticmethod
     def sudo(arg, pwd):
         logger.info('commands.sudo: ' + arg)
-        sys.stdout = _StdOutWrapper()
+        sys.stdout = StreamToLogger(logger)
 
         echopwd = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
