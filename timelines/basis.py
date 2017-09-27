@@ -7,18 +7,18 @@ import sys, time, subprocess, logging, logging.config
 #---------------------------------------------------------------------------
 
 #
-# __logging_config is used to configue logging
-# __logging_logger is used to get a logger
+# _logging_config is used to configue logging
+# _logging_logger is used to get a logger
 #
-__logging_config = './config/logging.config'
-__logging_logger = 'develop'
+_logging_config = './config/logging.config'
+_logging_logger = 'develop'
 
 #---------------------------------------------------------------------------
 #   Core Logic
 #---------------------------------------------------------------------------
 
-logging.config.fileConfig(__logging_config)
-logger = logging.getLogger(__logging_logger)
+logging.config.fileConfig(_logging_config)
+logger = logging.getLogger(_logging_logger)
 
 class BasisEvent(object):
     """
@@ -74,9 +74,9 @@ class Commands(object):
         # redirect stdout to logger
         sys.stdout
 
-        process = subprocess.Popen(arg.split(' '), 
+        process = subprocess.call(arg, 
             stdout=sys.stdout, stderr=sys.stdout, 
-            shell=False, cwd='./')
+            shell=True, cwd='./')
         
         process.wait()
         # process_output, = process.communicate()
@@ -95,11 +95,12 @@ class Commands(object):
         sys.stdout
 
         echopwd = subprocess.Popen(['echo', pwd], 
-            stdout=subprocess.PIPE, shell=False)
-        process = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
+            stdout=subprocess.PIPE, shell=True)
+        process = subprocess.Popen(arg,
             stdin=echopwd.stdout, stdout=sys.stdout, stderr=sys.stdout, 
-            shell=False, cwd='./')
+            shell=True, cwd='./')
         
+        echopwd.stdout.close()
         process.wait()
         # process_output, = process.communicate()
         # logger.info("commands.do.stdout: \n %s" % (process_output))

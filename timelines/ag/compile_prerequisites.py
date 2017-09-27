@@ -10,12 +10,12 @@ class CustomEvent(BasisEvent):
     def action(self):
         logger.info('--> timelines.ag.compile_prerequisites <--')
 
-        debian_shell = '/bin/sh -c ./utility/t.setup_aliyun_maven_mirror.sh'
+        debian_shell = './utility/t.setup_aliyun_maven_mirror.sh'
         retcode = cmd.do(debian_shell)
         if retcode != 0:
             return False
 
-        debian_shell = '/bin/sh -c ./utility/t.install_compile_prerequistes.sh'
+        debian_shell = 'sudo ./utility/t.install_compile_prerequistes.sh'
         retcode = cmd.sudo(debian_shell, self.ys['roles']['ag']['pwd'])
         if retcode != 0:
             return False
