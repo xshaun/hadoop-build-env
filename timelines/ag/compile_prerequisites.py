@@ -16,7 +16,7 @@ class CustomEvent(BasisEvent):
             return False
 
         debian_shell = '/bin/sh -c ./utility/t.pre_compile_env.sh'
-        res = cmd.sudo(debian_shell, self.ys['pwds']['ag'])
+        res = cmd.sudo(debian_shell, self.ys['roles']['ag']['pwd'])
         if res != 0:
             return False
 

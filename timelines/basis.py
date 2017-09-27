@@ -1,6 +1,6 @@
 #!/usr/bin/env python3 -B
 
-import time, subprocess, logging, logging.config
+import sys, time, subprocess, logging, logging.config
 
 #---------------------------------------------------------------------------
 #   Definitions
@@ -71,7 +71,7 @@ class Commands(object):
 
         retcode = subprocess.call(arg, shell=True, cwd='./')
 
-        logger.info('commands.do.returncode: ' + retcode)
+        logger.info('commands.do.returncode: ' + str(retcode))
         return retcode
 
     @staticmethod
@@ -80,7 +80,7 @@ class Commands(object):
 
         echo = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
         sudo = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
-            stdin=echo.stdout, stdout=subprocess.PIPE, shell=False, cwd='./')
+            stdin=echo.stdout, stdout=sys.stdout, shell=False, cwd='./')
         sudo.wait()
 
         stdout = str(sudo.stdout.read()).replace('\\n','\n')
