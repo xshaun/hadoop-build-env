@@ -64,34 +64,15 @@ class BasisEvent(object):
             self.attempts = attempts
             return self.finite()
 
-
-class StreamToLogger(object):
-    """
-    Fake file-like stream object that redirects writes to a logger instance.
-    """
-    def __init__(self, logger, log_level=logging.INFO):
-        self.logger = logger
-        self.log_level = log_level
-        self.linebuf = ''
-
-    def write(self, buf):
-        for line in buf.rstrip().splitlines():
-            self.logger.log(self.log_level, line.rstrip())
-
-    def flush(self):
-        pass
-
-    def fileno(self):
-        pass
-
 class Commands(object):
     
     @staticmethod
     def do(arg):
         logger.info('commands.do: ' + arg)
-        t = StreamToLogger(logger)
-        t.fileno = sys.stdout.fileno
-        sys.stdout = t
+        
+        # @TODO
+        # redirect stdout to logger
+        sys.stdout
 
         process = subprocess.Popen(arg.split(' '), 
             stdout=sys.stdout, stderr=sys.stdout, 
@@ -108,7 +89,10 @@ class Commands(object):
     @staticmethod
     def sudo(arg, pwd):
         logger.info('commands.sudo: ' + arg)
-        sys.stdout = StreamToLogger(logger)
+
+        # @TODO
+        # redirect stdout to logger
+        sys.stdout
 
         echopwd = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
