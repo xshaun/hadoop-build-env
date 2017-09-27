@@ -78,14 +78,17 @@ class Commands(object):
     def sudo(arg, pwd):
         logger.info('commands.sudo: ' + arg)
 
-        echo = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
-        sudo = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
-            stdin=echo.stdout, stdout=sys.stdout, shell=False, cwd='./')
-        sudo.wait()
+        echopwd = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
+        prosudo = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
+            stdin=echopwd.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False, cwd='./')
+        
+        logger.info('commands.sudo.stdout: \n')
+        with prosudo.stdout:
+            logger.info(prosudo.stdout)
 
-        stdout = str(sudo.stdout.read()).replace('\\n','\n')
-        logger.info('commands.sudo.stdout: \n' + stdout)
-        logger.info('commands.sudo.returncode: ' + str(sudo.returncode))
+        prosudo.wait()
+        rescode = prosudo.returncode
 
-        return sudo.returncode
+        logger.info('commands.sudo.returncode: ' + str(rescode))
+        return rescode
 
