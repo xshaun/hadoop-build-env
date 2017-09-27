@@ -3,6 +3,7 @@
 from timelines.basis import BasisEvent
 from timelines.basis import Commands as cmd
 from timelines.basis import logger
+import shutil
 
 class CustomEvent(BasisEvent):
 
@@ -22,7 +23,7 @@ class CustomEvent(BasisEvent):
         for item in os.listdir(folder):  
             itemsrc = os.path.join(folder, item)
             if os.path.isdir(itemsrc):
-                __import__('shutil').rmtree(itemsrc)
+                shutil.rmtree(itemsrc)
             else:
                 os.remove(itemsrc)
 

@@ -29,26 +29,26 @@ import os, yaml, logging, logging.config
 #---------------------------------------------------------------------------
 
 #
-#_logging_config is used to configue logging
-#_logging_logger is used to get a logger
+#__logging_config is used to configue logging
+#__logging_logger is used to get a logger
 #
-_logging_config = './config/logging.config'
-_logging_logger = 'develop'
+__logging_config = './config/logging.config'
+__logging_logger = 'develop'
 
 #
-#_settings_file indicates where is 
+#__settings_file indicates where is 
 #
-_settings_file = './settings.yaml'
+__settings_file = './settings.yaml'
 
 
 #---------------------------------------------------------------------------
 #   Core Logic
 #---------------------------------------------------------------------------
 
-logging.config.fileConfig(_logging_config)
-logger = logging.getLogger(_logging_logger)
+logging.config.fileConfig(__logging_config)
+logger = logging.getLogger(__logging_logger)
 
-def _parse_settings(abspath_filename):
+def __parse_settings(abspath_filename):
     if not os.path.isfile(abspath_filename):
         logger.error('not found the setting file.')
         return None
@@ -89,7 +89,7 @@ def _parse_settings(abspath_filename):
 
 
 def main(): 
-    ys = _parse_settings(os.path.abspath(_settings_file))
+    ys = __parse_settings(os.path.abspath(__settings_file))
 
     try:
         for event in ys['timelines']:

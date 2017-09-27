@@ -7,18 +7,18 @@ import time, subprocess, logging, logging.config
 #---------------------------------------------------------------------------
 
 #
-# _logging_config is used to configue logging
-# _logging_logger is used to get a logger
+# __logging_config is used to configue logging
+# __logging_logger is used to get a logger
 #
-_logging_config = './config/logging.config'
-_logging_logger = 'develop'
+__logging_config = './config/logging.config'
+__logging_logger = 'develop'
 
 #---------------------------------------------------------------------------
 #   Core Logic
 #---------------------------------------------------------------------------
 
-logging.config.fileConfig(_logging_config)
-logger = logging.getLogger(_logging_logger)
+logging.config.fileConfig(__logging_config)
+logger = logging.getLogger(__logging_logger)
 
 class BasisEvent(object):
     """
