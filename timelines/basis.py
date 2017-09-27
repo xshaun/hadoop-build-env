@@ -64,14 +64,33 @@ class BasisEvent(object):
             self.attempts = attempts
             return self.finite()
 
+class __StdOutWrapper:
+    """
+        Call wrapper for stdout
+    """
+    def write(self, s):
+        logger.info(s)
+
+class __StdErrWrapper:
+    """
+        Call wrapper for stderr
+    """
+    def write(self, s):
+        logger.error(s)
+
 class Commands(object):
     @staticmethod
     def do(arg):
         logger.info('commands.do: ' + arg)
 
-        retcode = subprocess.call(arg, shell=True, cwd='./')
+        process = subprocess.Popen(arg, 
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True, cwd='./')
+        
+        process_output, = process.communicate()
+        logger.info("commands.do.stdout: \n %s" % (process_output))
 
-        logger.info('commands.do.returncode: ' + str(retcode))
+        retcode = process.returncode
+        logger.info("commands.do.returncode: %d" % (retcode))
         return retcode
 
     @staticmethod
@@ -80,11 +99,14 @@ class Commands(object):
 
         echopwd = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
-            stdin=echopwd.stdout, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, cwd='./')
+            stdin=echopwd.stdout, stdout=__StdOutWrapper(), stderr=__StdErrWrapper(), shell=False, cwd='./')
         
-        process_output, = process.communicate()
-        logger.info('commands.sudo.stdout: \n' + process_output)
-     
+        process.wait()
+        # process_output, = process.communicate()
+        # logger.info("commands.do.stdout: \n %s" % (process_output))
+
         retcode = process.returncode
-        logger.info('commands.sudo.returncode: ' + str(retcode))
+        logger.info("commands.do.returncode: %d" % (retcode))
         return retcode
+
+
