@@ -85,7 +85,7 @@ class Commands(object):
         logger.info('commands.do: ' + arg)
 
         process = subprocess.Popen(arg.split(' '), 
-            stdout=__StdOutWrapper(), stderr=__StdErrWrapper(), shell=True, cwd='./')
+            stdout=_StdOutWrapper(), stderr=_StdErrWrapper(), shell=True, cwd='./')
         
         process.wait()
         # process_output, = process.communicate()
