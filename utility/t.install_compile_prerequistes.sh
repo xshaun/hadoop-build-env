@@ -31,7 +31,7 @@ if [[ 0 != $? ]]; then
     cd /opt/protobuf-2.5.0
     ./autogen.sh  &&  ./configure --prefix=/usr
 
-    make  &&  make install
+    make  &&  make install && cp ./src/protoc /usr/bin/
     # protoc --version
 
     cd /opt/protobuf-2.5.0/java

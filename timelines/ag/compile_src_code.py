@@ -19,7 +19,7 @@ class CustomEvent(BasisEvent):
             "mvn install",
             "cd %s" % (codefolder),
             "mvn clean",
-            "mvn eclipse:eclipse -DskipTests",
+            "mvn eclipse:eclipse -DdownloadSources=true -DdownloadJavadocs=true -DskipTests",
             "mvn dependency-check:aggregate",
             "mvn package -Pdist,native,docs,src -DskipTests -Dtar"
         ])
