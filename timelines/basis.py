@@ -64,14 +64,14 @@ class BasisEvent(object):
             self.attempts = attempts
             return self.finite()
 
-class _StdOutWrapper(sys.stdout):
+class _StdOutWrapper(object):
     """
         Call wrapper for stdout
     """
     def write(self, s):
         logger.info(s)
 
-class _StdErrWrapper(sys.stdout):
+class _StdErrWrapper(object):
     """
         Call wrapper for stderr
     """
