@@ -80,15 +80,11 @@ class Commands(object):
 
         echopwd = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
-            stdin=echopwd.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False, cwd='./')
+            stdin=echopwd.stdout, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, cwd='./')
         
-        logger.info('commands.sudo.stdout: \n')
-        with process.stdout:
-            output = str(process.stdout.read()).replace('\\n','\n')
-            logger.info(output)
-
-        process.wait()
+        process_output, = process.communicate()
+        logger.info('commands.sudo.stdout: \n' + process_output)
+     
         retcode = process.returncode
-
         logger.info('commands.sudo.returncode: ' + str(retcode))
         return retcode
