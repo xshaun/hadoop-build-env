@@ -66,26 +66,16 @@ class BasisEvent(object):
 
 
 class Commands(object):
-    class _StdOutWrapper(object):
-        """
-            Call wrapper for stdout
-        """
-        def write(self, s):
-            logger.info(s)
-
-    class _StdErrWrapper(object):
-        """
-            Call wrapper for stderr
-        """
-        def write(self, s):
-            logger.error(s)
-
+    __stdout__ = Commands._StdOutWrapper()
+    
+    __stderr__ = Commands._StdErrWrapper()
+    
     @staticmethod
     def do(arg):
         logger.info('commands.do: ' + arg)
 
         process = subprocess.Popen(arg.split(' '), 
-            stdout=_StdOutWrapper(), stderr=_StdErrWrapper(), shell=True, cwd='./')
+            stdout=__stdout__, stderr=__stderr__, shell=True, cwd='./')
         
         process.wait()
         # process_output, = process.communicate()
@@ -101,7 +91,7 @@ class Commands(object):
 
         echopwd = subprocess.Popen(['echo', pwd], stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(['sudo', '-S'] + arg.split(' '),
-            stdin=echopwd.stdout, stdout=_StdOutWrapper(), stderr=_StdErrWrapper(), shell=False, cwd='./')
+            stdin=echopwd.stdout, stdout=__stdout__, stderr=__stderr__, shell=False, cwd='./')
         
         process.wait()
         # process_output, = process.communicate()
@@ -110,5 +100,19 @@ class Commands(object):
         retcode = process.returncode
         logger.info("commands.do.returncode: %d" % (retcode))
         return retcode
+
+    class _StdOutWrapper(object):
+        """
+            Call wrapper for stdout
+        """
+        def write(self, s):
+            logger.info(s)
+
+    class _StdErrWrapper(object):
+        """
+            Call wrapper for stderr
+        """
+        def write(self, s):
+            logger.error(s)
 
 
