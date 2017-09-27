@@ -7,7 +7,7 @@ codepath: '/opt/rose-on-hadoop-dev/' # absolute path
 #
 # ag: admin gateway.
 # rm: reource manager
-# nms: node managers
+# nm: node manager
 #
 roles:
   'ag': 
@@ -20,7 +20,7 @@ roles:
       - 'localhost' # second hostname
     'pwd': 'xboy'
 
-  'nms':
+  'nm':
     'hosts':
       - 'localhost' 
       - 'localhost'

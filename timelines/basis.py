@@ -47,7 +47,7 @@ class BasisEvent(object):
         for x_x in range(self.attempts):
             if self.action():
                 return True
-            logger.info("!'o'! a failed attempt at %d-th running" % (x_x))
+            logger.info("!'o'! a failed attempt at %d-th running" % (x_x + 1))
             time.sleep(self.interval)
         return False
 
@@ -83,9 +83,8 @@ class Commands(object):
         # redirect stdout to logger
         sys.stdout
 
-        process = subprocess.Popen(arg,
-                                   stdout=sys.stdout, stderr=sys.stdout,
-                                   shell=True, cwd='./')
+        process = subprocess.Popen(
+            arg, stdout=sys.stdout, stderr=sys.stdout, shell=True, cwd='./')
 
         process.wait()
         # process_output, = process.communicate()
@@ -106,7 +105,7 @@ class Commands(object):
         echopwd = subprocess.Popen(
             ['echo', pwd], stdout=subprocess.PIPE, shell=True)
         process = subprocess.Popen(
-            arg, stdin=echopwd.stdout, stdout=sys.stdout, stderr=sys.stdout, shell=True, cwd='./')
+            arg, stdin=echopwd.stdout, stdout=sys.stdout, shell=True, cwd='./')
 
         process.wait()
         echopwd.stdout.close()
