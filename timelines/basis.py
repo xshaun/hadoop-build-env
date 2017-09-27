@@ -86,9 +86,10 @@ class Commands(object):
     @staticmethod
     def do(arg):
         logger.info('commands.do: ' + arg)
-
+        sys.stdout = _StdOutWrapper()
+        
         process = subprocess.Popen(arg.split(' '), 
-            stdout=Commands.__stdout__, stderr=Commands.__stderr__, 
+            stdout=sys.stdout, stderr=sys.stdout, 
             shell=True, cwd='./')
         
         process.wait()
