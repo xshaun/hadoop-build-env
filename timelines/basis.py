@@ -44,15 +44,17 @@ class BasisEvent(object):
 
     def finite(self):
         """ try to run several times despite failed """
-        for x in range(self.attempts):
+        for x_x in range(self.attempts):
             if self.action():
                 return True
+            logger.info("!'o'! a failed attempt at %d-th running" % (x_x))
             time.sleep(self.interval)
         return False
 
     def loop(self):
         """ try to run until succeed """
         while not self.action():
+            logger.info('A failed attempt and tring once more until success')
             time.sleep(self.interval)
         return True
 

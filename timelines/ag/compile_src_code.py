@@ -14,13 +14,15 @@ class CustomEvent(BasisEvent):
 
         codefolder = self.ys['codepath']
 
-        maven_shell = "cd {0} && mvn install \
-            && cd {1} \
-            && mvn clean \
-            && mvn eclipse:eclipse -DskipTests \
-            && mvn dependency-check:aggregate \
-            && mvn package -Pdist,native,docs,src -DskipTests -Dtar".format(
-            os.path.join(codefolder, 'hadoop-maven-plugins'), codefolder)
+        maven_shell = " && ".join([
+            "cd %s" % (os.path.join(codefolder, 'hadoop-maven-plugins')),
+            "mvn install",
+            "cd %s" % (codefolder),
+            "mvn clean"
+            "mvn eclipse:eclipse -DskipTests",
+            "mvn dependency-check:aggregate",
+            "mvn package -Pdist,native,docs,src -DskipTests -Dtar"
+            ])
 
         retcode = cmd.do(maven_shell)
         if retcode != 0:
