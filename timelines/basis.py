@@ -64,21 +64,22 @@ class BasisEvent(object):
             self.attempts = attempts
             return self.finite()
 
-class _StdOutWrapper(object):
-    """
-        Call wrapper for stdout
-    """
-    def write(self, s):
-        logger.info(s)
-
-class _StdErrWrapper(object):
-    """
-        Call wrapper for stderr
-    """
-    def write(self, s):
-        logger.error(s)
 
 class Commands(object):
+    class _StdOutWrapper(object):
+        """
+            Call wrapper for stdout
+        """
+        def write(self, s):
+            logger.info(s)
+
+    class _StdErrWrapper(object):
+        """
+            Call wrapper for stderr
+        """
+        def write(self, s):
+            logger.error(s)
+
     @staticmethod
     def do(arg):
         logger.info('commands.do: ' + arg)
