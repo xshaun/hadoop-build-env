@@ -103,11 +103,10 @@ class Commands(object):
         # redirect stdout to logger
         sys.stdout
 
-        echopwd = subprocess.Popen(['echo', pwd],
-                                   stdout=subprocess.PIPE, shell=True)
-        process = subprocess.Popen(arg,
-                                   stdin=echopwd.stdout, stdout=sys.stdout, stderr=sys.stdout,
-                                   shell=True, cwd='./')
+        echopwd = subprocess.Popen(
+            ['echo', pwd], stdout=subprocess.PIPE, shell=True)
+        process = subprocess.Popen(
+            arg, stdin=echopwd.stdout, stdout=sys.stdout, stderr=sys.stdout, shell=True, cwd='./')
 
         process.wait()
         echopwd.stdout.close()
