@@ -36,7 +36,6 @@ roles:
 
   'nm':
     'hosts':
-      - 'localhost' 
       - 'localhost'
     'pwd': 'xboy'
 

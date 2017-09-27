@@ -103,7 +103,7 @@ class Commands(object):
         sys.stdout
 
         echopwd = subprocess.Popen(
-            ['echo', pwd], stdout=subprocess.PIPE, shell=True)
+            ['echo', pwd], stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(
             arg, stdin=echopwd.stdout, stdout=sys.stdout, shell=True, cwd='./')
 
