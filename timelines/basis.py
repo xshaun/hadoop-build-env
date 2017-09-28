@@ -88,8 +88,9 @@ class Commands(object):
         # redirect stdout to logger
         sys.stdout
 
+        reset_arg = "source ./utilities/profile.* && %s" % (arg)
         process = subprocess.Popen(
-            arg, stdout=sys.stdout, stderr=sys.stdout, shell=True, cwd='./')
+            reset_arg, stdout=sys.stdout, stderr=sys.stdout, shell=True, cwd='./')
 
         process.wait()
         # process_output, = process.communicate()
@@ -107,10 +108,11 @@ class Commands(object):
         # redirect stdout to logger
         sys.stdout
 
+        reset_arg = "source ./utilities/profile.* && %s " % (arg)
         echopwd = subprocess.Popen(
             ['echo', pwd], stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(
-            arg, stdin=echopwd.stdout, stdout=sys.stdout, shell=True, cwd='./')
+            reset_arg, stdin=echopwd.stdout, stdout=sys.stdout, shell=True, cwd='./')
 
         process.wait()
         # process_output, = process.communicate()

@@ -1,6 +1,5 @@
 #!/bin/bash
 #
-source ./utility/base.*
 
 # Recommend trusty (14.04LTS)
 

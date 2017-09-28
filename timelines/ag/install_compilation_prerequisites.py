@@ -16,7 +16,7 @@ class CustomEvent(BasisEvent):
         if retcode != 0:
             return False
 
-        debian_shell = 'sudo -S ./utilities/t.install_compilation_prerequistes.sh'
+        debian_shell = 'sudo -S ./utilities/t.install_compilation_prerequisites.sh'
         retcode = cmd.sudo(debian_shell, self.ys['roles']['ag']['pwd'])
         if retcode != 0:
             return False
