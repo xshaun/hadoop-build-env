@@ -90,7 +90,8 @@ class Commands(object):
 
         reset_arg = "source ./utilities/profile.* && %s" % (arg)
         process = subprocess.Popen(
-            reset_arg, stdout=sys.stdout, stderr=sys.stdout, shell=True, cwd='./')
+            reset_arg, stdout=sys.stdout, stderr=sys.stdout, 
+            shell=True, cwd='./', executable='/bin/bash')
 
         process.wait()
         # process_output, = process.communicate()
@@ -112,7 +113,8 @@ class Commands(object):
         echopwd = subprocess.Popen(
             ['echo', pwd], stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(
-            reset_arg, stdin=echopwd.stdout, stdout=sys.stdout, shell=True, cwd='./')
+            reset_arg, stdin=echopwd.stdout, stdout=sys.stdout, 
+            shell=True, cwd='./', executable='/bin/bash')
 
         process.wait()
         # process_output, = process.communicate()
