@@ -37,5 +37,6 @@ class CustomEvent(BasisEvent):
         return True
 
 
-def clear_codepath(ys):
-    return CustomEvent(ys).occur(attempts=3, interval=3)
+def trigger(ys):
+    e = CustomEvent(ys, attempts=3, interval=3, auto=True)
+    return e.status

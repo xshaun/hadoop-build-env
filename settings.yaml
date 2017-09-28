@@ -2,7 +2,7 @@
 
 mode: 'pseudo_dis' # ['pseudo_dis' | 'fully_dis']
 
-codepath: '/opt/rose-on-hadoop-dev/' # absolute path 
+codepath: '/opt/rose-source-on-hadoop/' # absolute path 
 
 #
 # ag: admin gateway.
@@ -46,14 +46,17 @@ roles:
 #   F -> (must be)function name. 
 #
 timelines:
-  - 'ag.compile_prerequisites'    # install prerequisites used to compile hadoop
-  - 'ag.clear_codepath'           # remove all files under codepath folder
-  # - 'ag.download_bin_code'        # download binary code into codepath
-  - 'ag.download_src_code'        # download source code into codepath
-  - 'ag.compile_src_code'         # compile source code under codepath folder
+  - 'ag.install_compilation_prerequisites'    # install prerequisites used to compile hadoop
+  - 'ag.clear_codepath'                       # remove all files under codepath folder
+  - 'ag.download_bin_code'                    # download binary code into codepath
+  - 'ag.download_src_code'                    # download source code into codepath
+  - 'ag.compile_src_code'                     # compile source code under codepath folder
   
-#  - 'pre_runtime_env'      # prerequisites while running hadoop
-#  - 'deployment'           # deploy all roles
-#  - 'startup'              # start hadoop
-#  - 'launch_examples'      # run some examples for testing
-#  - 'shutdown'             # stop hadoop
+  # - 'com.install_runtime_prerequisites'       # prerequisites while running hadoop
+  # - 'rm.configure_daemon'                     # configuration
+  # - 'nm.configure_daemon'                     # configuration
+  # - 'com.distribute_binary'                   # deployment 
+
+  # - 'com.start_rose'                          # start rose
+  # - 'am.test_usability'                       # run samples
+  # - 'com.stop_rose'                           # stop rose

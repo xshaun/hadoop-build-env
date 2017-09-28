@@ -33,10 +33,16 @@ class BasisEvent(object):
      interval:  pause time while failed to run
     """
 
-    def __init__(self, ys):
+    def __init__(self, ys, attempts=5, interval=5, auto=True):
         self.ys = ys
-        self.attempts = 0
-        self.interval = 0  # seconds
+        self.attempts = attempts
+        self.interval = interval  # seconds
+        # @TODO
+        # support status machine
+        self.status = False
+
+        if auto:  # automatically occur
+            self.occur()
 
     def action(self):
         """ must be override, must return True or False """
@@ -63,14 +69,13 @@ class BasisEvent(object):
         self.attempts = 1
         return self.finite()
 
-    def occur(self, attempts=5, interval=5):
+    def occur(self):
         """ default runtime as finite method with 5 attempts"""
-        self.interval = interval
-        if attempts <= 0:
-            return self.loop()
+        if self.attempts < 0:
+            self.status = self.loop()
         else:
-            self.attempts = attempts
-            return self.finite()
+            self.status = self.finite()
+        return
 
 
 class Commands(object):

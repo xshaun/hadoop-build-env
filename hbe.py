@@ -19,44 +19,41 @@
 """
 Copyright (C) 2017 xiaoyang.xshaun. All Rights Reserved.
 
-To use, simply 'python3 -B ./hbe.py'
+To use, simply 'pip3 install -r ./requirements/pip3-requirements.txt && python3 -B ./hbe.py'
 """
 
-import os
-import yaml
-import logging
-import logging.config
+import os, yaml, logging, logging.config
 
 #---------------------------------------------------------------------------
 #   Definitions
 #---------------------------------------------------------------------------
 
 #
-#__logging_config is used to configue logging
-#__logging_logger is used to get a logger
+# _logging_config is used to configue logging
+# _logging_logger is used to get a logger
 #
-__logging_config = './config/logging.config'
-__logging_logger = 'develop'
+_logging_config = './config/logging.config'
+_logging_logger = 'develop'
 
 #
-#__settings_file indicates where is
+# _settings_file indicates where is
 #
-__settings_file = './settings.yaml'
+_settings_file = './settings.yaml'
 
 
 #---------------------------------------------------------------------------
 #   Core Logic
 #---------------------------------------------------------------------------
 
-logging.config.fileConfig(__logging_config)
-logger = logging.getLogger(__logging_logger)
+logging.config.fileConfig(_logging_config)
+logger = logging.getLogger(_logging_logger)
 
 
-def __parse_settings(abspath_filename):
+def _parse_settings(abspath_filename):
     try:
         if not os.path.isfile(abspath_filename):
             raise Exception('not found the setting file.')
-    
+
         file = open(abspath_filename)
         ys = yaml.load(file)  # setting file with yaml format
 
@@ -69,7 +66,8 @@ def __parse_settings(abspath_filename):
         # checker
         for item in ('mode', 'codepath', 'roles', 'timelines'):
             if item not in ys:
-                raise Exception("not found field '%s' in setting file." % (item))
+                raise Exception(
+                    "not found field '%s' in setting file." % (item))
 
         # checker
         if ys['mode'] not in ('pseudo_dis', 'fully_dis'):
@@ -77,27 +75,28 @@ def __parse_settings(abspath_filename):
 
         # checker
         if ys['mode'] == 'pseudo_dis' and (
-            len(ys['roles']['rm']['hosts']) != 1 or ys['roles']['rm'] != ys['roles']['nm']):
+                len(ys['roles']['rm']['hosts']) != 1 or ys['roles']['rm'] != ys['roles']['nm']):
             raise Exception(
                 'rm and nms must only have one, and same value under pseudo_dis mode in setting file.')
 
         return ys
 
     except Exception as e:
-        logger.error("catched exceptions while loading setting file: %s" % (str(e)))
+        logger.error(
+            "catched exceptions while loading setting file: %s" % (str(e)))
 
     return None
 
 
 def main():
-    ys = __parse_settings(os.path.abspath(__settings_file))
+    ys = _parse_settings(os.path.abspath(_settings_file))
     if ys is None:
         return 0
 
     try:
         for event in ys['timelines']:
             obj = __import__("timelines.%s" % (event), fromlist=True)
-            func = getattr(obj, event.split('.')[-1])  # function name
+            func = getattr(obj, 'trigger')
             if not func(ys):
                 raise Exception("errors occurs in timelines.%s" % (event))
     except Exception as e:

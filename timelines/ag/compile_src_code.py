@@ -31,5 +31,6 @@ class CustomEvent(BasisEvent):
         return True
 
 
-def compile_src_code(ys):
-    return CustomEvent(ys).occur(attempts=5, interval=10)
+def trigger(ys):
+    e = CustomEvent(ys, attempts=5, interval=10, auto=True)
+    return e.status

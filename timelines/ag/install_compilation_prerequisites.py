@@ -9,14 +9,14 @@ class CustomEvent(BasisEvent):
 
     # override
     def action(self):
-        logger.info('--> timelines.ag.compile_prerequisites <--')
+        logger.info('--> timelines.ag.install_compilation_prerequisites <--')
 
-        debian_shell = './utility/t.setup_aliyun_maven_mirror.sh'
+        debian_shell = './utilities/t.setup_aliyun_maven_mirror.sh'
         retcode = cmd.do(debian_shell)
         if retcode != 0:
             return False
 
-        debian_shell = 'sudo -S ./utility/t.install_compile_prerequistes.sh'
+        debian_shell = 'sudo -S ./utilities/t.install_compilation_prerequistes.sh'
         retcode = cmd.sudo(debian_shell, self.ys['roles']['ag']['pwd'])
         if retcode != 0:
             return False
@@ -24,5 +24,6 @@ class CustomEvent(BasisEvent):
         return True
 
 
-def compile_prerequisites(ys):
-    return CustomEvent(ys).occur(attempts=3, interval=3)
+def trigger(ys):
+    e = CustomEvent(ys, attempts=3, interval=3, auto=True)
+    return e.status
