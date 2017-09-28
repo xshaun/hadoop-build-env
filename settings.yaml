@@ -5,10 +5,13 @@ mode: 'pseudo_dis' # ['pseudo_dis' | 'fully_dis']
 codepath: '/opt/rose-source-on-hadoop/' # absolute path 
 
 #
-# ag: admin gateway.
-# rm: reource manager
-# nm: node manager
-# 
+# ag: admin gateway
+# rm: reource manager (in yarn)
+# nm: node manager (in yarn)
+# dn: data node (in hdfs)
+# nn: name node (in hdfs)
+#
+# ---
 # For example: under pseudo_dis mode
 #
 # roles:
@@ -23,6 +26,7 @@ codepath: '/opt/rose-source-on-hadoop/' # absolute path
 #     'hosts':
 #       - 'localhost'
 #     'pwd': 'xboy'
+# ---
 #
 roles:
   'ag': 
@@ -31,13 +35,29 @@ roles:
 
   'rm':
     'hosts':
-      - 'localhost' # first hostname
+      - 'localhost' # primary
+    'usr': 'boy'
     'pwd': 'xboy'
 
   'nm':
     'hosts':
       - 'localhost'
+    'usr': 'boy'
     'pwd': 'xboy'
+
+  'dn':
+    'hosts':
+      - 'localhost' # primary 
+      - 'localhost' # secondary
+    'usr': 'boy'
+    'pwd': 'xboy'
+
+  'nn':
+    'hosts':
+      - 'localhost'
+    'usr': 'boy'
+    'pwd': 'xboy'
+
 
 #
 # Naming Rules: R.?.F

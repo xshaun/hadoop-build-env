@@ -211,21 +211,3 @@ format_file()
     xmllint --format ${file} --output ${file}
 }
 
-# ---------------------
-# Auto Copy id_rsa.pub
-#    [omit inputting password manually]
-#
-# Usage:
-#    ssh_copy_id_auto <password> <username@IP>
-#
-ssh_copy_id_auto()
-{
-    expect -c "
-    set timeout -1;
-    spawn ssh-copy-id $2;
-    expect {
-        *(yes/no)* {send yes\r; exp_continue;}
-        *password:* {send $1\r; exp_continue;}
-        eof {exit 0;}
-    }";
-}

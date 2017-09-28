@@ -38,7 +38,8 @@ class CustomEvent(BasisEvent):
         movedir = "mv {0}/* {1} && rmdir {0} ".format(
             os.path.join(codefolder, "hadoop-%s" % (_version)), codefolder)
 
-        retcode = cmd.do("%s && %s" % (download, movedir))
+        _shell = "%s && %s" % (download, movedir)
+        retcode = cmd.do(_shell)
         if retcode != 0:
             return False
 

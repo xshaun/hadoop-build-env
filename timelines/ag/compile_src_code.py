@@ -14,7 +14,7 @@ class CustomEvent(BasisEvent):
 
         codefolder = self.ys['codepath']
 
-        maven_shell = " && ".join([
+        _maven_shell = " && ".join([
             "cd %s" % (os.path.join(codefolder, 'hadoop-maven-plugins')),
             "mvn install",
             "cd %s" % (codefolder),
@@ -23,8 +23,7 @@ class CustomEvent(BasisEvent):
             "mvn dependency-check:aggregate",
             "mvn package -Pdist,native,docs,src -DskipTests -Dtar"
         ])
-
-        retcode = cmd.do(maven_shell)
+        retcode = cmd.do(_maven_shell)
         if retcode != 0:
             return False
 
