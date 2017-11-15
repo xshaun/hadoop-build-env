@@ -112,9 +112,9 @@ def main(stage=None):
 
     except Exception as e:
         logger.error(str(e))
+        return 1
 
-    finally:
-        return 0
+    return 0
 
 
 if __name__ == '__main__':
@@ -122,4 +122,10 @@ if __name__ == '__main__':
         logger.error('Missing the necessary stage parameter')
         exit()
 
-    main(stage=sys.argv[1])
+    for i in range(1, len(sys.argv)):
+        retcode = main(stage=sys.argv[i])
+        if retcode != 0:
+            print("stage '%s' failed" % (sys.argv[i]))
+            exit()
+
+    return 0
