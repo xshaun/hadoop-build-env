@@ -107,4 +107,8 @@ stages:
   'all' : 
     - 'cpicp'
     - 'cpcc'
+    - 'cpdsc'
+    - 'cpcsc'
   
+  'test' : 
+    - 'cpicp'

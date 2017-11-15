@@ -2,7 +2,7 @@
 #
 
 #
-# [function] 
+# [function]
 # ---------------------
 # ssh_copy_id_auto()
 #
@@ -57,21 +57,21 @@ chmod 644 ~/.ssh/authorized_keys
 # [produce]
 # ----------------------------
 # Description:
-#   configure remote nodes to accept local *.pub 
+#   configure remote nodes to accept local *.pub
 #   for `ssh user@ip or pdsh` without password
 #
 # Params:
 #   users - ${1}, a list of remote nodes and join with ','. sample as "u1@ip1,u2@ip2"
-#   pwd - ${2}, remote nodes' password(s) that should been the same 
+#   pwd - ${2}, remote nodes' password(s) that should been the same
 #
 # Usage:
 #   ssh_copy_id_auto ${users} ${pwd}
 #
-OLD_IFS = "$IFS" 
-IFS = "," 
-nodes = (${1}) 
-IFS = "$OLD_IFS" 
+OLD_IFS="$IFS"
+IFS=","
+nodes=(${1})
 for node in ${nodes[@]}; do
     ssh_copy_id_auto ${node} ${2}
 done
+IFS="$OLD_IFS"
 

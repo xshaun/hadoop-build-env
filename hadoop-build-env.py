@@ -127,5 +127,3 @@ if __name__ == '__main__':
         if retcode != 0:
             print("stage '%s' failed" % (sys.argv[i]))
             exit()
-
-    return 0
