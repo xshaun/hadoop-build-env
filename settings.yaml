@@ -1,82 +1,110 @@
-# 
-
-mode: 'pseudo_dis' # ['pseudo_dis' | 'fully_dis']
-
-codepath: '/opt/rose-source-on-hadoop/' # absolute path 
-
+# ==============================================================
+# The document descripts deployment parameters that defines 
+# which file is fundamental and how to install these necessary 
+# components. 
 #
-# ag: admin gateway
-# rm: reource manager (in yarn)
-# nm: node manager (in yarn)
-# dn: data node (in hdfs)
-# nn: name node (in hdfs)
+# @author: Xiaoyang Sun (xshaun@outlook.com). 
+# Welcome e-mails from consulting and communicating.
+# --------------------------------------------------------------
+
+
+# ==============================================================
+# The following descripts parameters' definations and values.
+# Users can customize each field as their own demands. 
+
+# [$]
+# It defines the mode of deploying hadoop cluster. 
+# Optional values as following:
+#   - standalone
+#   - pseudo-distributed 
+#   - fully-distributed
 #
-# ---
-# For example: under pseudo_dis mode
+mode: 'pseudo-distributed' 
+
+# [$]
+# It defines the folder's absolute path of source code or binary. 
+# Empty or non-existing folder is fine bacasuse the stage of 
+# 'clear' and 'download' can create it automatically.
+# !!! Must ensure its correctness and avoid misoperations.!!!
 #
-# roles:
-#   'ag': 
-#     'host': 'localhost'
-#     'pwd': 'xboy'
-#   'rm':
-#     'hosts':
-#       - 'localhost'
-#     'pwd': 'xboy'
-#   'nm':
-#     'hosts':
-#       - 'localhost'
-#     'pwd': 'xboy'
-# ---
+codefolder: '/opt/rose-source-on-hadoop/'
+
+# [$]
+# Here descripts host, username and password of overall roles 
+# including deamons in Yarn and HDFS and also a proxy that helps
+# manage the cluster. 
+#
+# Abbreviation: 
+#   controlp - control proxy (controller)
+#   resourcem - reource manager (in Yarn)
+#   nodem - node manager (in Yarn)
+#   datan - data node (in HDFS)
+#   namen - name node (in HDFS)
 #
 roles:
-  'ag': 
-    'host': 'localhost' #  must
+  'controlp': 
+    'host': 'localhost'
+    'usr': 'boy'
     'pwd': 'xboy'
 
-  'rm':
+  'resourcem':
     'hosts':
       - 'localhost' # primary
     'usr': 'boy'
     'pwd': 'xboy'
 
-  'nm':
+  'nodem':
     'hosts':
       - 'localhost'
     'usr': 'boy'
     'pwd': 'xboy'
 
-  'dn':
+  'datan':
     'hosts':
       - 'localhost' # primary 
       - 'localhost' # secondary
     'usr': 'boy'
     'pwd': 'xboy'
 
-  'nn':
+  'namen':
     'hosts':
       - 'localhost'
     'usr': 'boy'
     'pwd': 'xboy'
 
+# [$]
+# Here defines concrete content/script(s) in each step that is
+# minimum unit of scheduling.
+# 
+# Make 'scripts/' as root directory and define value format is 
+# 'roles.function', such as 'controlp.clear_codefolder'. The 
+# point(.) means folder separator so users can customize 
+# hierarchical structure to organize customized scripts, such as
+# 'fruit.banana.eaten' means './scripts/fruit/banana/eaten.py'
+#
+steps:
+  # install prerequisites used to compile hadoop
+  'cpicp': 'controlp.install_compilation_prerequisites'
+  # remove all files under codepath folder
+  'cpcc': 'controlp.clear_codefolder'
+  # download binary code into codefolder
+  'cpdbc': 'controlp.download_bin_code'
+  # download source code into codefolder
+  'cpdsc': 'controlp.download_src_code'
+  # compile source code under codepath folder
+  'cpcsc': 'controlp.compile_src_code'
+  # distribute binary package to nodes
+  'cpdbp': 'controlp.distribute_binary_package'
 
-#
-# Naming Rules: R.?.F
-#   R -> one role, the script runs in R.
-#   ? -> custom notes.
-#   F -> (must be)function name. 
-#
-timelines:
-  - 'ag.install_compilation_prerequisites'    # install prerequisites used to compile hadoop
-  - 'ag.clear_codepath'                       # remove all files under codepath folder
-  - 'ag.download_bin_code'                    # download binary code into codepath
-  - 'ag.download_src_code'                    # download source code into codepath
-  - 'ag.compile_src_code'                     # compile source code under codepath folder
+  # prerequisites while running hadoop
+  'cirp': 'common.install_runtime_prerequisites'
   
-  # - 'com.install_runtime_prerequisites'       # prerequisites while running hadoop
-  # - 'rm.configure_daemon'                     # configuration
-  # - 'nm.configure_daemon'                     # configuration
-  # - 'com.distribute_binary'                   # deployment 
-
-  # - 'com.start_rose'                          # start rose
-  # - 'am.test_usability'                       # run samples
-  # - 'com.stop_rose'                           # stop rose
+# [$]
+# Here defines concrete steps in each stage that is combination 
+# of several processes/steps.
+#
+stages:
+  'all' : 
+    - 'cpicp'
+    - 'cpcc'
+  

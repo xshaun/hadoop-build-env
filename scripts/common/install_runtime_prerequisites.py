@@ -20,19 +20,20 @@ class CustomEvent(BasisEvent):
         logger.info('--> timelines.com.install_runtime_prerequisites <--')
 
         #
-        # Remote Commands
+        # Remote Commands: 
         #
-        # .create runtime codepath
-        part = dict(filter(lambda x: x[0] != 'ag', self.ys['roles'].items()))
-        nlist = list()
-        for k, v in part.items():
-            nlist += [v['usr'] + '@' + n for n in v['hosts']]
-        str = ','.join(set(nlist))
 
-        _shell = "pdsh -R ssh -w %s 'mkdir -p /opt/rose/tmp/'" % (nodes_list)
+        # .create runtime codepath in remote nodes
+        part = dict(filter(lambda x: x[0] != 'ag', self.ys['roles'].items()))
+        tlist = list()
+        for k, v in part.items():
+            tlist += [v['usr'] + '@' + n for n in v['hosts']]
+        _shell = "pdsh -R ssh -w %s 'mkdir -p /opt/rose/tmp/'" % (','.join(set(tlist)))
         retcode = cmd.do(_shell)
         if retcode != 0:
             return False
+
+        # .copy runtime scripts into remote nodes
 
 
         debian_shell = './utilities/t.install_runtime_prerequisites.sh'

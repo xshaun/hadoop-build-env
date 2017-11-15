@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 
-from timelines.basis import BasisEvent
-from timelines.basis import Commands as cmd
-from timelines.basis import logger
+from scripts.basis import Basis
+from scripts.basis import logger
+from scripts.command import Command as cmd
 import os
 
 
-class CustomEvent(BasisEvent):
+class Custom(Basis):
 
     # override
     def action(self):
-        logger.info('--> timelines.ag.compile_src_code <--')
+        logger.info('--> controlp.compile_src_code <--')
 
-        codefolder = self.ys['codepath']
+        codefolder = self.ys['codefolder']
 
-        _maven_shell = " && ".join([
+        ins = " && ".join([
             "cd %s" % (os.path.join(codefolder, 'hadoop-maven-plugins')),
             "mvn install",
             "cd %s" % (codefolder),
@@ -23,7 +23,7 @@ class CustomEvent(BasisEvent):
             "mvn dependency-check:aggregate",
             "mvn package -Pdist,native,docs,src -DskipTests -Dtar"
         ])
-        retcode = cmd.do(_maven_shell)
+        retcode = cmd.do(ins)
         if retcode != 0:
             return False
 
@@ -31,5 +31,5 @@ class CustomEvent(BasisEvent):
 
 
 def trigger(ys):
-    e = CustomEvent(ys, attempts=5, interval=10, auto=True)
+    e = Custom(ys, attempts=5, interval=10, auto=True)
     return e.status

@@ -18,11 +18,12 @@
 
 """
 Copyright (C) 2017 xiaoyang.xshaun. All Rights Reserved.
-
-To use, simply 'pip3 install -r ./requirements/pip3-requirements.txt && python3 -B ./hbe.py'
 """
 
-import os, yaml, logging, logging.config
+import os
+import yaml
+import logging
+import logging.config
 
 #---------------------------------------------------------------------------
 #   Definitions
@@ -32,7 +33,7 @@ import os, yaml, logging, logging.config
 # _logging_config is used to configue logging
 # _logging_logger is used to get a logger
 #
-_logging_config = './config/logging.config'
+_logging_config = './configs/logging.config'
 _logging_logger = 'develop'
 
 #
@@ -49,7 +50,9 @@ logging.config.fileConfig(_logging_config)
 logger = logging.getLogger(_logging_logger)
 
 
-def _parse_settings(abspath_filename):
+def _parse_yaml_settings(abspath_filename):
+    ys = None
+
     try:
         if not os.path.isfile(abspath_filename):
             raise Exception('not found the setting file.')
@@ -64,20 +67,21 @@ def _parse_settings(abspath_filename):
         """
 
         # checker
-        for item in ('mode', 'codepath', 'roles', 'timelines'):
+        for item in ('mode', 'codefolder', 'roles', 'steps', 'stages'):
             if item not in ys:
                 raise Exception(
                     "not found field '%s' in setting file." % (item))
 
         # checker
-        if ys['mode'] not in ('pseudo_dis', 'fully_dis'):
+        if ys['mode'] not in ('pseudo-distributed', 'fully-distributed'):
             raise Exception("ys['mode'] has an illegal value in setting file.")
 
         # checker
-        if ys['mode'] == 'pseudo_dis' and (
-                len(ys['roles']['rm']['hosts']) != 1 or ys['roles']['rm'] != ys['roles']['nm']):
+        if ys['mode'] == 'pseudo-distributed' and (
+                len(ys['roles']['resourcem']['hosts']) != 1 or 
+                ys['roles']['resourcem'] != ys['roles']['nodem']):
             raise Exception(
-                'rm and nms must only have one, and same value under pseudo_dis mode in setting file.')
+                'rm and nms must only have one, and same value under pseudo-distributed mode in setting file.')
 
         return ys
 
@@ -85,25 +89,28 @@ def _parse_settings(abspath_filename):
         logger.error(
             "catched exceptions while loading setting file: %s" % (str(e)))
 
-    return None
+    finally:
+        return ys
 
 
-def main():
-    ys = _parse_settings(os.path.abspath(_settings_file))
+def main(stage=None):
+    ys = _parse_yaml_settings(os.path.abspath(_settings_file))
     if ys is None:
         return 0
 
     try:
-        for event in ys['timelines']:
-            obj = __import__("timelines.%s" % (event), fromlist=True)
+        for step in ys['stages'][stage]:
+            obj = __import__("scripts.%s" % (ys['steps'][step]), fromlist=True)
             func = getattr(obj, 'trigger')
             if not func(ys):
-                raise Exception("errors occurs in timelines.%s" % (event))
+                raise Exception("errors occurs in scripts.%s" % (ys['steps'][step]))
+    
     except Exception as e:
         logger.error(str(e))
+    
     finally:
         return 0
 
 
 if __name__ == '__main__':
-    main()
+    main(stage=sys.argv[1])

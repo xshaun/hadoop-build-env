@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 
-from timelines.basis import BasisEvent
-from timelines.basis import Commands as cmd
-from timelines.basis import logger
+from scripts.basis import Basis
+from scripts.basis import logger
+from scripts.command import Command as cmd
 import os
 import shutil
 
 
-class CustomEvent(BasisEvent):
+class Custom(Basis):
 
     # override
     def action(self):
-        logger.info('--> timelines.ag.clear_codepath <--')
+        logger.info('--> controlp.clear_codefolder <--')
 
-        codefolder = self.ys['codepath']
+        codefolder = self.ys['codefolder']
 
         if not os.path.exists(codefolder):
             os.makedirs(codefolder)
 
         if not os.path.isdir(codefolder):
             logger.error(
-                '\'codepath\' does not indicate a folder in setting file.')
+                '\'codefolder\' does not indicate a folder in setting file.')
             return False
 
         for item in os.listdir(codefolder):
@@ -31,12 +31,12 @@ class CustomEvent(BasisEvent):
                 os.remove(itemsrc)
 
         if len(os.listdir(codefolder)) > 0:
-            logger.error('failed to clear \'codepath\' shown in setting file.')
+            logger.error('failed to clear \'codefolder\' shown in setting file.')
             return False
 
         return True
 
 
 def trigger(ys):
-    e = CustomEvent(ys, attempts=3, interval=3, auto=True)
+    e = Custom(ys, attempts=3, interval=3, auto=True)
     return e.status
