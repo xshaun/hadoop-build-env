@@ -25,7 +25,7 @@ class Custom(Basis):
             return False
 
         # setup passphraseless
-        roles_without_controller = dict(filter(lambda x: x[0] != 'controlp', 
+        roles_without_controller = dict(filter(lambda x: x[0] != 'controlp',
             self.ys['roles'].items()))
         for k, v in roles_without_controller.items():
             nodes_list_with_username = ','.join([ v['usr'] + '@' + n for n in v['hosts'] ])
@@ -39,6 +39,6 @@ class Custom(Basis):
         return True
 
 
-def trigger(ys, logger):
-    e = Custom(ys, logger, attempts=3, interval=3, auto=True)
+def trigger(ys):
+    e = Custom(ys, attempts=3, interval=3, auto=True)
     return e.status

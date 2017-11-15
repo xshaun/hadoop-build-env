@@ -3,12 +3,12 @@
 # Ensure python3 is installed.
 # The 'hadoop-build-env.py' script execution relys on python3.
 # Note here just check installation path as ubuntu(debian) package rules.
-if [[ -ne /usr/bin/python3 ]]; then 
+if [[ ! -e /usr/bin/python3 ]]; then 
     echo "Please install python3 and requirements before executing this script;"
     echo "Following commands may be helpful: "
     echo "$ sudo apt-get install python3 && pip3 install -r ./requirements/pip3-requirements.txt"
     exit 
 fi
 
-./hadoop-build-env.py -B $@
+/usr/bin/python3 -B ./hadoop-build-env.py $@
 

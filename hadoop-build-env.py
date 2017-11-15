@@ -21,6 +21,7 @@ Copyright (C) 2017 xiaoyang.xshaun. All Rights Reserved.
 """
 
 import os
+import sys
 import yaml
 import logging
 import logging.config
@@ -78,7 +79,7 @@ def _parse_yaml_settings(abspath_filename):
 
         # checker
         if ys['mode'] == 'pseudo-distributed' and (
-                len(ys['roles']['resourcem']['hosts']) != 1 or 
+                len(ys['roles']['resourcem']['hosts']) != 1 or
                 ys['roles']['resourcem'] != ys['roles']['nodem']):
             raise Exception(
                 'rm and nms must only have one, and same value under pseudo-distributed mode in setting file.')
@@ -96,7 +97,11 @@ def _parse_yaml_settings(abspath_filename):
 def main(stage=None):
     ys = _parse_yaml_settings(os.path.abspath(_settings_file))
     if ys is None:
-        return 0
+        return 1
+
+    if stage not in ys['stages']:
+        logger.error('defined stage is not in settings.yaml')
+        return 1
 
     try:
         for step in ys['stages'][stage]:
@@ -104,13 +109,17 @@ def main(stage=None):
             func = getattr(obj, 'trigger')
             if not func(ys):
                 raise Exception("errors occurs in scripts.%s" % (ys['steps'][step]))
-    
+
     except Exception as e:
         logger.error(str(e))
-    
+
     finally:
         return 0
 
 
 if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        logger.error('Missing the necessary stage parameter')
+        exit()
+
     main(stage=sys.argv[1])
