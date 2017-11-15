@@ -12,7 +12,7 @@ import os
 #
 # _version indicates downloading binary code version
 #
-_version = '3.0.0-alpha4'
+_version = '3.0.0-beta1'
 
 
 class Custom(Basis):

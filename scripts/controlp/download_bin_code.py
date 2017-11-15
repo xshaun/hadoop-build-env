@@ -12,7 +12,7 @@ import os
 #
 # _version indicates downloading binary code version
 #
-_version = '3.0.0-alpha4'
+_version = '3.0.0-beta1'
 
 
 class Custom(Basis):
@@ -35,8 +35,9 @@ class Custom(Basis):
             _version)
         download = "curl -sSL {0} | tar -C {1} -xzv".format(
             link_address, codefolder)
-        movedir = "mv {0}/* {1} && rmdir {0} ".format(
-            os.path.join(codefolder, "hadoop-%s" % (_version)), codefolder)
+        movedir = "mkdir -p {0} && mv {1}/* {0} && rmdir {1} ".format(
+            os.path.join(codefolder, "hadoop-dist/target/hadoop-%s" % (_version)),
+            os.path.join(codefolder, "hadoop-%s" % (_version)))
 
         ins = "%s && %s" % (download, movedir)
         retcode = cmd.do(ins)

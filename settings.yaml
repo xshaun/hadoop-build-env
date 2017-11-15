@@ -111,4 +111,4 @@ stages:
     - 'cpcsc'
   
   'test' : 
-    - 'cpicp'
+    - 'cpdbc'
