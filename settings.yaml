@@ -55,9 +55,9 @@ roles:
 
   'nodem':
     'hosts':
-      - 'localhost'
-    'usr': 'boy'
-    'pwd': 'xboy'
+      - '192.168.106.71'
+    'usr': 'root'
+    'pwd': '123456'
 
   'datan':
     'hosts':
@@ -68,9 +68,9 @@ roles:
 
   'namen':
     'hosts':
-      - 'localhost'
-    'usr': 'boy'
-    'pwd': 'xboy'
+      - '192.168.106.71'
+    'usr': 'root'
+    'pwd': '123456'
 
 # [$]
 # Here defines concrete content/script(s) in each step that is
@@ -85,6 +85,8 @@ roles:
 steps:
   # install prerequisites used to compile hadoop
   'cpicp': 'controlp.install_compilation_prerequisites'
+  # setup passphraseless
+  'cpsp': 'controlp.setup_passphraseless'
   # remove all files under codepath folder
   'cpcc': 'controlp.clear_codefolder'
   # download binary code into codefolder
@@ -104,14 +106,20 @@ steps:
 # of several processes/steps.
 #
 stages:
-  'all' : 
+  'all': 
     - 'cpicp'
     - 'cpcc'
     - 'cpdsc'
     - 'cpcsc'
 
+  'passless': 
+    - 'cpsp'
+
   'clear':
     - 'cpcc'
+
+  'compile':
+    - 'cpcsc'
 
   'test' : 
     - 'cpdbc'
