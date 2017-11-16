@@ -39,7 +39,7 @@ class Custom(Basis):
             logger.info("ins: %s; retcode: %d." % (ins, retcode))
 
         # scripts about building env
-        master_scripts = './utilities/install_runtime_prerequisites.sh'
+        master_scripts = './utilities/'
         slave_scripts_folder = '/opt/rose/scripts/'
 
         for node_with_username in nodes_list_with_username:
