@@ -108,6 +108,7 @@ steps:
 stages:
   'all': 
     - 'cpicp'
+    - 'cpsp'
     - 'cpcc'
     - 'cpdsc'
     - 'cpcsc'
