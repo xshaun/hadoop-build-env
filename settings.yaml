@@ -19,7 +19,8 @@
 #   - pseudo-distributed 
 #   - fully-distributed
 #
-mode: 'pseudo-distributed' 
+#mode: 'pseudo-distributed' 
+mode: 'fully-distributed' 
 
 # [$]
 # It defines the folder's absolute path of source code or binary. 
@@ -123,4 +124,4 @@ stages:
     - 'cpcsc'
 
   'test' : 
-    - 'cpdbc'
+    - 'cpdbp'

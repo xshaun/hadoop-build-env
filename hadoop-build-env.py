@@ -89,6 +89,7 @@ def _parse_yaml_settings(abspath_filename):
     except Exception as e:
         logger.error(
             "catched exceptions while loading setting file: %s" % (str(e)))
+        ys = None
 
     finally:
         return ys

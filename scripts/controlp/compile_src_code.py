@@ -21,7 +21,8 @@ class Custom(Basis):
             "mvn clean",
             "mvn eclipse:eclipse -DdownloadSources=true -DdownloadJavadocs=true -DskipTests",
             "mvn dependency-check:aggregate",
-            "mvn package -Pdist,native,docs,src -DskipTests -Dtar"
+            # "mvn package -Pdist,native,docs,src -DskipTests -Dtar" # -Pdocs will enforce to check the format correction of docs and some mvn errors will occur.
+            "mvn package -Pdist,native,src -DskipTests -Dtar"
         ])
         retcode = cmd.do(ins)
         if retcode != 0:
