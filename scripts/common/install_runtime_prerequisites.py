@@ -28,8 +28,8 @@ class Custom(Basis):
         #
         # build master and slaves environment
         #
-        #remote_ins = 'sudo /opt/rose/scripts/install_runtime_prerequisites.sh'
-        remote_ins = 'sudo mkdir /rosetest/'
+        # TODO [support to parallel execution]
+        remote_ins = 'sudo -S /opt/rose/scripts/install_runtime_prerequisites.sh'
 
         for k, v in roles_without_controller.items():
             for host in v['hosts']:
@@ -38,7 +38,7 @@ class Custom(Basis):
                 if usr_host in usr_host_list:
                     usr_host_list.remove(usr_host)
 
-                    ins = "{0} {1} -t '{2}' & sleep 0.5".format(
+                    ins = "{0} {1} -t '{2}' ".format(
                             ssh_option, usr_host, remote_ins)
                     retcode = cmd.sudo(ins, v['pwd'])
                     logger.info("ins: %s; retcode: %d." % (ins, retcode))

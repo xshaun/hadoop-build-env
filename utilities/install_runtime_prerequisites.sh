@@ -2,6 +2,11 @@
 #
 # Recommend trusty (14.04LTS)
 
+killall dpkg
+killall apt-get
+killall aptitude
+dpkg --configure -a
+
 # APT='apt-get'
 
 # ----------------------------
