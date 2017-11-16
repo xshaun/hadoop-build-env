@@ -109,6 +109,9 @@ stages:
     - 'cpcc'
     - 'cpdsc'
     - 'cpcsc'
-  
+
+  'clear':
+    - 'cpcc'
+
   'test' : 
     - 'cpdbc'
