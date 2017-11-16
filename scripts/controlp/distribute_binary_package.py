@@ -26,7 +26,9 @@ class Custom(Basis):
 
         nodes_list_with_username = list(set(nodes_list_with_username))
 
+        #
         # binary code
+        #
         master_sour_folder = os.path.join(self.ys['codefolder'],
                 'hadoop-dist/target/hadoop-3.0.0-beta1/')
         slave_dest_folder = '/opt/rose/rose-on-hadoop/'
@@ -38,7 +40,9 @@ class Custom(Basis):
             retcode = cmd.do(ins)
             logger.info("ins: %s; retcode: %d." % (ins, retcode))
 
+        #
         # scripts about building env
+        #
         master_scripts = './utilities/'
         slave_scripts_folder = '/opt/rose/scripts/'
 
@@ -49,7 +53,9 @@ class Custom(Basis):
             retcode = cmd.do(ins)
             logger.info("ins: %s; retcode: %d." % (ins, retcode))
 
+        #
         # wait to end
+        #
         ins = 'wait'
         retcode = cmd.do(ins)
         if retcode != 0:

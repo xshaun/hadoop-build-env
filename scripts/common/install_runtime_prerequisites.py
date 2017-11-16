@@ -1,56 +1,58 @@
 #!/usr/bin/env python3
 
-from timelines.basis import BasisEvent
-from timelines.basis import Commands as cmd
-from timelines.basis import logger
+from scripts.basis import Basis
+from scripts.basis import logger
+from scripts.command import Command as cmd
 
 #---------------------------------------------------------------------------
 #   Definitions
 #---------------------------------------------------------------------------
 
-#
-# _runtime_codepath indicates the code location as runtime
-#
-_runtime_codepath = '/opt/rose/'
-
-class CustomEvent(BasisEvent):
+class Custom(Basis):
 
     # override
     def action(self):
-        logger.info('--> timelines.com.install_runtime_prerequisites <--')
+        logger.info('--> common.install_runtime_prerequisties<--')
+
+        ssh_option = 'ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5'
+
+        usr_host_list = list()
+
+        roles_without_controller = dict(filter(lambda x: x[0] != 'controlp',
+            self.ys['roles'].items()))
+        for k, v in roles_without_controller.items():
+            usr_host_list.extend([ v['usr'] + '@' + n for n in v['hosts'] ])
+
+        usr_host_list = list(set(usr_host_list))
 
         #
-        # Remote Commands: 
+        # build master and slaves environment
         #
+        remote_ins = 'sudo /opt/rose/scripts/install_runtime_prerequisites.sh'
 
-        # .create runtime codepath in remote nodes
-        part = dict(filter(lambda x: x[0] != 'ag', self.ys['roles'].items()))
-        tlist = list()
-        for k, v in part.items():
-            tlist += [v['usr'] + '@' + n for n in v['hosts']]
-        _shell = "pdsh -R ssh -w %s 'mkdir -p /opt/rose/tmp/'" % (','.join(set(tlist)))
-        retcode = cmd.do(_shell)
+        for k, v in roles_without_controller.items():
+            for host in v['hosts']:
+                usr_host = (v['usr']+'@'+host)
+                
+                if usr_host in usr_host_list:
+                    usr_host_list.remove(usr_host)
+
+                    ins = "{0} {1} -t '{2}' & sleep 0.5".format(
+                            ssh_option, usr_host, remote_ins)
+                    retcode = cmd.sudo(ins, v['pwd'])
+                    logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+        #
+        # wait to end
+        #
+        ins = 'wait'
+        retcode = cmd.do(ins)
         if retcode != 0:
             return False
-
-        # .copy runtime scripts into remote nodes
-
-
-        debian_shell = './utilities/t.install_runtime_prerequisites.sh'
-        
-        
-        # retcode = cmd.do(debian_shell)
-        # if retcode != 0:
-        #     return False
-
-        # debian_shell = 'sudo -S ./utilities/t.install_compile_prerequistes.sh'
-        # retcode = cmd.sudo(debian_shell, self.ys['roles']['ag']['pwd'])
-        # if retcode != 0:
-        #     return False
 
         return True
 
 
 def trigger(ys):
-    e = CustomEvent(ys, attempts=5, interval=10, auto=True)
+    e = Custom(ys, attempts=3, interval=3, auto=True)
     return e.status

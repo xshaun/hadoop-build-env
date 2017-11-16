@@ -107,15 +107,19 @@ steps:
 # of several processes/steps.
 #
 stages:
-  'all': 
+  'init': 
     - 'cpicp'
     - 'cpsp'
     - 'cpcc'
     - 'cpdsc'
     - 'cpcsc'
+    - 'cpdbp'
 
-  'passless': 
+  'initproxy':
+    - 'cpicp'
     - 'cpsp'
+    - 'cpcc'
+    - 'cpdsc'
 
   'clear':
     - 'cpcc'
@@ -123,5 +127,8 @@ stages:
   'compile':
     - 'cpcsc'
 
-  'test' : 
+  'deloy':
     - 'cpdbp'
+
+  'test' : 
+    - 'cirp'
