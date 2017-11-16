@@ -17,15 +17,15 @@ class Custom(Basis):
         # setup passphraseless
         roles_without_controller = dict(filter(lambda x: x[0] != 'controlp',
             self.ys['roles'].items()))
-        nodes_list_with_username = list()
+ 
         for k, v in roles_without_controller.items():
-            nodes_list_with_username.extend([ v['usr'] + '@' + n for n in v['hosts'] ])
+            usr_host_list = list(set([ v['usr'] + '@' + n for n in v['hosts'] ]))
 
-        ins = "./utilities/setup_passphraseless.sh %s %s" % (
-            ','.join(list(set(nodes_list_with_username))), v['pwd'])
-        retcode = cmd.do(ins)
-        if retcode != 0:
-            return False
+            ins = "./utilities/setup_passphraseless.sh %s %s" % (
+                ','.join(usr_host_list), v['pwd'])
+            retcode = cmd.do(ins)
+            if retcode != 0:
+                return False
 
         return True
 
