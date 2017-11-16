@@ -28,12 +28,13 @@ class Custom(Basis):
         #
         # build master and slaves environment
         #
-        remote_ins = 'sudo /opt/rose/scripts/install_runtime_prerequisites.sh'
+        #remote_ins = 'sudo /opt/rose/scripts/install_runtime_prerequisites.sh'
+        remote_ins = 'sudo mkdir /rosetest/'
 
         for k, v in roles_without_controller.items():
             for host in v['hosts']:
                 usr_host = (v['usr']+'@'+host)
-                
+
                 if usr_host in usr_host_list:
                     usr_host_list.remove(usr_host)
 

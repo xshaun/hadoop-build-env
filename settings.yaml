@@ -57,7 +57,7 @@ roles:
   'nodem':
     'hosts':
       - '192.168.106.71'
-    'usr': 'root'
+    'usr': 'ubuntu'  # 'root'
     'pwd': '123456'
 
   'datan':
@@ -70,7 +70,7 @@ roles:
   'namen':
     'hosts':
       - '192.168.106.71'
-    'usr': 'root'
+    'usr': 'ubuntu'
     'pwd': '123456'
 
 # [$]
@@ -120,6 +120,9 @@ stages:
     - 'cpsp'
     - 'cpcc'
     - 'cpdsc'
+    
+  'keyless':
+    - 'cpsp'
 
   'clear':
     - 'cpcc'
