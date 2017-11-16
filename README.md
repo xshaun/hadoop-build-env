@@ -6,7 +6,14 @@ And we take delight in contribution in efficient cluster scheduling and approach
 
 ## How to run
 1. customize `setting.yaml` according to user demands.
+
 2. run `bhe <stage(s)>`
+
+   > e.g. 
+   >
+   > hbe init   # run all actions for hadoop execution
+   >
+   > hbe initproxt  # only install nessary libs in control-proxy-pc
 
 *PSEUDO_DIS_MODE* 
 ```
