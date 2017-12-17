@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #paras are group, user, codepath
-if [ $# -ne 4 ]
+if [ $# -ne 3 ]
 then 
     exit 1
 fi

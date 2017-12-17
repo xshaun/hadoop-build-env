@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #para are group_name and user_name
-if [ $# -ne 3 ]
+if [ $# -ne 2 ]
 then
-    echo "wrong paras num"
+    echo "wrong paras number"
     exit 1
 fi
 
