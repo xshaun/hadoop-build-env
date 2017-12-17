@@ -26,6 +26,20 @@ class Custom(Basis):
 
         nodes_list_with_username = list(set(nodes_list_with_username))
 
+
+        #
+        # add permissions
+        #
+        for k, v in roles_without_controller.items():
+            for host in v['hosts']:
+                usr_host = (v['usr']+'@'+host)
+
+                if usr_host in nodes_list_with_username:
+                    ins = "{0} {1} -tt 'sudo -S chown -R {2} /opt/' ".format(
+                            ssh_option, usr_host, v['usr'])
+                    retcode = cmd.sudo(ins, v['pwd'])
+                    logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
         #
         # binary code
         #
