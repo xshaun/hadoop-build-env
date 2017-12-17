@@ -4,6 +4,7 @@ from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command as cmd
 import os
+import copy
 
 #---------------------------------------------------------------------------
 #   Definitions
@@ -30,11 +31,14 @@ class Custom(Basis):
         #
         # add permissions
         #
+        usr_host_list = copy.deepcopy(nodes_list_with_username)
         for k, v in roles_without_controller.items():
             for host in v['hosts']:
                 usr_host = (v['usr']+'@'+host)
 
-                if usr_host in nodes_list_with_username:
+                if usr_host in usr_host_list:
+                    usr_host_list.remove(usr_host)
+                    
                     ins = "{0} {1} -tt 'sudo -S chown -R {2} /opt/' ".format(
                             ssh_option, usr_host, v['usr'])
                     retcode = cmd.sudo(ins, v['pwd'])

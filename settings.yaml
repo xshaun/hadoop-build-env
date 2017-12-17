@@ -135,12 +135,9 @@ stages:
     - 'cpcc'
     - 'cpdsc'
     - 'cpcsc'
-    
-    - 'cirp'
-    - 'caug' 
-
     - 'cpdbp'
-
+    - 'cirp'
+    - 'caug'
     - 'ccbmo'
 
   'initproxy':
