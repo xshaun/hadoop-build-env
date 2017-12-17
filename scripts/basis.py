@@ -100,7 +100,9 @@ class Basis(object):
             self.ys['roles'].items()))
         for k, v in roles_without_controller.items():
             for h in v['hosts']:
-                res.append({'ip': h, 'usr': v['usr'], 'pwd': v['pwd']})
+                t = {'ip': h, 'usr': v['usr'], 'pwd': v['pwd']}
+                if t not in res:
+                    res.append(t)
 
         return list(set(res))
 
