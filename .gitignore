@@ -9,3 +9,7 @@ __pycache__/
 # Project
 *.log
 log/*
+tmp/*
+
+# IDEA
+.idea/*

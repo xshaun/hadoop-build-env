@@ -29,9 +29,9 @@ class Custom(Basis):
         #
         # binary code
         #
-        master_sour_folder = os.path.join(self.ys['codefolder'],
+        master_sour_folder = os.path.join(self.ys['sourcecode'],
                 'hadoop-dist/target/hadoop-3.0.0-beta1/')
-        slave_dest_folder = '/opt/rose/rose-on-hadoop/'
+        slave_dest_folder = os.path.join(self.ys['binarycode'], 'rose-on-yarn/')
 
         for node_with_username in nodes_list_with_username:
             ins = "ssh {2} 'mkdir -p {3}' && rsync -e '{0}' -az '{1}' {2}:{3} & sleep 0.5".format(
@@ -41,10 +41,23 @@ class Custom(Basis):
             logger.info("ins: %s; retcode: %d." % (ins, retcode))
 
         #
+        # configs
+        #
+        master_configs = './configs/*.xml'
+        slave_dest_configs_folder = os.path.join(self.ys['binarycode'], 'rose-on-yarn/etc/hadoop/')
+
+        for node_with_username in nodes_list_with_username:
+            ins = "ssh {2} 'mkdir -p {3}' && rsync -e '{0}' -az '{1}' {2}:{3} & sleep 0.5".format(
+                    ssh_option, master_configs,
+                    node_with_username, slave_dest_configs_folder)
+            retcode = cmd.do(ins)
+            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+        #
         # scripts about building env
         #
         master_scripts = './utilities/'
-        slave_scripts_folder = '/opt/rose/scripts/'
+        slave_scripts_folder = os.path.join(self.ys['binarycode'], 'scripts/')
 
         for node_with_username in nodes_list_with_username:
             ins = "ssh {2} 'mkdir -p {3}' && rsync -e '{0}' -az '{1}' {2}:{3} & sleep 0.5".format(

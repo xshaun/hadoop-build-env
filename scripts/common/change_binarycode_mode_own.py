@@ -3,16 +3,15 @@
 from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command as cmd
+import os
 
 #---------------------------------------------------------------------------
 #   Definitions
 #---------------------------------------------------------------------------
 
 class Custom(Basis):
-
-    # override
     def action(self):
-        logger.info('--> common.install_runtime_prerequisties <--')
+        logger.info('--> common.change_binarycode_mode_own <--')
 
         ssh_option = 'ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
@@ -26,11 +25,14 @@ class Custom(Basis):
         usr_host_list = list(set(usr_host_list))
 
         #
-        # build master and slaves environment
-        #
         # TODO [support to parallel execution]
+        slave_dest_folder = os.path.join(self.ys['binarycode'], 'rose-on-yarn/')
         slave_scripts_folder = os.path.join(self.ys['binarycode'], 'scripts/')
-        remote_ins = "sudo -S %s/install_runtime_prerequisites.sh" % (slave_scripts_folder)
+        remote_ins = "sudo -S %s/change_binarycode_mode_own.sh %s %s %s" % (
+            slave_scripts_folder, 
+            self.ys['opt']['group'], 
+            self.ys['opt']['user'], 
+            slave_dest_folder)
 
         for k, v in roles_without_controller.items():
             for host in v['hosts']:
@@ -54,7 +56,7 @@ class Custom(Basis):
 
         return True
 
-
+        
 def trigger(ys):
     e = Custom(ys, attempts=3, interval=3, auto=True)
     return e.status

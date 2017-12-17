@@ -12,12 +12,12 @@ class Custom(Basis):
     def action(self):
         logger.info('--> controlp.compile_src_code <--')
 
-        codefolder = self.ys['codefolder']
+        sourcecode = self.ys['sourcecode']
 
         ins = " && ".join([
-            "cd %s" % (os.path.join(codefolder, 'hadoop-maven-plugins')),
+            "cd %s" % (os.path.join(sourcecode, 'hadoop-maven-plugins')),
             "mvn install",
-            "cd %s" % (codefolder),
+            "cd %s" % (sourcecode),
             "mvn clean",
             "mvn eclipse:eclipse -DdownloadSources=true -DdownloadJavadocs=true -DskipTests",
             "mvn dependency-check:aggregate",

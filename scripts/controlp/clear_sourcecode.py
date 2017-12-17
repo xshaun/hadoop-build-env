@@ -11,27 +11,27 @@ class Custom(Basis):
 
     # override
     def action(self):
-        logger.info('--> controlp.clear_codefolder <--')
+        logger.info('--> controlp.clear_sourcecode <--')
+        
+        sourcecode = self.ys['sourcecode']
 
-        codefolder = self.ys['codefolder']
+        if not os.path.exists(sourcecode):
+            os.makedirs(sourcecode)
 
-        if not os.path.exists(codefolder):
-            os.makedirs(codefolder)
-
-        if not os.path.isdir(codefolder):
+        if not os.path.isdir(sourcecode):
             logger.error(
-                '\'codefolder\' does not indicate a folder in setting file.')
+                '\'sourcecode\' does not indicate a folder in setting file.')
             return False
 
-        for item in os.listdir(codefolder):
-            itemsrc = os.path.join(codefolder, item)
+        for item in os.listdir(sourcecode):
+            itemsrc = os.path.join(sourcecode, item)
             if os.path.isdir(itemsrc):
                 shutil.rmtree(itemsrc)
             else:
                 os.remove(itemsrc)
 
-        if len(os.listdir(codefolder)) > 0:
-            logger.error('failed to clear \'codefolder\' shown in setting file.')
+        if len(os.listdir(sourcecode)) > 0:
+            logger.error('failed to clear \'sourcecode\' shown in setting file.')
             return False
 
         return True

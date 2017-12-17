@@ -21,23 +21,23 @@ class Custom(Basis):
     def action(self):
         logger.info('--> controlp.download_bin_code <--')
 
-        codefolder = self.ys['codefolder']
+        sourcecode = self.ys['sourcecode']
 
-        if not os.path.exists(codefolder):
-            os.makedirs(codefolder)
+        if not os.path.exists(sourcecode):
+            os.makedirs(sourcecode)
 
-        if not os.path.isdir(codefolder):
+        if not os.path.isdir(sourcecode):
             logger.error(
-                '\'codefolder\' does not indicate a folder in setting file.')
+                '\'sourcecode\' does not indicate a folder in setting file.')
             return False
 
         link_address = "http://www-eu.apache.org/dist/hadoop/common/hadoop-{0}/hadoop-{0}.tar.gz".format(
             _version)
         download = "curl -sSL {0} | tar -C {1} -xzv".format(
-            link_address, codefolder)
+            link_address, sourcecode)
         movedir = "mkdir -p {0} && mv {1}/* {0} && rmdir {1} ".format(
-            os.path.join(codefolder, "hadoop-dist/target/hadoop-%s" % (_version)),
-            os.path.join(codefolder, "hadoop-%s" % (_version)))
+            os.path.join(sourcecode, "hadoop-dist/target/hadoop-%s" % (_version)),
+            os.path.join(sourcecode, "hadoop-%s" % (_version)))
 
         ins = "%s && %s" % (download, movedir)
         retcode = cmd.do(ins)

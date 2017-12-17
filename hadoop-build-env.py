@@ -68,7 +68,7 @@ def _parse_yaml_settings(abspath_filename):
         """
 
         # checker
-        for item in ('mode', 'codefolder', 'roles', 'steps', 'stages'):
+        for item in ('mode', 'sourcecode', 'binarycode', 'roles', 'steps', 'stages'):
             if item not in ys:
                 raise Exception(
                     "not found field '%s' in setting file." % (item))
