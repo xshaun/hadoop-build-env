@@ -24,9 +24,9 @@ class Custom(Basis):
         #
         # TODO [support to parallel execution]
         slave_scripts_folder = os.path.join(self.ys['binarycode'], 'scripts/')
-        remote_ins = "sudo -S %s/add_user_group.sh %s %s %s" % (
-            slave_scripts_folder, 
-            self.ys['opt']['group'], 
+        remote_ins = "sudo -S %s/add_user_group.sh %s %s " % (
+            slave_scripts_folder,
+            self.ys['opt']['group'],
             self.ys['opt']['user'])
 
         for k, v in roles_without_controller.items():
@@ -36,7 +36,7 @@ class Custom(Basis):
                 if usr_host in usr_host_list:
                     usr_host_list.remove(usr_host)
 
-                    ins = "{0} {1} -t '{2}' ".format(
+                    ins = "{0} {1} -tt '{2}' ".format(
                             ssh_option, usr_host, remote_ins)
                     retcode = cmd.sudo(ins, v['pwd'])
                     logger.info("ins: %s; retcode: %d." % (ins, retcode))

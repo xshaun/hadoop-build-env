@@ -79,7 +79,7 @@ roles:
 
   'datan':
     'hosts':
-      - 'localhost' 
+      - '192.168.106.71' 
     'usr': 'ubuntu'
     'pwd': '123456'
     'dir': '/hdfs/dn' # <-*
@@ -159,6 +159,5 @@ stages:
     - 'cpdbp'
 
   'test' : 
-    - 'cirp'
-    - 'caug'
-    - 'ccbmo'
+     - 'caug'
+    #  - 'ccbmo'

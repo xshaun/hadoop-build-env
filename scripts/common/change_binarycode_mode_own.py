@@ -29,9 +29,9 @@ class Custom(Basis):
         slave_dest_folder = os.path.join(self.ys['binarycode'], 'rose-on-yarn/')
         slave_scripts_folder = os.path.join(self.ys['binarycode'], 'scripts/')
         remote_ins = "sudo -S %s/change_binarycode_mode_own.sh %s %s %s" % (
-            slave_scripts_folder, 
-            self.ys['opt']['group'], 
-            self.ys['opt']['user'], 
+            slave_scripts_folder,
+            self.ys['opt']['group'],
+            self.ys['opt']['user'],
             slave_dest_folder)
 
         for k, v in roles_without_controller.items():
@@ -41,7 +41,7 @@ class Custom(Basis):
                 if usr_host in usr_host_list:
                     usr_host_list.remove(usr_host)
 
-                    ins = "{0} {1} -t '{2}' ".format(
+                    ins = "{0} {1} -tt '{2}' ".format(
                             ssh_option, usr_host, remote_ins)
                     retcode = cmd.sudo(ins, v['pwd'])
                     logger.info("ins: %s; retcode: %d." % (ins, retcode))
@@ -56,7 +56,7 @@ class Custom(Basis):
 
         return True
 
-        
+
 def trigger(ys):
     e = Custom(ys, attempts=3, interval=3, auto=True)
     return e.status

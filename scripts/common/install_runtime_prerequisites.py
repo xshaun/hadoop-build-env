@@ -40,7 +40,7 @@ class Custom(Basis):
                 if usr_host in usr_host_list:
                     usr_host_list.remove(usr_host)
 
-                    ins = "{0} {1} -t '{2}' ".format(
+                    ins = "{0} {1} -tt '{2}' ".format(
                             ssh_option, usr_host, remote_ins)
                     retcode = cmd.sudo(ins, v['pwd'])
                     logger.info("ins: %s; retcode: %d." % (ins, retcode))
