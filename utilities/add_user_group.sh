@@ -11,7 +11,7 @@ fi
 egrep "^$1" /etc/group >& /dev/null  
 if [ $? -ne 0 ]  
 then  
-    groupadd $group  
+    groupadd $1  
 fi  
   
 #create user if not exists  
