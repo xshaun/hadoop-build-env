@@ -58,11 +58,13 @@ opt:
 #   datan - data node (in HDFS)
 #
 tmpmaster: &tmpmaster
-  - 'localhost'
+  hosts:
+    - 'localhost'
 
 tmpslaves: &tmpslaves
-  - '192.168.106.71'
-  
+  hosts:
+    - '192.168.106.71'
+
 roles:
   controlp: 
     'host': 'localhost'
@@ -70,32 +72,33 @@ roles:
     'pwd': 'xboy'
 
   resourcem:
-    'hosts':
-      <<: *tmpmaster
-      # - '?.?.?.?' # primary
+    <<: *tmpmaster
+    # hosts+:
+    #   - '?.?.?.?' # primary
     'usr': 'boy'
     'pwd': 'xboy'
 
   nodem:
-    'hosts':
-      <<: *tmpslaves
-      
+    <<: *tmpslaves    
+    # hosts+:
+    #   -
     'usr': 'ubuntu'  # 'root'
     'pwd': '123456'
 
   namen:
-    'hosts':
-      <<: *tmpmaster
-      # - '?.?.?.?' # primary 
-      # - '?.?.?.?' # secondary
+    <<: *tmpmaster
+    # hosts+:  
+    #   - '?.?.?.?' # primary 
+    #   - '?.?.?.?' # secondary
     'usr': 'boy'
     'pwd': 'xboy'
     'dir': './hdfs/nn' # <-*
     'sdir': './hdfs/snn' # <-*
 
   datan:
-    'hosts':
-      <<: *tmpslaves
+    <<: *tmpslaves
+    # hosts+:
+    #   -
     'usr': 'ubuntu'
     'pwd': '123456'
     'dir': './hdfs/dn' # <-*
