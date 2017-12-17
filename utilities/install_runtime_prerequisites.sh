@@ -25,6 +25,6 @@ apt-get -y install software-properties-common
 
 # ----------------------------
 # Clean and Upgrade libs:
-apt-get -y upgrade
-apt-get -y autoremove
-apt-get -y autoclean
+# apt-get -y upgrade
+# apt-get -y autoremove
+# apt-get -y autoclean

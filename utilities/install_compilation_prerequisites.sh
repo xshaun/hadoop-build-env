@@ -3,6 +3,11 @@
 
 # Recommend trusty (14.04LTS)
 
+killall dpkg
+killall apt-get
+killall aptitude
+dpkg --configure -a
+
 # APT='apt-get'
 
 # ----------------------------
@@ -69,7 +74,7 @@ put_config_line --file ~/.profile --property 'FINDBUGS_HOME' --value '/opt/findb
 
 # ----------------------------
 # Clean and Upgrade libs:
-apt-get -y upgrade
-apt-get -y autoremove
-apt-get -y autoclean
+# apt-get -y upgrade
+# apt-get -y autoremove
+# apt-get -y autoclean
 
