@@ -7,14 +7,18 @@ then
     exit 1
 fi
 
-is_group_exist=`cat /etc/group | grep -w $1 | awk -F ':' '{print $1}'`
-if [ $1 -ne is_group_exist ]
-then
-   groupadd $1
-fi
-
-is_user_exist=`id $2`
-if [ $is_user_exist -ne 0 ]
-   useradd $2
+#create group if not exists  
+egrep "^$1" /etc/group >& /dev/null  
+if [ $? -ne 0 ]  
+then  
+    groupadd $group  
+fi  
+  
+#create user if not exists  
+egrep "^$2" /etc/passwd >& /dev/null  
+if [ $? -ne 0 ]  
+then  
+	useradd $2
 else
-   usermod -a -G $1 $2
+   	usermod -a -G $1 $2
+fi  
