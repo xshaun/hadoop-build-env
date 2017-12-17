@@ -155,7 +155,7 @@ stages:
   'compile':
     - 'cpcsc'
 
-  'deloy':
+  'deploy':
     - 'cpdbp'
 
   'test' : 
