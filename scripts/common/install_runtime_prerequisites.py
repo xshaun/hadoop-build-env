@@ -17,15 +17,15 @@ class Custom(Basis):
 
         ssh_option = 'ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
-        usr_host_list = list()
+        nodes_list_with_username = list()
 
         roles_without_controller = dict(filter(lambda x: x[0] != 'controlp',
             self.ys['roles'].items()))
         for k, v in roles_without_controller.items():
-            usr_host_list.extend([ v['usr'] + '@' + n for n in v['hosts'] ])
+            nodes_list_with_username.extend([ v['usr'] + '@' + n for n in v['hosts'] ])
 
-        usr_host_list = list(set(usr_host_list))
-
+        nodes_list_with_username = list(set(nodes_list_with_username))
+        
         #
         # build master and slaves environment
         #
@@ -37,8 +37,8 @@ class Custom(Basis):
             for host in v['hosts']:
                 usr_host = (v['usr']+'@'+host)
 
-                if usr_host in usr_host_list:
-                    usr_host_list.remove(usr_host)
+                if usr_host in nodes_list_with_username:
+                    nodes_list_with_username.remove(usr_host)
 
                     ins = "{0} {1} -tt '{2}' ".format(
                             ssh_option, usr_host, remote_ins)

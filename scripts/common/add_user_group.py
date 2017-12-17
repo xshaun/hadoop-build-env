@@ -33,8 +33,8 @@ class Custom(Basis):
             for host in v['hosts']:
                 usr_host = (v['usr']+'@'+host)
 
-                if usr_host in usr_host_list:
-                    usr_host_list.remove(usr_host)
+                if usr_host in nodes_list_with_username:
+                    nodes_list_with_username.remove(usr_host)
 
                     ins = "{0} {1} -tt '{2}' ".format(
                             ssh_option, usr_host, remote_ins)
