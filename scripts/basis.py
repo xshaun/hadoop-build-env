@@ -116,7 +116,7 @@ class Basis(object):
             ......
         ]
         """
-        return self.getAllHosts(roles=['resourcem', 'namen'])
+        return self.getHosts(roles=['resourcem', 'namen'])
 
     def getSlaveHosts(self):
         """
@@ -130,5 +130,5 @@ class Basis(object):
             ......
         ]
         """
-        return self.getAllHosts(roles=['nodem', 'datan'])
+        return self.getHosts(roles=['nodem', 'datan'])
 
