@@ -36,7 +36,8 @@ class Custom(Basis):
         download = "curl -sSL {0} | tar -C {1} -xzv".format(
             link_address, sourcecode)
         movedir = "mkdir -p {0} && mv {1}/* {0} && rmdir {1} ".format(
-            os.path.join(sourcecode, "hadoop-dist/target/hadoop-%s" % (_version)),
+            os.path.join(sourcecode, "hadoop-dist/target/hadoop-%s" %
+                         (_version)),
             os.path.join(sourcecode, "hadoop-%s" % (_version)))
 
         ins = "%s && %s" % (download, movedir)

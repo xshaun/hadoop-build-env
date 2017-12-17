@@ -5,6 +5,7 @@ from scripts.basis import logger
 from scripts.command import Command as cmd
 import os
 
+
 class Custom(Basis):
 
     def action(self):
@@ -12,34 +13,29 @@ class Custom(Basis):
 
         ssh_option = 'ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
-        nodes_list_with_username = list()
-
-        roles_without_controller = dict(filter(lambda x: x[0] != 'controlp',
-            self.ys['roles'].items()))
-        for k, v in roles_without_controller.items():
-            nodes_list_with_username.extend([ v['usr'] + '@' + n for n in v['hosts'] ])
-
-        nodes_list_with_username = list(set(nodes_list_with_username))
+        host_list = self.getHosts()
 
         #
         # TODO [support to parallel execution]
-        slave_scripts_folder = os.path.join(self.ys['binarycode'], 'scripts/')
+        dest_scripts_folder = os.path.join(self.ys['binarycode'], 'scripts/')
+
         remote_ins = "sudo -S %s/add_user_group.sh %s %s " % (
-            slave_scripts_folder,
+            dest_scripts_folder,
             self.ys['opt']['group'],
             self.ys['opt']['user'])
 
-        for k, v in roles_without_controller.items():
-            for host in v['hosts']:
-                usr_host = (v['usr']+'@'+host)
+        for host in host_list:
+            ins = "{0} {2}@{1} -tt '{3}' ".format(
+                ssh_option, host['ip'], host['usr'],
+                remote_ins)
 
-                if usr_host in nodes_list_with_username:
-                    nodes_list_with_username.remove(usr_host)
+            retcode = cmd.sudo(ins, host['pwd'])
 
-                    ins = "{0} {1} -tt '{2}' ".format(
-                            ssh_option, usr_host, remote_ins)
-                    retcode = cmd.sudo(ins, v['pwd'])
-                    logger.info("ins: %s; retcode: %d." % (ins, retcode))
+            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+            if retcode != 0:
+                logger.error(ins)
+                return False
 
         #
         # wait to end

@@ -8,6 +8,7 @@ from scripts.command import Command as cmd
 #   Definitions
 #---------------------------------------------------------------------------
 
+
 class Custom(Basis):
 
     # override
@@ -15,16 +16,18 @@ class Custom(Basis):
         logger.info('--> controlp.setup_passphraseless <--')
 
         # setup passphraseless
-        roles_without_controller = dict(filter(lambda x: x[0] != 'controlp',
-            self.ys['roles'].items()))
- 
-        for k, v in roles_without_controller.items():
-            usr_host_list = list(set([ v['usr'] + '@' + n for n in v['hosts'] ]))
+        host_list = self.getHosts()
 
-            ins = "./utilities/setup_passphraseless.sh %s %s" % (
-                ','.join(usr_host_list), v['pwd'])
+        for host in host_list:
+            ins = "./utilities/setup_passphraseless.sh %s@%s %s" % (
+                host['usr'], host['ip'], host['pwd'])
+
             retcode = cmd.do(ins)
+
+            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
             if retcode != 0:
+                logger.error(ins)
                 return False
 
         return True

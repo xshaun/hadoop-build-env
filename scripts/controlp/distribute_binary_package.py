@@ -10,6 +10,7 @@ import copy
 #   Definitions
 #---------------------------------------------------------------------------
 
+
 class Custom(Basis):
 
     # override
@@ -18,71 +19,104 @@ class Custom(Basis):
 
         ssh_option = 'ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
-        nodes_list_with_username = list()
-
-        roles_without_controller = dict(filter(lambda x: x[0] != 'controlp',
-            self.ys['roles'].items()))
-        for k, v in roles_without_controller.items():
-            nodes_list_with_username.extend([ v['usr'] + '@' + n for n in v['hosts'] ])
-
-        nodes_list_with_username = list(set(nodes_list_with_username))
-
+        host_list = self.getHosts()
 
         #
         # add permissions
         #
-        usr_host_list = copy.deepcopy(nodes_list_with_username)
-        for k, v in roles_without_controller.items():
-            for host in v['hosts']:
-                usr_host = (v['usr']+'@'+host)
+        for host in host_list:
+            ins = "{0} {2}@{1} -tt 'sudo -S chown -R {2} /opt/' ".format(
+                ssh_option, host['ip'], host['usr'])
 
-                if usr_host in usr_host_list:
-                    usr_host_list.remove(usr_host)
-                    
-                    ins = "{0} {1} -tt 'sudo -S chown -R {2} /opt/' ".format(
-                            ssh_option, usr_host, v['usr'])
-                    retcode = cmd.sudo(ins, v['pwd'])
-                    logger.info("ins: %s; retcode: %d." % (ins, retcode))
+            retcode = cmd.sudo(ins, host['pwd'])
+
+            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+            if retcode != 0:
+                logger.error(ins)
+                return False
 
         #
         # binary code
         #
-        master_sour_folder = os.path.join(self.ys['sourcecode'],
-                'hadoop-dist/target/hadoop-3.0.0-beta1/')
-        slave_dest_folder = os.path.join(self.ys['binarycode'], 'rose-on-yarn/')
+        sour_folder = os.path.join(self.ys['sourcecode'],
+                                   'hadoop-dist/target/hadoop-3.0.0-beta1/')
+        dest_folder = os.path.join(self.ys['binarycode'],
+                                   'rose-on-yarn/')
 
-        for node_with_username in nodes_list_with_username:
-            ins = "ssh {2} 'mkdir -p {3}' && rsync -e '{0}' -az '{1}' {2}:{3} & sleep 0.5".format(
-                    ssh_option, master_sour_folder,
-                    node_with_username, slave_dest_folder)
+        for host in host_list:
+            ins = "{0} {2}@{1} 'mkdir -p {4}' && rsync -e '{0}' -az '{3}' {2}@{1}:{4} & sleep 0.5".format(
+                ssh_option, host['ip'], host['usr'],
+                sour_folder, dest_folder)
+
             retcode = cmd.do(ins)
+
             logger.info("ins: %s; retcode: %d." % (ins, retcode))
 
-        # #
-        # # configs
-        # #
-        # master_configs = './configs/*.xml'
-        # slave_dest_configs_folder = os.path.join(self.ys['binarycode'], 'rose-on-yarn/etc/hadoop/')
-
-        # for node_with_username in nodes_list_with_username:
-        #     ins = "ssh {2} 'mkdir -p {3}' && rsync -e '{0}' -az '{1}' {2}:{3} & sleep 0.5".format(
-        #             ssh_option, master_configs,
-        #             node_with_username, slave_dest_configs_folder)
-        #     retcode = cmd.do(ins)
-        #     logger.info("ins: %s; retcode: %d." % (ins, retcode))
+            if retcode != 0:
+                logger.error(ins)
+                return False
 
         #
         # scripts about building env
         #
-        master_scripts = './utilities/'
-        slave_scripts_folder = os.path.join(self.ys['binarycode'], 'scripts/')
+        controlp_scripts = './utilities/'
+        dest_scripts_folder = os.path.join(self.ys['binarycode'], 'scripts/')
 
-        for node_with_username in nodes_list_with_username:
-            ins = "ssh {2} 'mkdir -p {3}' && rsync -e '{0}' -az '{1}' {2}:{3} & sleep 0.5".format(
-                    ssh_option, master_scripts,
-                    node_with_username, slave_scripts_folder)
+        for host in host_list:
+            ins = "{0} {2}@{1} 'mkdir -p {4}' && rsync -e '{0}' -az '{3}' {2}@{1}:{4} & sleep 0.5".format(
+                ssh_option, host['ip'], host['usr'],
+                master_scripts, dest_scripts_folder)
+
             retcode = cmd.do(ins)
+
             logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+            if retcode != 0:
+                logger.error(ins)
+                return False
+
+        #
+        # config setup_passphraseless from master to slaves
+        #
+        master_hosts_list = self.getMasterHosts()
+        slave_hosts_list = self.getSlaveHosts()
+        setup_passphraseless = os.path.join(
+            dest_scripts_folder, 'setup_passphraseless.sh')
+
+        for mhost in master_hosts_list:
+            for shost in slave_hosts_list:
+                ins = "{0} {2}@{1} '{3} {5}@{4} {6}' & sleep 0.5".format(
+                    ssh_option, mhost['ip'], mhost['usr'],
+                    setup_passphraseless, shost['ip'], shost['usr'], shost['pwd'])
+
+                retcode = cmd.do(ins)
+
+                logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+                if retcode != 0:
+                    logger.error(ins)
+                    return False
+
+        #
+        # configs
+        #
+        controlp_configs = './configs/*.xml'
+        dest_configs_folder = os.path.join(
+            self.ys['binarycode'], 'rose-on-yarn/etc/hadoop/')
+
+        for host in host_list:
+            ins = "scp {0} {2}@{1}:{3} & sleep 0.5".format(
+                controlp_configs, host['ip'], host['usr'],
+                dest_configs_folder)
+
+            retcode = cmd.do(ins)
+
+            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+            if retcode != 0:
+                logger.error(ins)
+                return False
 
         #
         # wait to end
@@ -90,6 +124,7 @@ class Custom(Basis):
         ins = 'wait'
         retcode = cmd.do(ins)
         if retcode != 0:
+            logger.error(ins)
             return False
 
         return True

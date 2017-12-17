@@ -12,7 +12,7 @@ class Custom(Basis):
     # override
     def action(self):
         logger.info('--> controlp.clear_sourcecode <--')
-        
+
         sourcecode = self.ys['sourcecode']
 
         if not os.path.exists(sourcecode):
@@ -31,7 +31,8 @@ class Custom(Basis):
                 os.remove(itemsrc)
 
         if len(os.listdir(sourcecode)) > 0:
-            logger.error('failed to clear \'sourcecode\' shown in setting file.')
+            logger.error(
+                'failed to clear \'sourcecode\' shown in setting file.')
             return False
 
         return True

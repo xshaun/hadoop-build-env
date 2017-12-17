@@ -9,6 +9,7 @@ import os
 #   Definitions
 #---------------------------------------------------------------------------
 
+
 class Custom(Basis):
 
     # override
@@ -17,33 +18,29 @@ class Custom(Basis):
 
         ssh_option = 'ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
-        nodes_list_with_username = list()
+        host_list = self.getHosts()
 
-        roles_without_controller = dict(filter(lambda x: x[0] != 'controlp',
-            self.ys['roles'].items()))
-        for k, v in roles_without_controller.items():
-            nodes_list_with_username.extend([ v['usr'] + '@' + n for n in v['hosts'] ])
-
-        nodes_list_with_username = list(set(nodes_list_with_username))
-        
         #
         # build master and slaves environment
         #
         # TODO [support to parallel execution]
-        slave_scripts_folder = os.path.join(self.ys['binarycode'], 'scripts/')
-        remote_ins = "sudo -S %s/install_runtime_prerequisites.sh" % (slave_scripts_folder)
+        dest_scripts_folder = os.path.join(self.ys['binarycode'], 'scripts/')
 
-        for k, v in roles_without_controller.items():
-            for host in v['hosts']:
-                usr_host = (v['usr']+'@'+host)
+        runtime_env = os.path.join(
+            dest_scripts_folder, 'install_runtime_prerequisites.sh')
 
-                if usr_host in nodes_list_with_username:
-                    nodes_list_with_username.remove(usr_host)
+        for host in host_list:
+            ins = "{0} {2}@{1} -tt 'sudo -S {3}'".format(
+                ssh_option, host['ip'], host['usr'],
+                runtime_env)
 
-                    ins = "{0} {1} -tt '{2}' ".format(
-                            ssh_option, usr_host, remote_ins)
-                    retcode = cmd.sudo(ins, v['pwd'])
-                    logger.info("ins: %s; retcode: %d." % (ins, retcode))
+            retcode = cmd.sudo(ins, host['pwd'])
+
+            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+            if retcode != 0:
+                logger.error(ins)
+                return False
 
         #
         # wait to end

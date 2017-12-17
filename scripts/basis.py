@@ -79,3 +79,56 @@ class Basis(object):
             self.status = self.finite()
         
         return
+
+    def getHosts(self, ignoreRoles=['controlp',]):
+        """
+         -> resource manager
+         -> node manager
+         -> name node
+         -> data node
+        
+        return value format
+        [
+            [host-ip1, username1, password1]
+            [host-ip2, username2, password2]
+            ......
+        ]
+        """
+        res = list()
+
+        roles_without_controller = dict(filter(lambda x: x[0] not in ignoreRoles,
+            self.ys['roles'].items()))
+        for k, v in roles_without_controller.items():
+            for h in v['hosts']:
+                res.append({'ip': h, 'usr': v['usr'], 'pwd': v['pwd']})
+
+        return list(set(res))
+
+    def getMasterHosts(self):
+        """
+         -> resource manager
+         -> name node
+        
+        return value format
+        [
+            [host-ip1, username1, password1]
+            [host-ip2, username2, password2]
+            ......
+        ]
+        """
+        return self.getAllHosts(ignoreRoles=['controlp', 'nodem', 'datan',])
+
+    def getSlaveHosts(self):
+        """
+         -> node manager
+         -> data node
+        
+        return value format
+        [
+            [host-ip1, username1, password1]
+            [host-ip2, username2, password2]
+            ......
+        ]
+        """
+        return self.getAllHosts(ignoreRoles=['controlp', 'resourcem', 'namen',])
+

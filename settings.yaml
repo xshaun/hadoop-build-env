@@ -39,6 +39,13 @@ sourcecode: '/opt/rose-source-on-hadoop/'
 binarycode: '/opt/rose/'
 
 # [$]
+# GROUP & USER definition of operation and runtime
+#
+opt:
+  group: 'hadoop'
+  user: 'yarn'
+
+# [$]
 # Here descripts host, username and password of overall roles 
 # including deamons in Yarn and HDFS and also a proxy that helps
 # manage the cluster. 
@@ -51,45 +58,47 @@ binarycode: '/opt/rose/'
 #   datan - data node (in HDFS)
 #
 roles:
-  'controlp': 
+  controlp: 
     'host': 'localhost'
     'usr': 'boy'
     'pwd': 'xboy'
 
-  'resourcem':
+  resourcem:
     'hosts':
-      - 'localhost' # primary
+      <<: *tmpmaster
+      # - '?.?.?.?' # primary
     'usr': 'boy'
     'pwd': 'xboy'
 
-  'nodem':
+  nodem:
     'hosts':
-      - '192.168.106.71'
+      <<: *tmpslaves
+      
     'usr': 'ubuntu'  # 'root'
     'pwd': '123456'
 
-  'namen':
+  namen:
     'hosts':
-      - 'localhost' # primary 
-      - 'localhost' # secondary
+      <<: *tmpmaster
+      # - '?.?.?.?' # primary 
+      # - '?.?.?.?' # secondary
     'usr': 'boy'
     'pwd': 'xboy'
     'dir': '/hdfs/nn' # <-*
     'sdir': '/hdfs/snn' # <-*
 
-  'datan':
+  datan:
     'hosts':
-      - '192.168.106.71' 
+      <<: *tmpslaves
     'usr': 'ubuntu'
     'pwd': '123456'
     'dir': '/hdfs/dn' # <-*
 
-# [$]
-# GROUP & USER definition of operation and runtime
-#
-opt:
-  group: 'hadoop'
-  user: 'yarn'
+tmpmaster: &tmpmaster
+  - 'localhost'
+
+tmpslaves: &tmpslaves
+  - '192.168.106.71'
 
 # [$]
 # Here defines concrete content/script(s) in each step that is
