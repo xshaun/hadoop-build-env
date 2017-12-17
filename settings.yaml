@@ -72,16 +72,16 @@ roles:
     'hosts':
       - 'localhost' # primary 
       - 'localhost' # secondary
-    'usr': 'ubuntu'
-    'pwd': '123456'
+    'usr': 'boy'
+    'pwd': 'xboy'
     'dir': '/hdfs/nn' # <-*
     'sdir': '/hdfs/snn' # <-*
 
   'datan':
     'hosts':
       - 'localhost' 
-    'usr': 'boy'
-    'pwd': 'xboy'
+    'usr': 'ubuntu'
+    'pwd': '123456'
     'dir': '/hdfs/dn' # <-*
 
 # [$]
