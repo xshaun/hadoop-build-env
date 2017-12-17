@@ -84,15 +84,15 @@ roles:
       # - '?.?.?.?' # secondary
     'usr': 'boy'
     'pwd': 'xboy'
-    'dir': '/hdfs/nn' # <-*
-    'sdir': '/hdfs/snn' # <-*
+    'dir': './hdfs/nn' # <-*
+    'sdir': './hdfs/snn' # <-*
 
   datan:
     'hosts':
       <<: *tmpslaves
     'usr': 'ubuntu'
     'pwd': '123456'
-    'dir': '/hdfs/dn' # <-*
+    'dir': './hdfs/dn' # <-*
 
 tmpmaster: &tmpmaster
   - 'localhost'
@@ -123,6 +123,8 @@ steps:
   'cpdsc': 'controlp.download_src_code'
   # compile source code under codepath folder
   'cpcsc': 'controlp.compile_src_code'
+  # configure *-site.xml
+  'cpcsx': 'controlp.configure_site_xml'
   # distribute binary package to nodes
   'cpdbp': 'controlp.distribute_binary_package'
 
@@ -130,43 +132,55 @@ steps:
   'cirp': 'common.install_runtime_prerequisites'
   # add users and group
   'caug': 'common.add_user_group'
-  #change mode and own, workers
+  # change mode and own, workers
   'ccbmo': 'common.change_binarycode_mode_own'
+  # start all
+  'cstart': 'common.start_all'
+  # stop all
+  'cstop': 'common.stop_all'
+
+  # name-node formats file system
+  'nnffs': 'namen.format_file_system'
 
 # [$]
 # Here defines concrete steps in each stage that is combination 
 # of several processes/steps.
 #
 stages:
-  'init': 
+  'install': 
     - 'cpicp'
     - 'cpsp'
     - 'cpcc'
     - 'cpdsc'
     - 'cpcsc'
+    - 'cpcsx'
     - 'cpdbp'
     - 'cirp'
     - 'caug'
     - 'ccbmo'
 
-  'initproxy':
+  'cpinit':
     - 'cpicp'
     - 'cpsp'
     - 'cpcc'
     - 'cpdsc'
-    
-  'keyless':
-    - 'cpsp'
-
-  'clear':
-    - 'cpcc'
 
   'compile':
     - 'cpcsc'
 
   'deploy':
+    - 'cpcsx'
+    - 'cpdbp'
+    - 'cirp'
+    - 'caug'
+    - 'ccbmo'
+    - 'nnffs'
+
+  'scp':
     - 'cpdbp'
 
-  'test' : 
-     - 'caug'
-    #  - 'ccbmo'
+  'start':
+    - 'cstart'
+
+  'stop':
+    - 'cstop'

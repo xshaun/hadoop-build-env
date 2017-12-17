@@ -37,6 +37,41 @@ class Custom(Basis):
                 return False
 
         #
+        # hdfs folders
+        #
+        name_nodes = self.getHosts(roles=['namen', ])
+
+        for host in name_nodes:
+            ins = "{0} {2}@{1} 'mkdir -p {3} {4}' & sleep 0.5".format(
+                ssh_option, host['ip'], host['usr'],
+                os.path.join(self.ys['binarycode'], self.ys[
+                             'roles']['namen']['dir']),
+                os.path.join(self.ys['binarycode'], self.ys['roles']['namen']['sdir']))
+
+            retcode = cmd.do(ins)
+
+            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+            if retcode != 0:
+                logger.error(ins)
+                return False
+
+        data_nodes = self.getHosts(roles=['datan', ])
+
+        for host in data_nodes:
+            ins = "{0} {2}@{1} 'mkdir -p {3}' & sleep 0.5".format(
+                ssh_option, host['ip'], host['usr'],
+                os.path.join(self.ys['binarycode'], self.ys['roles']['datan']['dir']))
+
+            retcode = cmd.do(ins)
+
+            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+            if retcode != 0:
+                logger.error(ins)
+                return False
+
+        #
         # binary code
         #
         sour_folder = os.path.join(self.ys['sourcecode'],
@@ -101,7 +136,7 @@ class Custom(Basis):
         #
         # configs
         #
-        controlp_configs = './configs/*.xml'
+        controlp_configs = './configs/*.xml ./configs/workers'
         dest_configs_folder = os.path.join(
             self.ys['binarycode'], 'rose-on-yarn/etc/hadoop/')
 

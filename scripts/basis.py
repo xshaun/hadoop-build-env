@@ -80,7 +80,7 @@ class Basis(object):
         
         return
 
-    def getHosts(self, ignoreRoles=['controlp',]):
+    def getHosts(self, roles=['resourcem', 'nodem', 'namen', 'datan']):
         """
          -> resource manager
          -> node manager
@@ -96,7 +96,7 @@ class Basis(object):
         """
         res = list()
 
-        roles_without_controller = dict(filter(lambda x: x[0] not in ignoreRoles,
+        roles_without_controller = dict(filter(lambda x: x[0] in roles,
             self.ys['roles'].items()))
         for k, v in roles_without_controller.items():
             for h in v['hosts']:
@@ -116,7 +116,7 @@ class Basis(object):
             ......
         ]
         """
-        return self.getAllHosts(ignoreRoles=['controlp', 'nodem', 'datan',])
+        return self.getAllHosts(roles=['resourcem', 'namen'])
 
     def getSlaveHosts(self):
         """
@@ -130,5 +130,5 @@ class Basis(object):
             ......
         ]
         """
-        return self.getAllHosts(ignoreRoles=['controlp', 'resourcem', 'namen',])
+        return self.getAllHosts(roles=['nodem', 'datan'])
 
