@@ -44,7 +44,7 @@ class Basis(object):
 
     def action(self):
         """ must be override, must return True or False """
-        
+
         return True
 
     def finite(self):
@@ -68,7 +68,7 @@ class Basis(object):
     def once(self):
         """ try to run once despite failed """
         self.attempts = 1
-        
+
         return self.finite()
 
     def occur(self):
@@ -77,7 +77,7 @@ class Basis(object):
             self.status = self.loop()
         else:
             self.status = self.finite()
-        
+
         return
 
     def getHosts(self, roles=['resourcem', 'nodem', 'namen', 'datan']):
@@ -86,7 +86,7 @@ class Basis(object):
          -> node manager
          -> name node
          -> data node
-        
+
         return value format
         [
             [host-ip1, username1, password1]
@@ -95,14 +95,16 @@ class Basis(object):
         ]
         """
         res = list()
+        res_mark = list()
 
         roles_without_controller = dict(filter(lambda x: x[0] in roles,
-            self.ys['roles'].items()))
+                                               self.ys['roles'].items()))
         for k, v in roles_without_controller.items():
             for h in v['hosts']:
-                t = {'ip': h, 'usr': v['usr'], 'pwd': v['pwd']}
-                if t not in res:
-                    res.append(t)
+                t = "%s-%s-%s" % (h, v['usr'], v['pwd'])
+                if t not in res_mark:
+                    res_mark.append(t)
+                    res.append({'ip': h, 'usr': v['usr'], 'pwd': v['pwd']})
 
         return list(set(res))
 
@@ -110,7 +112,7 @@ class Basis(object):
         """
          -> resource manager
          -> name node
-        
+
         return value format
         [
             [host-ip1, username1, password1]
@@ -124,7 +126,7 @@ class Basis(object):
         """
          -> node manager
          -> data node
-        
+
         return value format
         [
             [host-ip1, username1, password1]
@@ -133,4 +135,3 @@ class Basis(object):
         ]
         """
         return self.getHosts(roles=['nodem', 'datan'])
-
