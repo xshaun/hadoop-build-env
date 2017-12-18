@@ -22,14 +22,13 @@ class Custom(Basis):
 
         sourcecode = self.ys['sourcecode']
         binarycode = self.ys['binarycode']
-        dest_folder = os.path.join(binarycode, 'rose-on-yarn/')
 
         #
         # add permissions
         #
         for host in host_list:
             ins = "{0} {2}@{1} -tt 'sudo -S mkdir -p {3}' ".format(
-                ssh_option, host['ip'], host['usr'], dest_folder)
+                ssh_option, host['ip'], host['usr'], binarycode)
 
             retcode = cmd.sudo(ins, host['pwd'])
 
@@ -39,8 +38,7 @@ class Custom(Basis):
                 logger.error(ins)
                 return False
 
-            
-            ins = "{0} {2}@{1} -tt 'sudo -S chown -R {2} {3}' ".format(
+            ins = "{0} {2}@{1} -tt 'sudo -S chmod 777 {3}' ".format(
                 ssh_option, host['ip'], host['usr'], binarycode)
 
             retcode = cmd.sudo(ins, host['pwd'])
