@@ -38,7 +38,7 @@ class Custom(Basis):
                 logger.error(ins)
                 return False
 
-            ins = "{0} {2}@{1} -tt 'sudo -S chmod 777 {3}' ".format(
+            ins = "{0} {2}@{1} -tt 'sudo -S chmod -R 777 {3}' ".format(
                 ssh_option, host['ip'], host['usr'], binarycode)
 
             retcode = cmd.sudo(ins, host['pwd'])
