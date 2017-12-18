@@ -95,18 +95,18 @@ class Basis(object):
         ]
         """
         res = list()
-        res_mark = list()
+        res_flag = list()
 
         roles_without_controller = dict(filter(lambda x: x[0] in roles,
                                                self.ys['roles'].items()))
         for k, v in roles_without_controller.items():
             for h in v['hosts']:
                 t = "%s-%s-%s" % (h, v['usr'], v['pwd'])
-                if t not in res_mark:
-                    res_mark.append(t)
+                if t not in res_flag:
                     res.append({'ip': h, 'usr': v['usr'], 'pwd': v['pwd']})
+                    res_flag.append(t)
 
-        return list(set(res))
+        return res
 
     def getMasterHosts(self):
         """
