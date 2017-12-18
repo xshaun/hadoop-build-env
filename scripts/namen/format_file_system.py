@@ -9,10 +9,13 @@ import os
 class Custom(Basis):
 
     def action(self):
-        logger.info('--> common.add_user_group <--')
+        logger.info('--> common.format_file_system <--')
 
         ssh_option = 'ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
+        sourcecode = self.ys['sourcecode']
+        binarycode = self.ys['binarycode']
+        
         #
         # clear hdfs
         #

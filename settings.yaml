@@ -171,7 +171,6 @@ stages:
 
   'compile':
     - 'cpcsc'
-    - 'cpcsx'
 
   'deploy':
     - 'cpcsx'
