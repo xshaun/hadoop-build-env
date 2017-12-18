@@ -19,7 +19,7 @@ class Custom(Basis):
         host_list = self.getHosts()
 
         for host in host_list:
-            ins = "./utilities/setup_passphraseless.sh '%s@%s' %s" % (
+            ins = "./utilities/setup_passphraseless.sh '%s@%s' '%s'" % (
                 host['usr'], host['ip'], host['pwd'])
 
             retcode = cmd.do(ins)

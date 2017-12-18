@@ -22,10 +22,10 @@ ssh_copy_id_auto()
 {
     expect -c "
     set timeout -1;
-    spawn ssh-copy-id $1;
+    spawn ssh-copy-id '$1';
     expect {
         *(yes/no)* {send yes\r; exp_continue;}
-        *password:* {send $2\r; exp_continue;}
+        *password:* {send '$2'\r; exp_continue;}
         eof {exit 0;}
     }";
 }

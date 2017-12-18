@@ -168,7 +168,7 @@ class Custom(Basis):
             datanodes_hostname.append("%s@%s" % (host['usr'], host['ip']))
 
         for host in namenode:
-            ins = "{0} {2}@{1} -tt '{3} {4} {5}' & sleep 0.5".format(
+            ins = "{0} {2}@{1} -tt '{3} \'{4}\' \'{5}\'' & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 setup_passphraseless, ",".join(datanodes_hostname), self.ys['roles']['datan']['pwd'])
 
@@ -189,7 +189,7 @@ class Custom(Basis):
             nodemanagers_hostname.append("%s@%s" % (host['usr'], host['ip']))
 
         for host in resourcemanager:
-            ins = "{0} {2}@{1} -tt '{3} {4} {5}' & sleep 0.5".format(
+            ins = "{0} {2}@{1} -tt '{3} \'{4}\' \'{5}\'' & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 setup_passphraseless, ",".join(nodemanagers_hostname), self.ys['roles']['nodem']['pwd'])
 
