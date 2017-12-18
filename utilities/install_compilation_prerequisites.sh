@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-source *.profile
+source ./utilities/*.profile
 
 # Recommend trusty (14.04LTS)
 
@@ -31,16 +31,18 @@ apt-get -y install build-essential autoconf automake libtool cmake zlib1g-dev pk
 # * ProtocolBuffer 2.5.0 (required)
 apt-get -y install libprotobuf-dev=2.5.0-9ubuntu1 protobuf-compiler=2.5.0-9ubuntu1
 if [[ 0 != $? ]]; then
-    curl -sSL 'https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz' | tar -C /opt -xzv
+    if [[ ! -e /usr/bin/protoc || 'libprotoc 2.5.0' != `/usr/bin/protoc --version | grep 2.5.0`  ]]; then
+        curl -sSL 'https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz' | tar -C /opt -xzv
 
-    cd /opt/protobuf-2.5.0
-    ./autogen.sh  &&  ./configure --prefix=/usr
+        cd /opt/protobuf-2.5.0
+        ./autogen.sh  &&  ./configure --prefix=/usr
 
-    make  &&  make install && cp ./src/protoc /usr/bin/
-    # protoc --version
+        make  &&  make install && cp ./src/protoc /usr/bin/
+        # protoc --version
 
-    cd /opt/protobuf-2.5.0/java
-    mvn install
+        cd /opt/protobuf-2.5.0/java
+        mvn install
+    fi
 fi
 
 # ----------------------------
