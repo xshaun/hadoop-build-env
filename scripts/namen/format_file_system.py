@@ -68,7 +68,8 @@ class Custom(Basis):
         #
         dest_folder = os.path.join(binarycode, 'rose-on-yarn/')
 
-        remote_ins = "{0} namenode -format -force".format(
+        remote_ins = "{0} && {0} && {1} namenode -format -force".format(
+            os.path.join(dest_folder, 'sbin/stop-all.sh')
             os.path.join(dest_folder, 'bin/hdfs'))
 
         ins = "{0} {2}@{1} -tt '{3}' ".format(
