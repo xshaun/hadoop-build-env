@@ -59,11 +59,15 @@ opt:
 #
 tmpmaster: &tmpmaster
   hosts:
-    - 'localhost'
+    - '192.168.7.81'
 
 tmpslaves: &tmpslaves
   hosts:
-    - '192.168.106.71'
+    - '192.168.7.80'
+    - '192.168.7.79'
+    - '192.168.7.78'
+    - '192.168.7.77'
+    - '192.168.7.76'
 
 roles:
   controlp: 
@@ -75,23 +79,23 @@ roles:
     <<: *tmpmaster
     # hosts+:
     #   - '?.?.?.?' # primary
-    'usr': 'boy'
-    'pwd': 'xboy'
+    'usr': 'ivic'
+    'pwd': 'cloudos$123'
 
   nodem:
     <<: *tmpslaves    
     # hosts+:
     #   -
-    'usr': 'ubuntu'  # 'root'
-    'pwd': '123456'
+    'usr': 'ivic'
+    'pwd': 'cloudos$123'
 
   namen:
     <<: *tmpmaster
     # hosts+:  
     #   - '?.?.?.?' # primary 
     #   - '?.?.?.?' # secondary
-    'usr': 'boy'
-    'pwd': 'xboy'
+    'usr': 'ivic'
+    'pwd': 'cloudos$123'
     'dir': 'hdfs/nn' # <-*
     'sdir': 'hdfs/snn' # <-*
 
@@ -99,8 +103,8 @@ roles:
     <<: *tmpslaves
     # hosts+:
     #   -
-    'usr': 'ubuntu'
-    'pwd': '123456'
+    'usr': 'ivic'
+    'pwd': 'cloudos$123'
     'dir': 'hdfs/dn' # <-*
 
 # [$]
