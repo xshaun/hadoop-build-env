@@ -123,7 +123,7 @@ class Custom(Basis):
             sourcecode, 'hadoop-dist/target/hadoop-3.0.0-beta1/etc/hadoop/hadoop-env.sh')
 
         ins = "put_config_line --file {0} --property {1} --value {2} --prefix 'export' && \
-                put_config_line --file {0} --property {3} --value {4} --prefix 'export' && \
+                put_config_line --file {0} --property {3} --value {4} --prefix 'export' & \
                   sleep 0.5".format(
             file,
             'JAVA_HOME', "$(echo '`whereis java | awk '{print \$3}'`')",
