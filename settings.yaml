@@ -177,6 +177,7 @@ stages:
     - 'cpcsc'
 
   'deploy':
+    - 'cpsp'
     - 'cpcsx'
     - 'cpdbp'
     - 'cirp'
