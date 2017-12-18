@@ -122,7 +122,7 @@ class Custom(Basis):
         dest_folder = os.path.join(binarycode, 'rose-on-yarn/')
 
         for host in host_list:
-            ins = "{0} {2}@{1} -tt 'mkdir -p {4}' && rsync -e '{0}' -az '{3}' {2}@{1}:{4} & sleep 0.5".format(
+            ins = "{0} {2}@{1} -tt 'mkdir -p {4}' && scp '{3}' {2}@{1}:{4} & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 sour_folder, dest_folder)
 
@@ -141,7 +141,7 @@ class Custom(Basis):
         dest_scripts_folder = os.path.join(binarycode, 'scripts/')
 
         for host in host_list:
-            ins = "{0} {2}@{1} -tt 'mkdir -p {4}' && rsync -e '{0}' -az '{3}' {2}@{1}:{4} & sleep 0.5".format(
+            ins = "{0} {2}@{1} -tt 'mkdir -p {4}' && scp '{3}' {2}@{1}:{4} & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 controlp_scripts, dest_scripts_folder)
 
