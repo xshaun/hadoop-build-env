@@ -125,13 +125,13 @@ class Custom(Basis):
         ins = "put_config_line --file {0} --property {1} --value {2} --prefix 'export' & sleep 0.5".format(
             file, 'JAVA_HOME', '/usr/lib/jvm/java-8-oracle')
 
-            retcode = cmd.do(ins)
+        retcode = cmd.do(ins)
 
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+        logger.info("ins: %s; retcode: %d." % (ins, retcode))
 
-            if retcode != 0:
-                logger.error(ins)
-                return False
+        if retcode != 0:
+            logger.error(ins)
+            return False
 
         return True
 
