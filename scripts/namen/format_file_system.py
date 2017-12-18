@@ -16,18 +16,38 @@ class Custom(Basis):
         #
         # clear hdfs
         #
-        host_list = self.getHosts()
+        """
+        folders for namenode
+        """
+        name_nodes = self.getHosts(roles=['namen', ])
 
-        binarycode = self.ys['binarycode']
-        remote_ins = "rm -rf {0} {1} {2}".format(
-            os.path.join(binarycode, self.ys['roles']['namen']['dir'], '*'),
-            os.path.join(binarycode, self.ys['roles']['namen']['sdir'], '*'),
-            os.path.join(binarycode, self.ys['roles']['datan']['dir'], '*'))
+        namedir = os.path.join(binarycode, self.ys['roles']['namen']['dir'], '*')
+        namesdir = os.path.join(binarycode, self.ys['roles']['namen']['sdir'], '*')
 
-        for host in host_list:
-            ins = "{0} {2}@{1} -tt '{3}' ".format(
+        for host in name_nodes:
+            ins = "{0} {2}@{1} -tt 'rm -rf {3} {4}' & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
-                remote_ins)
+                namedir, namesdir)
+
+            retcode = cmd.do(ins)
+
+            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+            if retcode != 0:
+                logger.error(ins)
+                return False
+
+        """
+        folders for datanodes
+        """
+        data_nodes = self.getHosts(roles=['datan', ])
+
+        datadir = os.path.join(binarycode, self.ys['roles']['datan']['dir'], '*')
+
+        for host in data_nodes:
+            ins = "{0} {2}@{1} -tt 'rm -rf {3}' & sleep 0.5".format(
+                ssh_option, host['ip'], host['usr'],
+                datadir)
 
             retcode = cmd.do(ins)
 

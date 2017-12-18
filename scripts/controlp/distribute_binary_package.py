@@ -51,7 +51,7 @@ class Custom(Basis):
         namesdir = os.path.join(binarycode, self.ys['roles']['namen']['sdir'])
 
         for host in name_nodes:
-            ins = "{0} {2}@{1} 'mkdir -p {3} {4}' & sleep 0.5".format(
+            ins = "{0} {2}@{1} -tt 'mkdir -p {3} {4}' & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 namedir, namesdir)
 
@@ -71,7 +71,7 @@ class Custom(Basis):
         datadir = os.path.join(binarycode, self.ys['roles']['datan']['dir'])
 
         for host in data_nodes:
-            ins = "{0} {2}@{1} 'mkdir -p {3}' & sleep 0.5".format(
+            ins = "{0} {2}@{1} -tt 'mkdir -p {3}' & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 datadir)
 
@@ -91,7 +91,7 @@ class Custom(Basis):
         dest_folder = os.path.join(binarycode, 'rose-on-yarn/')
 
         for host in host_list:
-            ins = "{0} {2}@{1} 'mkdir -p {4}' && rsync -e '{0}' -az '{3}' {2}@{1}:{4} & sleep 0.5".format(
+            ins = "{0} {2}@{1} -tt 'mkdir -p {4}' && rsync -e '{0}' -az '{3}' {2}@{1}:{4} & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 sour_folder, dest_folder)
 
@@ -110,7 +110,7 @@ class Custom(Basis):
         dest_scripts_folder = os.path.join(binarycode, 'scripts/')
 
         for host in host_list:
-            ins = "{0} {2}@{1} 'mkdir -p {4}' && rsync -e '{0}' -az '{3}' {2}@{1}:{4} & sleep 0.5".format(
+            ins = "{0} {2}@{1} -tt 'mkdir -p {4}' && rsync -e '{0}' -az '{3}' {2}@{1}:{4} & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 controlp_scripts, dest_scripts_folder)
 
@@ -132,7 +132,7 @@ class Custom(Basis):
 
         for mhost in master_hosts_list:
             for shost in slave_hosts_list:
-                ins = "{0} {2}@{1} '{3} {5}@{4} {6}' & sleep 0.5".format(
+                ins = "{0} {2}@{1} -tt '{3} {5}@{4} {6}' & sleep 0.5".format(
                     ssh_option, mhost['ip'], mhost['usr'],
                     setup_passphraseless, shost['ip'], shost['usr'], shost['pwd'])
 
