@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+source *.profile
 
 # Recommend trusty (14.04LTS)
 
