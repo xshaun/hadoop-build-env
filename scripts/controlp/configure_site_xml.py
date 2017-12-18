@@ -43,13 +43,15 @@ class Custom(Basis):
     def action(self):
         logger.info('--> common.configure_site_xml <--')
 
+        binarycode = self.ys['binarycode']
+
         #
         # wirte slaves' ip into workers
         #
-        host_list = self.getSlaveHosts()
+        slaves_list = self.getSlaveHosts()
 
         workers = open('./configs/workers', 'w')
-        for host in host_list:
+        for host in slaves_list:
             workers.write(host['ip'])
         workers.close()
 
@@ -66,26 +68,22 @@ class Custom(Basis):
 
         putconfig(file='./configs/hdfs-site.xml',
                   name='dfs.namenode.name.dir',
-                  value=os.path.join('file:',
-                                     self.ys['binarycode'],
+                  value=os.path.join('file:', binarycode,
                                      self.ys['roles']['namen']['dir']))
 
         putconfig(file='./configs/hdfs-site.xml',
                   name='fs.checkpoint.dir',
-                  value=os.path.join('file:',
-                                     self.ys['binarycode'],
+                  value=os.path.join('file:', binarycode,
                                      self.ys['roles']['namen']['sdir']))
 
         putconfig(file='./configs/hdfs-site.xml',
                   name='fs.checkpoint.edits.dir',
-                  value=os.path.join('file:',
-                                     self.ys['binarycode'],
+                  value=os.path.join('file:', binarycode,
                                      self.ys['roles']['namen']['sdir']))
 
         putconfig(file='./configs/hdfs-site.xml',
                   name='dfs.datanode.data.dir',
-                  value=os.path.join('file:',
-                                     self.ys['binarycode'],
+                  value=os.path.join('file:', binarycode,
                                      self.ys['roles']['datan']['dir']))
 
         putconfig(file='./configs/yarn-site.xml',

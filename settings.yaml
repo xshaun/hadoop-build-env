@@ -92,8 +92,8 @@ roles:
     #   - '?.?.?.?' # secondary
     'usr': 'boy'
     'pwd': 'xboy'
-    'dir': './hdfs/nn' # <-*
-    'sdir': './hdfs/snn' # <-*
+    'dir': 'hdfs/nn' # <-*
+    'sdir': 'hdfs/snn' # <-*
 
   datan:
     <<: *tmpslaves
@@ -101,7 +101,7 @@ roles:
     #   -
     'usr': 'ubuntu'
     'pwd': '123456'
-    'dir': './hdfs/dn' # <-*
+    'dir': 'hdfs/dn' # <-*
 
 # [$]
 # Here defines concrete content/script(s) in each step that is

@@ -4,7 +4,6 @@ from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command as cmd
 import os
-import copy
 
 #---------------------------------------------------------------------------
 #   Definitions
@@ -20,6 +19,9 @@ class Custom(Basis):
         ssh_option = 'ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
         host_list = self.getHosts()
+
+        sourcecode = self.ys['sourcecode']
+        binarycode = self.ys['binarycode']
 
         #
         # add permissions
@@ -37,16 +39,21 @@ class Custom(Basis):
                 return False
 
         #
-        # hdfs folders
+        # create hdfs folders
         #
+
+        """
+        folders for namenode
+        """
         name_nodes = self.getHosts(roles=['namen', ])
+
+        namedir = os.path.join(binarycode, self.ys['roles']['namen']['dir'])
+        namesdir = os.path.join(binarycode, self.ys['roles']['namen']['sdir'])
 
         for host in name_nodes:
             ins = "{0} {2}@{1} 'mkdir -p {3} {4}' & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
-                os.path.join(self.ys['binarycode'], self.ys[
-                             'roles']['namen']['dir']),
-                os.path.join(self.ys['binarycode'], self.ys['roles']['namen']['sdir']))
+                namedir, namesdir)
 
             retcode = cmd.do(ins)
 
@@ -56,12 +63,17 @@ class Custom(Basis):
                 logger.error(ins)
                 return False
 
+        """
+        folders for datanodes
+        """
         data_nodes = self.getHosts(roles=['datan', ])
+
+        datadir = os.path.join(binarycode, self.ys['roles']['datan']['dir'])
 
         for host in data_nodes:
             ins = "{0} {2}@{1} 'mkdir -p {3}' & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
-                os.path.join(self.ys['binarycode'], self.ys['roles']['datan']['dir']))
+                datadir)
 
             retcode = cmd.do(ins)
 
@@ -74,10 +86,9 @@ class Custom(Basis):
         #
         # binary code
         #
-        sour_folder = os.path.join(self.ys['sourcecode'],
-                                   'hadoop-dist/target/hadoop-3.0.0-beta1/')
-        dest_folder = os.path.join(self.ys['binarycode'],
-                                   'rose-on-yarn/')
+        sour_folder = os.path.join(
+            sourcecode, 'hadoop-dist/target/hadoop-3.0.0-beta1/')
+        dest_folder = os.path.join(binarycode, 'rose-on-yarn/')
 
         for host in host_list:
             ins = "{0} {2}@{1} 'mkdir -p {4}' && rsync -e '{0}' -az '{3}' {2}@{1}:{4} & sleep 0.5".format(
@@ -96,7 +107,7 @@ class Custom(Basis):
         # scripts about building env
         #
         controlp_scripts = './utilities/'
-        dest_scripts_folder = os.path.join(self.ys['binarycode'], 'scripts/')
+        dest_scripts_folder = os.path.join(binarycode, 'scripts/')
 
         for host in host_list:
             ins = "{0} {2}@{1} 'mkdir -p {4}' && rsync -e '{0}' -az '{3}' {2}@{1}:{4} & sleep 0.5".format(
@@ -138,7 +149,7 @@ class Custom(Basis):
         #
         controlp_configs = './configs/*.xml ./configs/workers'
         dest_configs_folder = os.path.join(
-            self.ys['binarycode'], 'rose-on-yarn/etc/hadoop/')
+            binarycode, 'rose-on-yarn/etc/hadoop/')
 
         for host in host_list:
             ins = "scp {0} {2}@{1}:{3} & sleep 0.5".format(
