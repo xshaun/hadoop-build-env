@@ -80,14 +80,14 @@ roles:
     # hosts+:
     #   - '?.?.?.?' # primary
     'usr': 'ivic'
-    'pwd': 'cloudos\$123'
+    'pwd': 'cloudos$123'
 
   nodem:
     <<: *tmpslaves    
     # hosts+:
     #   -
     'usr': 'ivic'
-    'pwd': 'cloudos\$123'
+    'pwd': 'cloudos$123'
 
   namen:
     <<: *tmpmaster
@@ -95,7 +95,7 @@ roles:
     #   - '?.?.?.?' # primary 
     #   - '?.?.?.?' # secondary
     'usr': 'ivic'
-    'pwd': 'cloudos\$123'
+    'pwd': 'cloudos$123'
     'dir': 'hdfs/nn' # <-*
     'sdir': 'hdfs/snn' # <-*
 
@@ -104,7 +104,7 @@ roles:
     # hosts+:
     #   -
     'usr': 'ivic'
-    'pwd': 'cloudos\$123'
+    'pwd': 'cloudos$123'
     'dir': 'hdfs/dn' # <-*
 
 # [$]
