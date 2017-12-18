@@ -46,7 +46,7 @@ put_config_line()
     if [[ 0 == $? ]]; then
         sed -i "s#${pattern}#${prefix} ${property}=${value}#g" ${file}
     else
-        sed -i "2a ${prefix} ${property}=${value}" ${file}
+        sed -i "1a ${prefix} ${property}=${value}" ${file}
     fi
 
 }
