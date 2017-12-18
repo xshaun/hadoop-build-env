@@ -27,6 +27,9 @@ class Custom(Basis):
         # add permissions
         #
         for host in host_list:
+            """
+            create folders
+            """
             ins = "{0} {2}@{1} -tt 'sudo -S mkdir -p {3}' ".format(
                 ssh_option, host['ip'], host['usr'], binarycode)
 
@@ -38,6 +41,23 @@ class Custom(Basis):
                 logger.error(ins)
                 return False
 
+            """
+            chown
+            """
+            ins = "{0} {2}@{1} -tt 'sudo -S chown -R {2} {3}' ".format(
+                ssh_option, host['ip'], host['usr'], binarycode)
+
+            retcode = cmd.sudo(ins, host['pwd'])
+
+            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+            if retcode != 0:
+                logger.error(ins)
+                return False
+
+            """
+            chmod
+            """
             ins = "{0} {2}@{1} -tt 'sudo -S chmod -R 777 {3}' ".format(
                 ssh_option, host['ip'], host['usr'], binarycode)
 
