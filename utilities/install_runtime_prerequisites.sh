@@ -23,6 +23,10 @@ apt-get -y install oracle-java8-installer --allow-unauthenticated
 apt-get -y install oracle-java8-set-default --allow-unauthenticated
 apt-get -y install software-properties-common
 
+if [[ '' == `which java` ]]; then 
+    apt-get -y install openjdk-8-jdk; 
+fi
+
 # ----------------------------
 # Clean and Upgrade libs:
 # apt-get -y upgrade
