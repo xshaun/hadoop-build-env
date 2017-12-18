@@ -18,9 +18,11 @@ class Custom(Basis):
         #
         host_list = self.getHosts()
 
-        remote_ins = "rm -rf {0}/{1}/* {0}/{2}/* {0}/{3}/*".format(
-            self.ys['binarycode'], self.ys['roles']['namen']['dir'],
-            self.ys['roles']['namen']['sdir'], self.ys['roles']['datan']['dir'])
+        binarycode = self.ys['binarycode']
+        remote_ins = "rm -rf {0} {1} {2}".format(
+            os.path.join(binarycode, self.ys['roles']['namen']['dir'], '*'),
+            os.path.join(binarycode, self.ys['roles']['namen']['sdir'], '*'),
+            os.path.join(binarycode, self.ys['roles']['datan']['dir'], '*'))
 
         for host in host_list:
             ins = "{0} {2}@{1} -tt '{3}' ".format(
@@ -40,9 +42,12 @@ class Custom(Basis):
         #
         dest_folder = os.path.join(self.ys['binarycode'], 'rose-on-yarn/')
 
-        ins = "{0} {2}@{1} -tt '{3}/bin/hdfs namenode -format -force' ".format(
+        remote_ins = "{0} namenode -format -force".format(
+            os.path.join(dest_folder, 'bin/hdfs'))
+
+        ins = "{0} {2}@{1} -tt '{3}' ".format(
             ssh_option, self.ys['roles']['namen']['hosts'][0],
-            self.ys['roles']['namen']['usr'], dest_folder)
+            self.ys['roles']['namen']['usr'], remote_ins)
 
         retcode = cmd.do(ins)
 
