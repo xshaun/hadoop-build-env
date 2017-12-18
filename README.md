@@ -7,13 +7,23 @@ And we take delight in contribution in efficient cluster scheduling and approach
 ## How to run
 1. customize `setting.yaml` according to user demands.
 
-2. run `bhe <stage(s)>`
+2. run `bhe <stage(s)>`  e.g.
+```shell
+hbe install   # run all actions for control-proxy and cluster 
 
-   > e.g. 
-   >
-   > hbe init   # run all actions for hadoop execution
-   >
-   > hbe initproxt  # only install nessary libs in control-proxy-pc
+hbe cpinit   #  install nessary libs in control-proxy for developing
+
+hbe compile  # compile source code in control-proxy
+
+hbe deploy  # configure site, distribute binary libs into cluster, prepare execution environment in cluster
+
+hbe scp  # distribute binary libs into cluster 
+
+hbe start  # run start-all.sh
+
+hbe stop  # run stop-all.sh
+```
+
 
 *PSEUDO_DIS_MODE* 
 ```
@@ -31,12 +41,11 @@ run, compile, benchmark and all actions are only in your dev-PC.
 compile, view report are only in yout dev-PC.
 run, benchmark, performance log are in cluster-PCs.
 
-                                          run|bench
+                                        run jobs/benchmark
             compile|report    deploy      |_|_|_|_|_|    
     user ------> |__| ----------------->  |_|_|_|_|_|
            control-proxy-pc               |_|_|_|_|_|
-                                *.jar     hadoop cluster     
-
+                                *.jar       cluster     
 ```
 
 ## How to customize step(s) and organize stage(s)
