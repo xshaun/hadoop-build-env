@@ -16,7 +16,7 @@ class Custom(Basis):
     def action(self):
         logger.info('--> controlp.distribute_binary_package<--')
 
-        ssh_option = 'ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5'
+        ssh_option = '-o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
         host_list = self.getHosts()
 
@@ -30,7 +30,7 @@ class Custom(Basis):
             """
             create folders
             """
-            ins = "{0} {2}@{1} -tt 'sudo -S mkdir -p {3}' ".format(
+            ins = "ssh {0} {2}@{1} -tt 'sudo -S mkdir -p {3}' ".format(
                 ssh_option, host['ip'], host['usr'], binarycode)
 
             retcode = cmd.sudo(ins, host['pwd'])
@@ -44,7 +44,7 @@ class Custom(Basis):
             """
             chown
             """
-            ins = "{0} {2}@{1} -tt 'sudo -S chown -R {2} {3}' ".format(
+            ins = "ssh {0} {2}@{1} -tt 'sudo -S chown -R {2} {3}' ".format(
                 ssh_option, host['ip'], host['usr'], binarycode)
 
             retcode = cmd.sudo(ins, host['pwd'])
@@ -58,7 +58,7 @@ class Custom(Basis):
             """
             chmod
             """
-            ins = "{0} {2}@{1} -tt 'sudo -S chmod -R 777 {3}' ".format(
+            ins = "ssh {0} {2}@{1} -tt 'sudo -S chmod -R 777 {3}' ".format(
                 ssh_option, host['ip'], host['usr'], binarycode)
 
             retcode = cmd.sudo(ins, host['pwd'])
@@ -82,7 +82,7 @@ class Custom(Basis):
         namesdir = os.path.join(binarycode, self.ys['roles']['namen']['sdir'])
 
         for host in name_nodes:
-            ins = "{0} {2}@{1} -tt 'mkdir -p {3} {4}' & sleep 0.5".format(
+            ins = "ssh {0} {2}@{1} -tt 'mkdir -p {3} {4}' & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 namedir, namesdir)
 
@@ -102,7 +102,7 @@ class Custom(Basis):
         datadir = os.path.join(binarycode, self.ys['roles']['datan']['dir'])
 
         for host in data_nodes:
-            ins = "{0} {2}@{1} -tt 'mkdir -p {3}' & sleep 0.5".format(
+            ins = "ssh {0} {2}@{1} -tt 'mkdir -p {3}' & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 datadir)
 
@@ -118,11 +118,11 @@ class Custom(Basis):
         # binary code
         #
         sour_folder = os.path.join(
-            sourcecode, 'hadoop-dist/target/hadoop-3.0.0-beta1/')
+            sourcecode, 'hadoop-dist/target/hadoop-3.0.0-beta1/', '*')
         dest_folder = os.path.join(binarycode, 'rose-on-yarn/')
 
         for host in host_list:
-            ins = "{0} {2}@{1} -tt 'mkdir -p {4}' && scp '{3}' {2}@{1}:{4} & sleep 0.5".format(
+            ins = "ssh {0} {2}@{1} -tt 'mkdir -p {4}' && scp -r {0} {3} {2}@{1}:{4} & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 sour_folder, dest_folder)
 
@@ -137,11 +137,11 @@ class Custom(Basis):
         #
         # scripts about building env
         #
-        controlp_scripts = './utilities/'
+        controlp_scripts = './utilities/*'
         dest_scripts_folder = os.path.join(binarycode, 'scripts/')
 
         for host in host_list:
-            ins = "{0} {2}@{1} -tt 'mkdir -p {4}' && scp '{3}' {2}@{1}:{4} & sleep 0.5".format(
+            ins = "ssh {0} {2}@{1} -tt 'mkdir -p {4}' && scp -r {0} {3} {2}@{1}:{4} & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 controlp_scripts, dest_scripts_folder)
 
@@ -168,7 +168,7 @@ class Custom(Basis):
             datanodes_hostname.append("%s@%s" % (host['usr'], host['ip']))
 
         for host in namenode:
-            ins = "{0} {2}@{1} -tt '{3} \'{4}\' \'{5}\'' & sleep 0.5".format(
+            ins = "ssh {0} {2}@{1} -tt '{3} \'{4}\' \'{5}\'' & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 setup_passphraseless, ",".join(datanodes_hostname), self.ys['roles']['datan']['pwd'])
 
@@ -189,7 +189,7 @@ class Custom(Basis):
             nodemanagers_hostname.append("%s@%s" % (host['usr'], host['ip']))
 
         for host in resourcemanager:
-            ins = "{0} {2}@{1} -tt '{3} \'{4}\' \'{5}\'' & sleep 0.5".format(
+            ins = "ssh {0} {2}@{1} -tt '{3} \'{4}\' \'{5}\'' & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
                 setup_passphraseless, ",".join(nodemanagers_hostname), self.ys['roles']['nodem']['pwd'])
 
