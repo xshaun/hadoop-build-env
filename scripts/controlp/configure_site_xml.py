@@ -6,6 +6,7 @@ from scripts.command import Command as cmd
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import SubElement
+import os
 
 #---------------------------------------------------------------------------
 #   Definitions
