@@ -21,7 +21,7 @@
 ssh_copy_id_auto()
 {   
     # fix bug while sending character $
-    p=${$2//'$'/';send $;send'}
+    p=${2//$/';send $;send '}
 
     expect -c "
     set timeout -1;
