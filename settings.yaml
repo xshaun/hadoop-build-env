@@ -127,7 +127,7 @@ steps:
   # compile source code under codepath folder
   'cpcsc': 'controlp.compile_src_code'
   # configure *-site.xml
-  'cpcsx': 'controlp.configure_site_xml'
+  'cpcsx': 'controlp.configure_site'
   # distribute binary package to nodes
   'cpdbp': 'controlp.distribute_binary_package'
 

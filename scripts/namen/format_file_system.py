@@ -15,7 +15,7 @@ class Custom(Basis):
 
         sourcecode = self.ys['sourcecode']
         binarycode = self.ys['binarycode']
-        
+
         #
         # clear hdfs
         #
@@ -24,8 +24,10 @@ class Custom(Basis):
         """
         name_nodes = self.getHosts(roles=['namen', ])
 
-        namedir = os.path.join(binarycode, self.ys['roles']['namen']['dir'], '*')
-        namesdir = os.path.join(binarycode, self.ys['roles']['namen']['sdir'], '*')
+        namedir = os.path.join(binarycode,
+                               self.ys['roles']['namen']['dir'], '*')
+        namesdir = os.path.join(binarycode,
+                                self.ys['roles']['namen']['sdir'], '*')
 
         for host in name_nodes:
             ins = "{0} {2}@{1} -tt 'rm -rf {3} {4}' & sleep 0.5".format(
@@ -45,7 +47,8 @@ class Custom(Basis):
         """
         data_nodes = self.getHosts(roles=['datan', ])
 
-        datadir = os.path.join(binarycode, self.ys['roles']['datan']['dir'], '*')
+        datadir = os.path.join(binarycode,
+                               self.ys['roles']['datan']['dir'], '*')
 
         for host in data_nodes:
             ins = "{0} {2}@{1} -tt 'rm -rf {3}' & sleep 0.5".format(
@@ -63,7 +66,7 @@ class Custom(Basis):
         #
         # formate
         #
-        dest_folder = os.path.join(self.ys['binarycode'], 'rose-on-yarn/')
+        dest_folder = os.path.join(binarycode, 'rose-on-yarn/')
 
         remote_ins = "{0} namenode -format -force".format(
             os.path.join(dest_folder, 'bin/hdfs'))

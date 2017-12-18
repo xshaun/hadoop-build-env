@@ -15,12 +15,14 @@ class Custom(Basis):
 
         host_list = self.getHosts()
 
+        binarycode = self.ys['binarycode']
+
         #
         # TODO [support to parallel execution]
-        dest_scripts_folder = os.path.join(self.ys['binarycode'], 'scripts/')
+        dest_scripts_folder = os.path.join(binarycode, 'scripts/')
 
-        remote_ins = "sudo -S %s/add_user_group.sh %s %s " % (
-            dest_scripts_folder,
+        remote_ins = "sudo -S %s %s %s " % (
+            os.path.join(dest_scripts_folder, 'add_user_group.sh'),
             self.ys['opt']['group'],
             self.ys['opt']['user'])
 
