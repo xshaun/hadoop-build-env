@@ -32,7 +32,7 @@ def putconfig(file, name, value):
     value_elem = SubElement(property, 'value')
     value_elem.text = value
 
-    conf_file = open(file, 'w')
+    conf_file = open(file, 'wb')
     conf_file.write(ElementTree.tostring(root))
     conf_file.close()
 
