@@ -126,7 +126,7 @@ class Custom(Basis):
                 put_config_line --file {0} --property {3} --value {4} --prefix 'export' && \
                   sleep 0.5".format(
             file,
-            'JAVA_HOME', '`whereis java | awk '{print $3}'`',
+            'JAVA_HOME', "`whereis java | awk '{print $3}'`",
             'PDSH_RCMD_TYPE', 'ssh')
 
         retcode = cmd.do(ins)
