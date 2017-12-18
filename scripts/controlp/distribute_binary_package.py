@@ -101,7 +101,7 @@ class Custom(Basis):
         for host in host_list:
             ins = "{0} {2}@{1} 'mkdir -p {4}' && rsync -e '{0}' -az '{3}' {2}@{1}:{4} & sleep 0.5".format(
                 ssh_option, host['ip'], host['usr'],
-                master_scripts, dest_scripts_folder)
+                controlp_scripts, dest_scripts_folder)
 
             retcode = cmd.do(ins)
 
