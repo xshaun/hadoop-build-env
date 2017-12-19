@@ -140,6 +140,8 @@ steps:
   'cpdbc': 'controlp.download_bin_code'
   # download source code into sourcecode
   'cpdsc': 'controlp.download_src_code'
+  # init compile source code under codepath folder (clean dependency ...)
+  'cpicsc': 'controlp.init_compile_src_code'
   # compile source code under codepath folder
   'cpcsc': 'controlp.compile_src_code'
   # configure *-site.xml
@@ -169,9 +171,9 @@ stages:
   'install': 
     - 'cpicp'
     - 'cpsp'
-    - 'cpcc'
-    - 'cpdsc'
-    - 'cpcsc'
+  # - 'cpcc'
+  # - 'cpdsc'
+    - 'cpicsc'
     - 'cpcsx'
     - 'cpdbp'
     - 'cirp'
@@ -182,12 +184,9 @@ stages:
   'cpinit':
     - 'cpicp'
     - 'cpsp'
-    - 'cpcc'
-    - 'cpdsc'
-
-  'compile':
-    - 'cpcsc'
-    - 'cpcsx'
+  # - 'cpcc'
+  # - 'cpdsc'
+    - 'cpicsc'
 
   'deploy':
     - 'cpsp'
@@ -197,6 +196,9 @@ stages:
     - 'caug'
     - 'ccbmo'
     - 'nnffs'
+
+  'compile':
+    - 'cpcsc'
 
   'scp':
     - 'cpdbp'

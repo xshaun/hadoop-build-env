@@ -10,12 +10,17 @@ class Custom(Basis):
 
     # override
     def action(self):
-        logger.info('--> controlp.compile_src_code <--')
+        logger.info('--> controlp.init_compile_src_code <--')
 
         sourcecode = self.ys['sourcecode']
 
         ins = " && ".join([
+            "cd %s" % (os.path.join(sourcecode, 'hadoop-maven-plugins')),
+            "mvn install",
             "cd %s" % (sourcecode),
+            "mvn clean",
+            "mvn eclipse:eclipse -DdownloadSources=true -DdownloadJavadocs=true -DskipTests",
+            "mvn dependency-check:aggregate",
             # "mvn package -Pdist,native,docs,src -DskipTests -Dtar" # -Pdocs will enforce to check the format correction of docs and some mvn errors will occur.
             "mvn package -Pdist,native,src -DskipTests -Dtar"
         ])
