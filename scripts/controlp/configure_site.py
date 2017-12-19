@@ -130,9 +130,9 @@ class Custom(Basis):
             ['HADOOP_YARN_HOME', binarycode],
             ['HADOOP_HDFS_HOME', binarycode],
             ['HADOOP_COMMON_HOME', os.path.join(
-                binarycode, './share/hadoop/common/')]
+                binarycode, './share/hadoop/common/')],
             ['HADOOP_MAPRED_HOME', os.path.join(
-                binarycode, './share/hadoop/mapreduce/')]
+                binarycode, './share/hadoop/mapreduce/')],
             ['HADOOP_CONF_DIR', os.path.join(binarycode, 'etc/hadoop/')],
             ['YARN_CONF_DIR', os.path.join(binarycode, 'etc/hadoop/')],
         ]
