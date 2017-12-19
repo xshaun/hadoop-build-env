@@ -123,18 +123,19 @@ class Custom(Basis):
             sourcecode, 'hadoop-dist/target/hadoop-3.0.0-beta1/etc/hadoop/hadoop-env.sh')
 
         ins = ':'
+        hadoop_home = os.path.join(binarycode, 'rose-on-yarn')
         envlist = [
             ['PDSH_RCMD_TYPE', 'ssh'],
             ['JAVA_HOME', '/usr/lib/jvm/java-8-openjdk-amd64/'],
-            ['HADOOP_HOME', binarycode],
-            ['HADOOP_YARN_HOME', binarycode],
-            ['HADOOP_HDFS_HOME', binarycode],
+            ['HADOOP_HOME', hadoop_home],
+            ['HADOOP_YARN_HOME', hadoop_home],
+            ['HADOOP_HDFS_HOME', hadoop_home],
             ['HADOOP_COMMON_HOME', os.path.join(
-                binarycode, './share/hadoop/common/')],
+                hadoop_home, 'share/hadoop/common/')],
             ['HADOOP_MAPRED_HOME', os.path.join(
-                binarycode, './share/hadoop/mapreduce/')],
-            ['HADOOP_CONF_DIR', os.path.join(binarycode, 'etc/hadoop/')],
-            ['YARN_CONF_DIR', os.path.join(binarycode, 'etc/hadoop/')],
+                hadoop_home, 'share/hadoop/mapreduce/')],
+            ['HADOOP_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
+            ['YARN_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
         ]
         for e in envlist:
             ins += " && put_config_line --file {0} --property {1} --value {2} --prefix 'export' ".format(
