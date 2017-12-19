@@ -130,10 +130,10 @@ class Custom(Basis):
             ['HADOOP_HOME', hadoop_home],
             ['HADOOP_YARN_HOME', hadoop_home],
             ['HADOOP_HDFS_HOME', hadoop_home],
-            ['HADOOP_COMMON_HOME', os.path.join(
-                hadoop_home, 'share/hadoop/common/')],
-            ['HADOOP_MAPRED_HOME', os.path.join(
-                hadoop_home, 'share/hadoop/mapreduce/')],
+            ['HADOOP_MAPRED_HOME', hadoop_home],
+            ['HADOOP_COMMON_HOME', hadoop_home],
+            ['HADOOP_COMMON_LIB_NATIVE_DIR', os.path.join(
+                hadoop_home, 'lib/native/')],
             ['HADOOP_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
             ['YARN_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
         ]
