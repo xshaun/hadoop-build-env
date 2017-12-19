@@ -92,6 +92,10 @@ class Custom(Basis):
                                      self.ys['roles']['datan']['dir']))
 
         putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.resourcemanager.hostname',
+                  value=self.ys['roles']['resourcem']['hosts'][0])
+
+        putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.opportunistic-container-allocation.enabled',
                   value='true')
 
