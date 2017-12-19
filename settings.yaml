@@ -195,11 +195,7 @@ stages:
     - 'cstop'
 
   'test':
-    - 'cpicp'
-    - 'cpsp'
     - 'cpcsx'
     - 'cpdbp'
-    - 'cirp'
-    - 'caug'
     - 'ccbmo'
     - 'nnffs'

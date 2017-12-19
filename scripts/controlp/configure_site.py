@@ -127,8 +127,12 @@ class Custom(Basis):
             ['PDSH_RCMD_TYPE', 'ssh'],
             ['JAVA_HOME', '/usr/lib/jvm/java-8-openjdk-amd64/'],
             ['HADOOP_HOME', binarycode],
-            ['HADOOP_HDFS_HOME', binarycode],
             ['HADOOP_YARN_HOME', binarycode],
+            ['HADOOP_HDFS_HOME', binarycode],
+            ['HADOOP_COMMON_HOME', os.path.join(
+                binarycode, './share/hadoop/common/')]
+            ['HADOOP_MAPRED_HOME', os.path.join(
+                binarycode, './share/hadoop/mapreduce/')]
             ['HADOOP_CONF_DIR', os.path.join(binarycode, 'etc/hadoop/')],
             ['YARN_CONF_DIR', os.path.join(binarycode, 'etc/hadoop/')],
         ]
