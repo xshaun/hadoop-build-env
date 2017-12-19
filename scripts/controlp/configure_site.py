@@ -53,7 +53,7 @@ class Custom(Basis):
 
         workers = open('./configs/workers', 'w')
         for host in slaves_list:
-            workers.write(host['ip'])
+            workers.write("%s \n" % (host['ip']))
         workers.close()
 
         #
