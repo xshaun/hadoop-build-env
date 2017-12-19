@@ -18,7 +18,7 @@ class Custom(Basis):
         dest_folder = os.path.join(self.ys['binarycode'], 'rose-on-yarn/')
 
         for host in host_list:
-            ins = "{0} {2}@{1} -tt '{3} && {4} & sleep 0.5' ".format(
+            ins = "{0} {2}@{1} -tt '{3} && {4}' ".format(
                 ssh_option, host['ip'], host['usr'],
                 os.path.join(dest_folder, 'sbin/start-dfs.sh'),
                 os.path.join(dest_folder, 'sbin/start-yarn.sh'))
