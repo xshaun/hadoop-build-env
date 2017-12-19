@@ -3,10 +3,9 @@
 from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command as cmd
-import lxml.etree as etree
-from xml.etree import ElementTree
-from xml.etree.ElementTree import Element
-from xml.etree.ElementTree import SubElement
+from lxml import etree as ElementTree
+from lxml.etree import Element as Element
+from lxml.etree import SubElement as SubElement
 import os
 
 #---------------------------------------------------------------------------
@@ -35,12 +34,8 @@ def putconfig(file, name, value):
     value_elem.text = value
 
     conf_file = open(file, 'wb')
-    conf_file.write(ElementTree.tostring(root))
-    conf_file.close()
-
-    x = etree.parse(file)
-    conf_file = open(file, 'wb')
-    conf_file.write(etree.tostring(x, pretty_print=True, encoding='utf-8'))
+    conf_file.write(ElementTree.tostring(
+        root, pretty_print=True, encoding='utf-8'))
     conf_file.close()
 
 
