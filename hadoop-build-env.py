@@ -17,7 +17,8 @@
 # OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 """
-Copyright (C) 2017 xiaoyang.xshaun. All Rights Reserved.
+WELCOME YOUR EMAILS ABOUT COMMUNICATION AND CONSULTATION 
+AUTHOR: XIAOYANG SUN (xshaun@outlook.com).ALL RIGHTS RESERVED
 """
 
 import os
@@ -109,7 +110,8 @@ def main(stage=None):
             obj = __import__("scripts.%s" % (ys['steps'][step]), fromlist=True)
             func = getattr(obj, 'trigger')
             if not func(ys):
-                raise Exception("errors occurs in scripts.%s" % (ys['steps'][step]))
+                raise Exception("errors occurs in scripts.%s" %
+                                (ys['steps'][step]))
 
     except Exception as e:
         logger.error(str(e))
