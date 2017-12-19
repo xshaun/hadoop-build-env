@@ -7,6 +7,7 @@ from lxml import etree as ElementTree
 from lxml.etree import Element as Element
 from lxml.etree import SubElement as SubElement
 import os
+import shutil
 
 #---------------------------------------------------------------------------
 #   Definitions
@@ -63,6 +64,11 @@ class Custom(Basis):
         #
         # configure *-site.xml
         #
+        shutil.copy2('./configs/default/hadoop-core.xml', './configs/core-site.xml')
+        shutil.copy2('./configs/default/hadoop-hdfs.xml', './configs/hdfs-site.xml')
+        shutil.copy2('./configs/default/hadoop-yarn.xml', './configs/yarn-site.xml')
+        shutil.copy2('./configs/default/hadoop-mapred.xml', './configs/mapred-site.xml')
+
         putconfig(file='./configs/core-site.xml',
                   name='fs.defaultFS',
                   value="hdfs://%s:9000" % self.ys['roles']['namen']['hosts'][0])
