@@ -13,3 +13,11 @@ tmp/*
 
 # IDEA
 .idea/*
+
+# For this
+settings.yaml
+configs/workers
+configs/core-site.xml
+configs/hdfs-site.xml
+configs/yarn-site.xml
+configs/mapred-site.xml
