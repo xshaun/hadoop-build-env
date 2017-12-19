@@ -38,8 +38,8 @@ def putconfig(file, name, value):
     conf_file.write(ElementTree.tostring(root))
     conf_file.close()
 
-    conf_file = open(file, 'wb')
     x = etree.parse(file)
+    conf_file = open(file, 'wb')
     conf_file.write(etree.tostring(x, pretty_print=True, encoding='utf-8'))
     conf_file.close()
 
