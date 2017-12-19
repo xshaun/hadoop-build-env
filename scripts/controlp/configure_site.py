@@ -123,7 +123,7 @@ class Custom(Basis):
             sourcecode, 'hadoop-dist/target/hadoop-3.0.0-beta1/etc/hadoop/hadoop-env.sh')
 
         ins = ':'
-        hadoop_home = os.path.join(binarycode, 'rose-on-yarn')
+        hadoop_home = os.path.join(binarycode, 'rose-on-yarn/')
         envlist = [
             ['PDSH_RCMD_TYPE', 'ssh'],
             ['JAVA_HOME', '/usr/lib/jvm/java-8-openjdk-amd64/'],
