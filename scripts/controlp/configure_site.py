@@ -119,15 +119,24 @@ class Custom(Basis):
         #
         # configure ./etc/hadoop/*.sh
         #
-        file = os.path.join(
+        hadoop_env_file = os.path.join(
             sourcecode, 'hadoop-dist/target/hadoop-3.0.0-beta1/etc/hadoop/hadoop-env.sh')
 
-        ins = "put_config_line --file {0} --property {1} --value {2} --prefix 'export' && \
-                put_config_line --file {0} --property {3} --value {4} --prefix 'export' & \
-                  sleep 0.5".format(
-            file,
-            'JAVA_HOME', "$(echo '`whereis java | awk '; echo "'{print \$3}'"; echo '`')",
-            'PDSH_RCMD_TYPE', 'ssh')
+        ins = ':'
+        envlist = [
+            ['PDSH_RCMD_TYPE', 'ssh'],
+            ['JAVA_HOME', '/usr/lib/jvm/java-8-openjdk-amd64/'],
+            ['HADOOP_HOME', binarycode],
+            ['HADOOP_HDFS_HOME', binarycode],
+            ['HADOOP_YARN_HOME', binarycode],
+            ['HADOOP_CONF_DIR', os.path.join(binarycode, 'etc/hadoop/')],
+            ['YARN_CONF_DIR', os.path.join(binarycode, 'etc/hadoop/')],
+        ]
+        for e in envlist:
+            ins += " && put_config_line --file {0} --property {1} --value {2} --prefix 'export' ".format(
+                hadoop_env_file, e[0], e[1])
+
+        ins += ' & sleep 0.5'
 
         retcode = cmd.do(ins)
 
@@ -136,18 +145,6 @@ class Custom(Basis):
         if retcode != 0:
             logger.error(ins)
             return False
-
-
-# # Secure and insecure env vars
-# # * [start|stop]-dfs.sh
-# HDFS_DATANODE_USER=root
-# HADOOP_SECURE_DN_USER=hdfs
-# HDFS_NAMENODE_USER=root
-# HDFS_SECONDARYNAMENODE_USER=root
-# #
-# # * [start|stop]-yarn.sh
-# YARN_NODEMANAGER_USER=root
-# YARN_RESOURCEMANAGER_USER=root
 
         return True
 
