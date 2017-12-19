@@ -38,7 +38,7 @@ cat /etc/*release | grep ID=debian
 if [[ $? == 0 ]]; then
 	apt-get -f install apt-transport-https
 	echo deb http://http.debian.net/debian jessie-backports main >> /etc/apt/sources.list
-	apt-get -f update
+	apt-get update
 	apt-get -f install openjdk-8-jdk
 	# update-alternatives --config java
 fi
