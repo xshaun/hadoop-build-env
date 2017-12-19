@@ -18,9 +18,10 @@ class Custom(Basis):
         dest_folder = os.path.join(self.ys['binarycode'], 'rose-on-yarn/')
 
         for host in host_list:
-            ins = "{0} {2}@{1} -tt '{3} && {3}' ".format(
+            ins = "{0} {2}@{1} -tt '{3} && sleep 0.5 && {4}' ".format(
                 ssh_option, host['ip'], host['usr'],
-                os.path.join(dest_folder, 'sbin/stop-all.sh'))
+                os.path.join(dest_folder, 'sbin/stop-yarn.sh'),
+                os.path.join(dest_folder, 'sbin/stop-dfs.sh'))
 
             retcode = cmd.do(ins)
 
