@@ -18,7 +18,7 @@ def putconfig(file, name, value):
 
     description = ''
     for existing_prop in root.getchildren():
-        if existing_prop.find('name').text == name:
+        if existing_prop.find('name') is not None and existing_prop.find('name').text == name:
             description = existing_prop.find('description').text
             root.remove(existing_prop)
             break
