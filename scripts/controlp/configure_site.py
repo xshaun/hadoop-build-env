@@ -143,7 +143,7 @@ class Custom(Basis):
             ['HADOOP_COMMON_LIB_NATIVE_DIR', os.path.join(
                 hadoop_home, 'lib/native/')],
             ['HADOOP_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
-            ['YARN_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
+            # ['YARN_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
         ]
         for e in envlist:
             ins += " && put_config_line --file {0} --property {1} --value {2} --prefix 'export' ".format(
