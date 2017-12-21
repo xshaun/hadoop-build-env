@@ -206,7 +206,7 @@ stages:
   'compile':
     - 'cpcsc'
 
-  'scp':
+  'sync':
     - 'cpdbp'
 
   'start':

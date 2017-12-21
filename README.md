@@ -13,11 +13,17 @@ hbe install   # run all actions for control-proxy and cluster
 
 hbe cpinit   #  install nessary libs in control-proxy for developing
 
-hbe compile  # compile source code in control-proxy
+hbe initcompile  # initially compile source code in control-proxy. This will resolve maven depandency and download a number of jar libs.
 
 hbe deploy  # configure site, distribute binary libs into cluster, prepare execution environment in cluster
 
-hbe scp  # distribute binary libs into cluster 
+hbe config # configure site.xml, worker and some configuration.
+
+================================================================
+
+hbe compile  # compile source code in control-proxy
+
+hbe sync  # distribute binary libs into cluster 
 
 hbe start  # run start-all.sh
 
