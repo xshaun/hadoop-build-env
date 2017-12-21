@@ -117,6 +117,18 @@ class Custom(Basis):
                   name='yarn.nodemanager.amrmproxy.enabled',
                   value='true')
 
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.resourcemanager.webapp.address',
+                  value='${yarn.resourcemanager.address}:8088')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.webapp.address',
+                  value='${yarn.nodemanager.address}:8042')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.timeline-service.webapp.address',
+                  value='${yarn.timeline-service.address}:8188')
+
         # mapreduce
         putconfig(file='./configs/mapred-site.xml',
                   name='mapreduce.framework.name',
