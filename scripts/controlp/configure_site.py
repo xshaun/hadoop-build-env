@@ -117,18 +117,6 @@ class Custom(Basis):
                   name='yarn.nodemanager.amrmproxy.enabled',
                   value='true')
 
-        putconfig(file='./configs/yarn-site.xml',
-                  name='yarn.resourcemanager.webapp.address',
-                  value='${yarn.resourcemanager.address}:8088')
-
-        putconfig(file='./configs/yarn-site.xml',
-                  name='yarn.nodemanager.webapp.address',
-                  value='${yarn.nodemanager.address}:8042')
-
-        putconfig(file='./configs/yarn-site.xml',
-                  name='yarn.timeline-service.webapp.address',
-                  value='${yarn.timeline-service.address}:8188')
-
         # mapreduce
         putconfig(file='./configs/mapred-site.xml',
                   name='mapreduce.framework.name',
@@ -175,6 +163,8 @@ class Custom(Basis):
             ['HADOOP_MAPRED_HOME', hadoop_home],
             ['HADOOP_COMMON_HOME', hadoop_home],
             ['HADOOP_COMMON_LIB_NATIVE_DIR', os.path.join(
+                hadoop_home, 'lib/native/')],
+            ['HADOOP_OPTS', "\"${HADOOP_OPTS} -Djava.library.path=%s\"" % os.path.join(
                 hadoop_home, 'lib/native/')],
             ['HADOOP_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
             # ['YARN_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],

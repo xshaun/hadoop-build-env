@@ -40,7 +40,8 @@ put_config_line()
         esac
     done
 
-    local pattern="^[ \t]*${prefix}[ \t]*${property}=.*"
+    #local pattern="^[ \t]*${prefix}[ \t]*${property}=.*" # may cause some errors such as 'switch case ? case ?'
+    local pattern="^${prefix}[ \t]*${property}=.*"
 
     grep "${pattern}" ${file} > /dev/null
     if [[ 0 == $? ]]; then

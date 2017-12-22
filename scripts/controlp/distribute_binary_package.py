@@ -33,10 +33,9 @@ class Custom(Basis):
 
         for host in rm_list:
             #!!! donot use -tt option
-            ins = "{0} {2}@{1} -T '{3} && {4}' ".format(
+            ins = "ssh {0} {2}@{1} -T '{3}' ".format(
                 ssh_option, host['ip'], host['usr'],
-                os.path.join(dest_folder, 'sbin/stop-yarn.sh'),
-                os.path.join(dest_folder, 'sbin/stop-dfs.sh'))
+                os.path.join(dest_folder, 'sbin/stop-all.sh'))
 
             retcode = cmd.do(ins)
 
