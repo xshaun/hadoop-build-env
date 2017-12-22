@@ -23,6 +23,7 @@ class Custom(Basis):
         ])
         retcode = cmd.do(ins)
         if retcode != 0:
+            cmd.do("mvn package -DskipTests")
             return False
 
         return True
