@@ -77,7 +77,7 @@ put_config_line --file ~/.profile --property 'FINDBUGS_HOME' --value '/opt/findb
 
 #
 # * set maven opts
-put_config_line --file ~/.profile --property 'MAVEN_OPTS' --value '-Xmx1024m -XX:MaxPermSize=128m' --prefix 'export'
+put_config_line --file ~/.profile --property 'MAVEN_OPTS' --value '"-Xmx1024m -XX:MaxPermSize=128m"' --prefix 'export'
 
 # ----------------------------
 # Clean and Upgrade libs:
