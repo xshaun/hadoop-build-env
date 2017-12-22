@@ -164,7 +164,7 @@ class Custom(Basis):
             ['HADOOP_COMMON_HOME', hadoop_home],
             ['HADOOP_COMMON_LIB_NATIVE_DIR', os.path.join(
                 hadoop_home, 'lib/native/')],
-            ['HADOOP_OPTS', "\"${HADOOP_OPTS} -Djava.library.path=%s\"" % os.path.join(
+            ['HADOOP_OPTS', "'\"${HADOOP_OPTS} -Djava.library.path=%s\"'" % os.path.join(
                 hadoop_home, 'lib/native/')],
             ['HADOOP_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
             # ['YARN_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
