@@ -77,8 +77,9 @@ put_config_line --file ~/.profile --property 'FINDBUGS_HOME' --value '/opt/findb
 
 #
 # * set maven opts
-put_config_line --file ~/.profile --property 'MAVEN_OPTS' --value '"-Xmx1024m"' --prefix 'export'
-put_config_line --file ~/.profile --property 'JAVA_TOOL_OPTIONS' --value '"-Xmx1024m -Xms1024m"' --prefix 'export'
+put_config_line --file ~/.profile --property 'MAVEN_OPTS' --value '"-Xms512m -Xmx2048m"' --prefix 'export'
+put_config_line --file ~/.profile --property 'JAVA_TOOL_OPTIONS' --value '"-Xms512m -Xmx2048m -XX:+UseConcMarkSweepGC -XX:-UseGCOverheadLimit"' --prefix 'export'
+put_config_line --file ~/.profile --property 'JAVA_OPTS' --value '"-Xms512m -Xmx4096m"' --prefix 'export'
 
 # ----------------------------
 # Clean and Upgrade libs:
