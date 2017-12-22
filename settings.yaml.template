@@ -168,43 +168,56 @@ steps:
 # of several processes/steps.
 #
 stages:
-  'install': 
+  'init': 
     - 'cpicp'
     - 'cpsp'
   # - 'cpcc'
   # - 'cpdsc'
     - 'cpicsc'
-    - 'cpcs'
+    - 'cpcsx'
     - 'cpdbp'
     - 'cirp'
     - 'caug'
     - 'ccbmo'
     - 'nnffs'
 
-  'cpinit':
+  'initcontrolp':
     - 'cpicp'
     - 'cpsp'
   # - 'cpcc'
   # - 'cpdsc'
-    - 'cpicsc'
-
-  'deploy':
-    - 'cpsp'
-    - 'cpcs'
-    - 'cpdbp'
-    - 'cirp'
-    - 'caug'
-    - 'ccbmo'
-    - 'nnffs'
-
-  'config':
-    - 'cpcs'
+  # - 'cpicsc'
 
   'initcompile':
     - 'cpicsc'
-    
+
+  'initcluster':
+    - 'cirp'
+    - 'caug'
+    - 'ccbmo'
+
+  'initdeploy':
+    - 'cpsp'
+    - 'cpicsc'
+    - 'cpcsx'
+    - 'cpdbp'
+    - 'cirp'
+    - 'caug'
+    - 'ccbmo'
+    - 'nnffs'
+
+  'deploy':
+    - 'cpcsx'
+    - 'cpdbp'
+    - 'caug'
+    - 'ccbmo'
+    - 'cstart'
+
   'compile':
     - 'cpcsc'
+
+  'config':
+    - 'cpcsx'
 
   'sync':
     - 'cpdbp'
@@ -214,9 +227,3 @@ stages:
 
   'stop':
     - 'cstop'
-
-  'test':
-    - 'cpcs'
-    - 'cpdbp'
-    - 'ccbmo'
-    - 'nnffs'

@@ -9,15 +9,20 @@ And we take delight in contribution in efficient cluster scheduling and approach
 
 2. run `bhe <stage(s)>`  e.g.
 ```shell
-hbe install   # run all actions for control-proxy and cluster 
 
-hbe cpinit   #  install nessary libs in control-proxy for developing
+hbe init # prepare enviroment in control-proxy and cluster for all actions 
 
-hbe initcompile  # initially compile source code in control-proxy. This will resolve maven depandency and download a number of jar libs.
+hbe initcontrolp # install nessary libs in control-proxy for compiling...
 
-hbe deploy  # configure site, distribute binary libs into cluster, prepare execution environment in cluster
+hbe initcompile # initially compile source code in control-proxy. This will resolve maven depandency and download a number of jar libs.
+
+hbe initcluster # install nessary libs in cluster for running... 
+
+hbe initdeploy  # configure site, distribute binary libs into cluster, prepare execution environment in cluster
 
 hbe config # configure site.xml, worker and some configuration.
+
+hbe deploy  # configure site, distribute binary libs into cluster to cluster
 
 ================================================================
 
@@ -28,6 +33,16 @@ hbe sync  # distribute binary libs into cluster
 hbe start  # run start-all.sh
 
 hbe stop  # run stop-all.sh
+
+================================================================
+# usually used:
+
+hbe compile config sync strart
+
+hbe compile sync strart
+
+hbe compile deploy
+
 ```
 
 
