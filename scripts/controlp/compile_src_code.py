@@ -15,9 +15,10 @@ class Custom(Basis):
         sourcecode = self.ys['sourcecode']
 
         ins = " && ".join([
+            "free",
             "cd %s" % (sourcecode),
             # "mvn package -Pdist,native,docs,src -DskipTests -Dtar" # -Pdocs will enforce to check the format correction of docs and some mvn errors will occur.
-            "mvn package -Pdist,native,src -DskipTests -Dtar"
+            "mvn package -Pdist,native,src -DskipTests"
         ])
         retcode = cmd.do(ins)
         if retcode != 0:

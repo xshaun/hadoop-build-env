@@ -142,6 +142,22 @@ class Custom(Basis):
                   name='yarn.nodemanager.env-whitelist',
                   value='JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME')
 
+        ins = "format_file %s && format_file %s && format_file %s && format_file %s" % (
+                './configs/core-site.xml',
+                './configs/hdfs-site.xml',
+                './configs/yarn-site.xml',
+                './configs/mapred-site.xml')
+
+        ins += ' & sleep 0.5'
+
+        retcode = cmd.do(ins)
+
+        logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+        if retcode != 0:
+            logger.error(ins)
+            return False
+
         #
         # configure ./etc/hadoop/*.sh
         #

@@ -19,8 +19,9 @@ class Custom(Basis):
 
         for host in host_list:
             #!!! donot use -tt option
-            ins = "{0} {2}@{1} -T '{3} && {4}' ".format(
+            ins = "{0} {2}@{1} -T '{3} && {4} && {5}' ".format(
                 ssh_option, host['ip'], host['usr'],
+                os.path.join(dest_folder, 'sbin/stop-all.sh'),
                 os.path.join(dest_folder, 'sbin/start-dfs.sh'),
                 os.path.join(dest_folder, 'sbin/start-yarn.sh'))
 
