@@ -208,6 +208,7 @@ stages:
 
   'deploy':
     - 'cpcsx'
+    - 'cstop'
     - 'cpdbp'
     - 'caug'
     - 'ccbmo'

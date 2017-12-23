@@ -24,24 +24,6 @@ class Custom(Basis):
         binarycode = self.ys['binarycode']
 
         #
-        # stop all processes
-        # ignore errors while executing
-        #
-        rm_list = self.getHosts(roles=['resourcem', ])
-
-        dest_folder = os.path.join(binarycode, 'rose-on-yarn/')
-
-        for host in rm_list:
-            #!!! donot use -tt option
-            ins = "ssh {0} {2}@{1} -T '{3}' ".format(
-                ssh_option, host['ip'], host['usr'],
-                os.path.join(dest_folder, 'sbin/stop-all.sh'))
-
-            retcode = cmd.do(ins)
-
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-        #
         # add permissions
         #
         for host in host_list:
