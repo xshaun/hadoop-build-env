@@ -17,6 +17,22 @@ class Custom(Basis):
         binarycode = self.ys['binarycode']
 
         #
+        # clear
+        #
+        dest_folder = os.path.join(binarycode, 'rose-on-yarn/')
+
+        remote_ins = "{0} && {0}".format(
+                os.path.join(dest_folder, 'sbin/stop-all.sh'))
+
+        ins = "{0} {2}@{1} -tt '{3}' ".format(
+                ssh_option, self.ys['roles']['namen']['hosts'][0],
+                self.ys['roles']['namen']['usr'], remote_ins)
+
+        retcode = cmd.do(ins)
+
+        logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+        #
         # clear hdfs
         #
         """
@@ -68,9 +84,8 @@ class Custom(Basis):
         #
         dest_folder = os.path.join(binarycode, 'rose-on-yarn/')
 
-        remote_ins = "{0} && {0} && {1} namenode -format -force".format(
-            os.path.join(dest_folder, 'sbin/stop-all.sh'),
-            os.path.join(dest_folder, 'bin/hdfs'))
+        remote_ins = "{1}".format(
+            os.path.join(dest_folder, 'bin/hdfs namenode -format -force'))
 
         ins = "{0} {2}@{1} -tt '{3}' ".format(
             ssh_option, self.ys['roles']['namen']['hosts'][0],
