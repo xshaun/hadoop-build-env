@@ -119,8 +119,16 @@ class Custom(Basis):
                   value='true')
 
         putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.amrmproxy.address',
+                  value='0.0.0.0:8049')
+
+        putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.scheduler.address',
-                  value='${yarn.nodemanager.amrmproxy.address}')
+                  value='0.0.0.0:8049')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.amrmproxy.client.thread-count',
+                  value='3')
 
         # mapreduce
         putconfig(file='./configs/mapred-site.xml',
