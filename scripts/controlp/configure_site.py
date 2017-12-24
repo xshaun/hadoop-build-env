@@ -101,6 +101,7 @@ class Custom(Basis):
                   name='yarn.resourcemanager.hostname',
                   value=self.ys['roles']['resourcem']['hosts'][0])
 
+        # support distributed scheduler
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.opportunistic-container-allocation.enabled',
                   value='true')
@@ -116,6 +117,10 @@ class Custom(Basis):
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.nodemanager.amrmproxy.enabled',
                   value='true')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.resourcemanager.scheduler.address',
+                  value='${yarn.nodemanager.amrmproxy.address}')
 
         # mapreduce
         putconfig(file='./configs/mapred-site.xml',

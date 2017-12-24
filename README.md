@@ -18,11 +18,11 @@ hbe initcompile # initially compile source code in control-proxy. This will reso
 
 hbe initcluster # install nessary libs in cluster for running... 
 
-hbe initdeploy  # configure site, distribute binary libs into cluster, prepare execution environment in cluster
+hbe initdeploy  # initally compile source code, configure site, distribute binary libs into cluster, prepare execution environment in cluster
 
 hbe config # configure site.xml, worker and some configuration.
 
-hbe deploy  # configure site, distribute binary libs into cluster to cluster
+hbe deploy  # compile source code, configure site, distribute binary libs into cluster to cluster
 
 ================================================================
 
@@ -37,11 +37,15 @@ hbe stop  # run stop-all.sh
 ================================================================
 # usually used:
 
-hbe compile config sync strart
+hbe initcompile # first compile
 
-hbe compile sync strart
+hbe initdeploy # first compile and deploy
 
-hbe compile deploy
+hbe compile config stop sync strart
+
+hbe compile stop sync strart
+
+hbe deploy
 
 ```
 

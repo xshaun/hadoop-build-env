@@ -208,6 +208,7 @@ stages:
     - 'cstart'
 
   'deploy':
+    - 'cpcsc'
     - 'cpcsx'
     - 'cstop'
     - 'cpdbp'
