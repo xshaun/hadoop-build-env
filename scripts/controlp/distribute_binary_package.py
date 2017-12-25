@@ -118,11 +118,11 @@ class Custom(Basis):
         # binary code
         #
         sour_folder = os.path.join(
-            sourcecode, 'hadoop-dist/target/hadoop-3.0.0-beta1/', '*')
+                self.getControlPBinaryFolder(), '*')
         dest_folder = os.path.join(binarycode, 'rose-on-yarn/')
 
         for host in host_list:
-            ins = "ssh {0} {2}@{1} -tt 'mkdir -p {4}' && scp -r {0} {3} {2}@{1}:{4}".format(
+            ins = "ssh {0} {2}@{1} -tt 'mkdir -p {4} && rm -rf {4}/*' && scp -r {0} {3} {2}@{1}:{4}".format(
                 ssh_option, host['ip'], host['usr'],
                 sour_folder, dest_folder)
 

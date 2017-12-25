@@ -163,7 +163,7 @@ class Custom(Basis):
         # configure ./etc/hadoop/*.sh
         #
         hadoop_env_file = os.path.join(
-            sourcecode, 'hadoop-dist/target/hadoop-3.0.0-beta1/etc/hadoop/hadoop-env.sh')
+                self.getControlPBinaryFolder(), 'etc/hadoop/hadoop-env.sh')
 
         ins = ':'
         hadoop_home = os.path.join(binarycode, 'rose-on-yarn/')

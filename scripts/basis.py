@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import time
+import os
 import logging
 import logging.config
 
@@ -135,3 +136,21 @@ class Basis(object):
         ]
         """
         return self.getHosts(roles=['nodem', 'datan'])
+
+    def getControlPSourceFolder(self):
+
+        return self.ys['sourcecode']
+
+    def getControlPBinaryFolder(self):
+        sourcecode = self.ys['sourcecode']
+
+        binaryfather = os.path.join(sourcecode, 'hadoop-dist/target/')
+        items = os.listdir(binaryfather)
+
+        binaryfolder = None
+        for item in items:
+            if item.endswith('.tar.gz'):
+                binaryfolder = os.path.join(binaryfather, item[0:-7])
+                break
+
+        return binaryfolder
