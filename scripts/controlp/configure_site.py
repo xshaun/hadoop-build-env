@@ -178,9 +178,12 @@ class Custom(Basis):
             ['HADOOP_OPTS', "'\"${HADOOP_OPTS} -Djava.library.path=%s\"'" % os.path.join(
                 hadoop_home, 'lib/native/')],
             ['HADOOP_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
-            # ['YARN_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')], # depressed
             ['HADOOP_LOG_DIR', os.path.join(hadoop_home, '../logs/')], # custom
-            ['HADOOP_ROOT_LOGGER', 'DEBUG,console'], # DEBUG mode # custom
+            ['HADOOP_ROOT_LOGGER', 'DEBUG,console,RFA'], # DEBUG mode # custom
+            ['HADOOP_DAEMON_ROOT_LOGGER', 'DEBUG,console,RFA'], # DEBUG mode # custom
+            ['HADOOP_SECURITY_LOGGER', 'DEBUG,console,RFA'], # DEBUG mode # custom
+            # ['YARN_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')], # depressed
+            # ['YARN_ROOT_LOGGER', 'DEBUG,console,RFA'], # depressed
         ]
         for e in envlist:
             ins += " && put_config_line --file {0} --property {1} --value {2} --prefix 'export' ".format(
