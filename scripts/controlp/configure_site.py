@@ -149,8 +149,6 @@ class Custom(Basis):
                 './configs/yarn-site.xml',
                 './configs/mapred-site.xml')
 
-        ins += ' & sleep 0.5'
-
         retcode = cmd.do(ins)
 
         logger.info("ins: %s; retcode: %d." % (ins, retcode))
@@ -180,13 +178,12 @@ class Custom(Basis):
             ['HADOOP_OPTS', "'\"${HADOOP_OPTS} -Djava.library.path=%s\"'" % os.path.join(
                 hadoop_home, 'lib/native/')],
             ['HADOOP_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
-            # ['YARN_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
+            # ['YARN_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')], # depressed
+            ['HADOOP_LOG_DIR', os.path.join(hadoop_home, '../logs/')],
         ]
         for e in envlist:
             ins += " && put_config_line --file {0} --property {1} --value {2} --prefix 'export' ".format(
                 hadoop_env_file, e[0], e[1])
-
-        ins += ' & sleep 0.5'
 
         retcode = cmd.do(ins)
 

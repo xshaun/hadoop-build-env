@@ -46,7 +46,7 @@ class Custom(Basis):
                                 self.ys['roles']['namen']['sdir'], '*')
 
         for host in name_nodes:
-            ins = "{0} {2}@{1} -tt 'rm -rf {3} {4}' & sleep 0.5".format(
+            ins = "{0} {2}@{1} -tt 'rm -rf {3} {4}' ".format(
                 ssh_option, host['ip'], host['usr'],
                 namedir, namesdir)
 
@@ -67,7 +67,7 @@ class Custom(Basis):
                                self.ys['roles']['datan']['dir'], '*')
 
         for host in data_nodes:
-            ins = "{0} {2}@{1} -tt 'rm -rf {3}' & sleep 0.5".format(
+            ins = "{0} {2}@{1} -tt 'rm -rf {3}' ".format(
                 ssh_option, host['ip'], host['usr'],
                 datadir)
 
