@@ -34,6 +34,7 @@ class Custom(Basis):
             for p in self.ys['params']:
                 candidates.append(self.__parse(p))
 
+        threads = list()
         for can in candidates:
             ins = " && ".join([
                 "cd %s" % (can),
@@ -41,12 +42,18 @@ class Custom(Basis):
                 # "mvn package -Pdist,native,src -T 1C -Dmaven.test.skip=true  -Dmaven.compile.fork=true"
                 "mvn clean && mvn package -Pdist,native -DskipTests -Dtar"
             ])
-            retcode = cmd.do(ins)
-            if retcode != 0:
-                cmd.do("mvn package -DskipTests")
-                return False
 
-        return True
+            t = ParaIns(ins)
+            t.start()
+            threads.append(t)
+
+        for t in threads:
+            t.join()
+
+        ret = True
+        for t in threads:
+            ret = ret and t.ret
+        return ret
 
 
 def trigger(ys, params=[]):
