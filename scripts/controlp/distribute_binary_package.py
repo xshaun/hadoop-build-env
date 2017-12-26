@@ -95,6 +95,10 @@ class Custom(Basis):
             t.start()
             threads.append(t)
 
+        # must wait 
+        for t in threads:
+            t.join()
+
         # configs
         #
         hbe_configs = './configs/*.xml ./configs/workers'
