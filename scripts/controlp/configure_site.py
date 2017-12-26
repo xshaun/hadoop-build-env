@@ -42,14 +42,19 @@ def putconfig(file, name, value):
         root, pretty_print=True, encoding='utf-8'))
     conf_file.close()
 
+    return
+
 
 class Custom(Basis):
 
     def action(self):
         logger.info('--> common.configure_site <--')
 
-        binarycode = self.ys['binarycode']
-        sourcecode = self.ys['sourcecode']
+        cluster_hadoop_lib_native = self.getClusterHadoopLibNativeDir()
+        cluster_hadoop_conf_dir = self.getClusterHadoopConfDir()
+        cluster_binary_dir = self.getClusterBinaryDir()
+        cluster_hdfs_dir = self.getClusterHdfsDir()
+        cluster_log_dir = self.getClusterLogDir()
 
         #
         # wirte slaves' ip into workers
@@ -64,10 +69,14 @@ class Custom(Basis):
         #
         # configure *-site.xml
         #
-        shutil.copy2('./configs/default/hadoop-core.xml', './configs/core-site.xml')
-        shutil.copy2('./configs/default/hadoop-hdfs.xml', './configs/hdfs-site.xml')
-        shutil.copy2('./configs/default/hadoop-yarn.xml', './configs/yarn-site.xml')
-        shutil.copy2('./configs/default/hadoop-mapred.xml', './configs/mapred-site.xml')
+        shutil.copy2('./configs/default/hadoop-core.xml',
+                     './configs/core-site.xml')
+        shutil.copy2('./configs/default/hadoop-hdfs.xml',
+                     './configs/hdfs-site.xml')
+        shutil.copy2('./configs/default/hadoop-yarn.xml',
+                     './configs/yarn-site.xml')
+        shutil.copy2('./configs/default/hadoop-mapred.xml',
+                     './configs/mapred-site.xml')
 
         putconfig(file='./configs/core-site.xml',
                   name='fs.defaultFS',
@@ -79,22 +88,22 @@ class Custom(Basis):
 
         putconfig(file='./configs/hdfs-site.xml',
                   name='dfs.namenode.name.dir',
-                  value=os.path.join('file:', binarycode,
+                  value=os.path.join('file:', cluster_hdfs_dir,
                                      self.ys['roles']['namen']['dir']))
 
         putconfig(file='./configs/hdfs-site.xml',
                   name='fs.checkpoint.dir',
-                  value=os.path.join('file:', binarycode,
+                  value=os.path.join('file:', cluster_hdfs_dir,
                                      self.ys['roles']['namen']['sdir']))
 
         putconfig(file='./configs/hdfs-site.xml',
                   name='fs.checkpoint.edits.dir',
-                  value=os.path.join('file:', binarycode,
+                  value=os.path.join('file:', cluster_hdfs_dir,
                                      self.ys['roles']['namen']['sdir']))
 
         putconfig(file='./configs/hdfs-site.xml',
                   name='dfs.datanode.data.dir',
-                  value=os.path.join('file:', binarycode,
+                  value=os.path.join('file:', cluster_hdfs_dir,
                                      self.ys['roles']['datan']['dir']))
 
         putconfig(file='./configs/yarn-site.xml',
@@ -144,10 +153,10 @@ class Custom(Basis):
                   value='JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME')
 
         ins = "format_file %s && format_file %s && format_file %s && format_file %s" % (
-                './configs/core-site.xml',
-                './configs/hdfs-site.xml',
-                './configs/yarn-site.xml',
-                './configs/mapred-site.xml')
+            './configs/core-site.xml',
+            './configs/hdfs-site.xml',
+            './configs/yarn-site.xml',
+            './configs/mapred-site.xml')
 
         retcode = cmd.do(ins)
 
@@ -161,30 +170,29 @@ class Custom(Basis):
         # configure ./etc/hadoop/*.sh
         #
         hadoop_env_file = os.path.join(
-                self.getControlPBinaryFolder(), 'etc/hadoop/hadoop-env.sh')
+            cluster_hadoop_conf_dir, 'hadoop-env.sh')
 
         ins = ':'
-        hadoop_home = os.path.join(binarycode, 'rose-on-yarn/')
         envlist = [
             ['PDSH_RCMD_TYPE', 'ssh'],
             ['JAVA_HOME', '/usr/lib/jvm/java-8-openjdk-amd64/'],
-            ['HADOOP_HOME', hadoop_home],
-            ['HADOOP_YARN_HOME', hadoop_home],
-            ['HADOOP_HDFS_HOME', hadoop_home],
-            ['HADOOP_MAPRED_HOME', hadoop_home],
-            ['HADOOP_COMMON_HOME', hadoop_home],
-            ['HADOOP_COMMON_LIB_NATIVE_DIR', os.path.join(
-                hadoop_home, 'lib/native/')],
-            ['HADOOP_OPTS', "'\"${HADOOP_OPTS} -Djava.library.path=%s\"'" % os.path.join(
-                hadoop_home, 'lib/native/')],
-            ['HADOOP_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')],
-            ['HADOOP_LOG_DIR', os.path.join(hadoop_home, '../logs/')], # custom
-            ['HADOOP_ROOT_LOGGER', 'DEBUG,console,RFA'], # DEBUG mode # custom
-            ['HADOOP_DAEMON_ROOT_LOGGER', 'DEBUG,console,RFA'], # DEBUG mode # custom
-            ['HADOOP_SECURITY_LOGGER', 'DEBUG,console,RFA'], # DEBUG mode # custom
-            # ['YARN_CONF_DIR', os.path.join(hadoop_home, 'etc/hadoop/')], # depressed
-            # ['YARN_ROOT_LOGGER', 'DEBUG,console,RFA'], # depressed
+            ['HADOOP_HOME', cluster_binary_dir],
+            ['HADOOP_YARN_HOME', cluster_binary_dir],
+            ['HADOOP_HDFS_HOME', cluster_binary_dir],
+            ['HADOOP_MAPRED_HOME', cluster_binary_dir],
+            ['HADOOP_COMMON_HOME', cluster_binary_dir],
+            ['HADOOP_COMMON_LIB_NATIVE_DIR', cluster_hadoop_lib_native],
+            ['HADOOP_OPTS',
+                "'\"${HADOOP_OPTS} -Djava.library.path=%s\"'" % (cluster_hadoop_lib_native)],
+            ['HADOOP_CONF_DIR', cluster_hadoop_conf_dir],
+            ['HADOOP_LOG_DIR', cluster_log_dir],                 # custom
+            ['HADOOP_ROOT_LOGGER', 'DEBUG,console,RFA'],         # DEBUG mode custom
+            ['HADOOP_DAEMON_ROOT_LOGGER', 'DEBUG,console,RFA'],  # DEBUG mode custom
+            ['HADOOP_SECURITY_LOGGER', 'DEBUG,console,RFA'],     # DEBUG mode # custom
+            # ['YARN_CONF_DIR', cluster_hadoop_conf_dir],        # Deprecated
+            # ['YARN_ROOT_LOGGER', 'DEBUG,console,RFA'],         # Deprecated
         ]
+
         for e in envlist:
             ins += " && put_config_line --file {0} --property {1} --value {2} --prefix 'export' ".format(
                 hadoop_env_file, e[0], e[1])

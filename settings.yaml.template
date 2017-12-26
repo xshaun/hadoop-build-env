@@ -40,7 +40,7 @@ mode: 'fully-distributed'
 # 'clear' and 'download' can create it automatically.
 # !!! Must ensure its correctness and avoid misoperations.!!!
 #
-sourcecode: '/opt/rose-source-on-hadoop/'
+controlp_base_path: '/opt/rose-source-on-hadoop/'
 
 # [$]
 # It defines the folder's absolute path of binary code. 
@@ -48,7 +48,7 @@ sourcecode: '/opt/rose-source-on-hadoop/'
 # 'distribute' can create it automatically.
 # !!! Must ensure its correctness and avoid misoperations.!!!
 #
-binarycode: '/opt/rose/'
+cluster_base_path: '/opt/rose/'
 
 # [$]
 # GROUP & USER definition of operation and runtime
@@ -146,6 +146,8 @@ steps:
   'cpcsc': 'controlp.compile_src_code'
   # configure *-site.xml
   'cpcs': 'controlp.configure_site'
+  # prepare for distributing
+  'cpdbpp': 'controlp.distribute_binary_package_prep'
   # distribute binary package to nodes
   'cpdbp': 'controlp.distribute_binary_package'
 
@@ -156,9 +158,11 @@ steps:
   # change mode and own, workers
   'ccbmo': 'common.change_binarycode_mode_own'
   # start all
-  'cstart': 'common.start_all'
+  'cstart': 'common.start'
   # stop all
-  'cstop': 'common.stop_all'
+  'cstop': 'common.stop'
+  # clean
+  'cclean': 'common.clean'
 
   # name-node formats file system
   'nnffs': 'namen.format_file_system'
@@ -175,6 +179,7 @@ stages:
   # - 'cpdsc'
     - 'cpicsc'
     - 'cpcsx'
+    - 'cpdbpp'
     - 'cpdbp'
     - 'cirp'
     - 'caug'
@@ -200,6 +205,7 @@ stages:
     - 'cpsp'
     - 'cpicsc'
     - 'cpcsx'
+    - 'cpdbpp'
     - 'cpdbp'
     - 'cirp'
     - 'caug'
@@ -230,3 +236,6 @@ stages:
 
   'stop':
     - 'cstop'
+
+  'clean':
+    - 'cclean'

@@ -13,7 +13,7 @@ class Custom(Basis):
     def action(self):
         logger.info('--> controlp.clear_sourcecode <--')
 
-        sourcecode = self.ys['sourcecode']
+        sourcecode = self.getControlPSourceDir()
 
         if not os.path.exists(sourcecode):
             os.makedirs(sourcecode)

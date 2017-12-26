@@ -16,21 +16,22 @@ class Custom(Basis):
     def action(self):
         logger.info('--> common.install_runtime_prerequisties <--')
 
-        ssh_option = 'ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5'
+        ssh_option = '-o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
         host_list = self.getHosts()
+
+        cluster_script_dir = self.getClusterScriptDir()
 
         #
         # build master and slaves environment
         #
         # TODO [support to parallel execution]
-        dest_scripts_folder = os.path.join(self.ys['binarycode'], 'scripts/')
 
         runtime_env = os.path.join(
-            dest_scripts_folder, 'install_runtime_prerequisites.sh')
+            cluster_script_dir, 'install_runtime_prerequisites.sh')
 
         for host in host_list:
-            ins = "{0} {2}@{1} -tt 'sudo -S {3}'".format(
+            ins = "ssh {0} {2}@{1} -tt 'sudo -S {3}'".format(
                 ssh_option, host['ip'], host['usr'],
                 runtime_env)
 

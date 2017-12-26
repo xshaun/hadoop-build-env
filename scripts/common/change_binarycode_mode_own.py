@@ -15,26 +15,23 @@ class Custom(Basis):
     def action(self):
         logger.info('--> common.change_binarycode_mode_own <--')
 
-        ssh_option = 'ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5'
+        ssh_option = '-o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
         host_list = self.getHosts()
 
-        binarycode = self.ys['binarycode']
+        cluster_binary_dir = self.getClusterBinaryDir()
+        cluster_script_dir = self.getClusterScriptDir()
 
         #
         # TODO [support to parallel execution]
-        dest_folder = os.path.join(binarycode, 'rose-on-yarn/')
-
-        dest_scripts_folder = os.path.join(binarycode, 'scripts/')
 
         remote_ins = "sudo -S %s %s %s %s" % (
-            os.path.join(dest_scripts_folder, 'change_binarycode_mode_own.sh'),
-            self.ys['opt']['group'],
-            self.ys['opt']['user'],
-            dest_folder)
+            os.path.join(cluster_script_dir, 'change_binarycode_mode_own.sh'),
+            self.ys['opt']['group'], self.ys['opt']['user'],
+            cluster_binary_dir)
 
         for host in host_list:
-            ins = "{0} {2}@{1} -tt '{3}' ".format(
+            ins = "ssh {0} {2}@{1} -tt '{3}' ".format(
                 ssh_option, host['ip'], host['usr'],
                 remote_ins)
 

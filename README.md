@@ -46,7 +46,8 @@ $ hbe start # default start-all.sh. params: yarn, hdfs
 
 $ hbe stop # default stop-all.sh. params: yarn, hdfs 
 
-# ========================EXAMPLES AS FOLLOWING========================
+# ========================EXAMPLES AS FOLLOWING======================== #
+
 $ hbe initcompile # first compile
 
 $ hbe initdeploy # first compile and deploy
@@ -71,7 +72,6 @@ run, compile, benchmark and all actions are only in your dev-PC.
            run|compile|bench|report
     user ------> |__|
             control-proxy-pc
-
 ```
 
 *FULLY_DIS_MODE*
@@ -93,7 +93,6 @@ Rules:
 1. put `*.py` into `./scripts/` and `*.sh` into `./utilities/`
 2. customized python files need to inherit `basis.py` and overwrite its `action()` method.
 3. define `tigger` function to support automatical execution. 
-
 ```
 
 ## Notes

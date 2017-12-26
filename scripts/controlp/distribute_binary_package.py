@@ -12,186 +12,70 @@ import os
 
 class Custom(Basis):
 
+    def __parse(self, param):
+        # TODO: hard code version
+        if param is 'nm':
+            return [os.path.join(self.getControlPSourceDir(),
+                                 'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/',
+                                 'target/hadoop-yarn-server-nodemanager-3.0.0-beta1.jar'),
+                    os.path.join(self.getClusterBinaryDir(),
+                                 'share/hadoop/yarn/')
+                    ]
+
+        if param is 'rm':
+            return [os.path.join(self.getControlPSourceDir(),
+                                 'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-resourcemanager',
+                                 'target/hadoop-yarn-server-resourcemanager-3.0.0-beta1.jar'),
+                    os.path.join(self.getClusterBinaryDir(),
+                                 'share/hadoop/yarn/')
+                    ]
+
+        # TODO, add more
+        return
+
     # override
     def action(self):
-        logger.info('--> controlp.distribute_binary_package<--')
+        logger.info('--> controlp.distribute_binary_package <--')
 
         ssh_option = '-o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
         host_list = self.getHosts()
 
-        sourcecode = self.ys['sourcecode']
-        binarycode = self.ys['binarycode']
+        if len(self.ys['params']) != 0:
+            for p in self.ys['params']:
+
+                file = self.__parse(p)
+
+                for host in host_list:
+                    ins = ("scp -r {0} {3} {2}@{1}:{4}").format(
+                        ssh_option, host['ip'], host['usr'],
+                        file[0], file[1])
+
+                    retcode = cmd.do(ins)
+
+                    logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+                    if retcode != 0:
+                        logger.error(ins)
+                        return False
+            return True
 
         #
-        # add permissions
-        #
-        for host in host_list:
-            """
-            create folders
-            """
-            ins = "ssh {0} {2}@{1} -tt 'sudo -S mkdir -p {3}' ".format(
-                ssh_option, host['ip'], host['usr'], binarycode)
 
-            retcode = cmd.sudo(ins, host['pwd'])
-
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-            """
-            chown
-            """
-            ins = "ssh {0} {2}@{1} -tt 'sudo -S chown -R {2} {3}' ".format(
-                ssh_option, host['ip'], host['usr'], binarycode)
-
-            retcode = cmd.sudo(ins, host['pwd'])
-
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-            """
-            chmod
-            """
-            ins = "ssh {0} {2}@{1} -tt 'sudo -S chmod -R 777 {3}' ".format(
-                ssh_option, host['ip'], host['usr'], binarycode)
-
-            retcode = cmd.sudo(ins, host['pwd'])
-
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-        #
-        # create hdfs folders
-        #
-
-        """
-        folders for namenode
-        """
-        name_nodes = self.getHosts(roles=['namen', ])
-
-        namedir = os.path.join(binarycode, self.ys['roles']['namen']['dir'])
-        namesdir = os.path.join(binarycode, self.ys['roles']['namen']['sdir'])
-
-        for host in name_nodes:
-            ins = "ssh {0} {2}@{1} -tt 'mkdir -p {3} {4}' ".format(
-                ssh_option, host['ip'], host['usr'],
-                namedir, namesdir)
-
-            retcode = cmd.do(ins)
-
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-        """
-        folders for datanodes
-        """
-        data_nodes = self.getHosts(roles=['datan', ])
-
-        datadir = os.path.join(binarycode, self.ys['roles']['datan']['dir'])
-
-        for host in data_nodes:
-            ins = "ssh {0} {2}@{1} -tt 'mkdir -p {3}' ".format(
-                ssh_option, host['ip'], host['usr'],
-                datadir)
-
-            retcode = cmd.do(ins)
-
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
+        controlp_binary_dir = self.getControlPBinaryDir()
+        cluster_binary_dir = self.getClusterBinaryDir()
+        controlp_binary_files = os.path.join(controlp_binary_dir, '*')
+        cluster_binary_files = os.path.join(cluster_binary_dir, '*')
+        cluster_hadoop_conf_dir = self.getClusterHadoopConfDir()
 
         #
         # binary code
         #
-        sour_folder = os.path.join(
-                self.getControlPBinaryFolder(), '*')
-        dest_folder = os.path.join(binarycode, 'rose-on-yarn/')
-
         for host in host_list:
-            ins = "ssh {0} {2}@{1} -tt 'mkdir -p {4} && rm -rf {4}/*' && scp -r {0} {3} {2}@{1}:{4}".format(
+            ins = ("ssh {0} {2}@{1} -tt 'mkdir -p {4} && rm -rf {5}'"
+                   " && scp -r {0} {3} {2}@{1}:{4}").format(
                 ssh_option, host['ip'], host['usr'],
-                sour_folder, dest_folder)
-
-            retcode = cmd.do(ins)
-
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-        #
-        # scripts about building env
-        #
-        controlp_scripts = './utilities/*'
-        dest_scripts_folder = os.path.join(binarycode, 'scripts/')
-
-        for host in host_list:
-            ins = "ssh {0} {2}@{1} -tt 'mkdir -p {4}' && scp -r {0} {3} {2}@{1}:{4} ".format(
-                ssh_option, host['ip'], host['usr'],
-                controlp_scripts, dest_scripts_folder)
-
-            retcode = cmd.do(ins)
-
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-        #
-        # config setup_passphraseless from master to slaves
-        #
-        setup_passphraseless = os.path.join(
-            dest_scripts_folder, 'setup_passphraseless.sh')
-
-        # hdfs
-        namenode = self.getHosts(roles=['namen', ])
-        datanodes = self.getHosts(roles=['datan', ])
-
-        datanodes_hostname = list()
-        for host in datanodes:
-            datanodes_hostname.append("%s@%s" % (host['usr'], host['ip']))
-
-        for host in namenode:
-            ins = "ssh {0} {2}@{1} -tt '{3} \'{4}\' \'{5}\'' ".format(
-                ssh_option, host['ip'], host['usr'],
-                setup_passphraseless, ",".join(datanodes_hostname), self.ys['roles']['datan']['pwd'])
-
-            retcode = cmd.do(ins)
-
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-        # yarn
-        resourcemanager = self.getHosts(roles=['resourcem', ])
-        nodemanagers = self.getHosts(roles=['nodem', ])
-
-        nodemanagers_hostname = list()
-        for host in nodemanagers:
-            nodemanagers_hostname.append("%s@%s" % (host['usr'], host['ip']))
-
-        for host in resourcemanager:
-            ins = "ssh {0} {2}@{1} -tt '{3} \'{4}\' \'{5}\''".format(
-                ssh_option, host['ip'], host['usr'],
-                setup_passphraseless, ",".join(nodemanagers_hostname), self.ys['roles']['nodem']['pwd'])
+                controlp_binary_files, cluster_binary_dir, cluster_binary_files)
 
             retcode = cmd.do(ins)
 
@@ -204,14 +88,12 @@ class Custom(Basis):
         #
         # configs
         #
-        controlp_configs = './configs/*.xml ./configs/workers'
-        dest_configs_folder = os.path.join(
-            binarycode, 'rose-on-yarn/etc/hadoop/')
+        hbe_configs = './configs/*.xml ./configs/workers'
 
         for host in host_list:
-            ins = "scp {0} {2}@{1}:{3} ".format(
-                controlp_configs, host['ip'], host['usr'],
-                dest_configs_folder)
+            ins = "scp -r {0} {3} {2}@{1}:{3} ".format(
+                ssh_option, host['ip'], host['usr'],
+                hbe_configs, cluster_hadoop_conf_dir)
 
             retcode = cmd.do(ins)
 

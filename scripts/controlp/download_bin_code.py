@@ -21,26 +21,21 @@ class Custom(Basis):
     def action(self):
         logger.info('--> controlp.download_bin_code <--')
 
-        sourcecode = self.ys['sourcecode']
+        controlp_binary_dir = self.getControlPBinaryDir()
 
-        if not os.path.exists(sourcecode):
-            os.makedirs(sourcecode)
+        if not os.path.exists(controlp_binary_dir):
+            os.makedirs(controlp_binary_dir)
 
-        if not os.path.isdir(sourcecode):
+        if not os.path.isdir(controlp_binary_dir):
             logger.error(
-                '\'sourcecode\' does not indicate a folder in setting file.')
+                '\'binary code\' does not indicate a folder in setting file.')
             return False
 
         link_address = "http://www-eu.apache.org/dist/hadoop/common/hadoop-{0}/hadoop-{0}.tar.gz".format(
             _version)
-        download = "curl -sSL {0} | tar -C {1} -xzv".format(
-            link_address, sourcecode)
-        movedir = "mkdir -p {0} && mv {1}/* {0} && rmdir {1} ".format(
-            os.path.join(sourcecode, "hadoop-dist/target/hadoop-%s" %
-                         (_version)),
-            os.path.join(sourcecode, "hadoop-%s" % (_version)))
+        ins = "curl -sSL {0} | tar -C {1} -xzv".format(
+            link_address, os.path.join(controlp_binary_dir, '../')) # TODO, only exclude files
 
-        ins = "%s && %s" % (download, movedir)
         retcode = cmd.do(ins)
         if retcode != 0:
             return False

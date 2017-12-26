@@ -96,10 +96,12 @@ def _parse_yaml_settings(abspath_filename):
         return ys
 
 
-def main(stage=None):
+def main(stage=None, params=list()):
     ys = _parse_yaml_settings(os.path.abspath(_settings_file))
     if ys is None:
         return 1
+
+    ys['params'] = params
 
     if stage not in ys['stages']:
         logger.error('defined stage is not in settings.yaml')
@@ -125,8 +127,7 @@ if __name__ == '__main__':
         logger.error('Missing the necessary stage parameter')
         exit()
 
-    for i in range(1, len(sys.argv)):
-        retcode = main(stage=sys.argv[i])
-        if retcode != 0:
-            print("stage '%s' failed" % (sys.argv[i]))
-            exit()
+    retcode = main(stage=sys.argv[1], params=sys.argv[2:])
+    if retcode != 0:
+        print("stage '%s' failed" % (sys.argv[i]))
+        exit()
