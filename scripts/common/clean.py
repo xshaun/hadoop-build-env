@@ -23,7 +23,7 @@ class Custom(Basis):
 
         ssh_option = '-o StrictHostKeyChecking=no -o ConnectTimeout=600'
 
-        rm_list = self.getHosts(roles=['resourcem', ])
+        host_list = self.getHosts()
 
         cluster_script_dir = self.getClusterScriptDir()
 
@@ -31,7 +31,7 @@ class Custom(Basis):
             remote_ins = self.__parse(p)
 
             threads = list()
-            for host in rm_list:
+            for host in host_list:
                 #!!! donot use -tt option
                 ins = "ssh {0} {2}@{1} -T '{3}' ".format(
                     ssh_option, host['ip'], host['usr'],
