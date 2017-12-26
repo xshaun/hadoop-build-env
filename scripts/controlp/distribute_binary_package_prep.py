@@ -24,9 +24,6 @@ class Custom(Basis):
         cluster_binary_dir = self.getClusterBinaryDir()
         cluster_hdfs_dir = self.getClusterHdfsDir()
 
-        sourcecode = self.ys['sourcecode']
-        binarycode = self.ys['binarycode']
-
         #
         # add permissions
         #

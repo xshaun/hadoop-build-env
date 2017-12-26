@@ -13,26 +13,26 @@ class Custom(Basis):
     def action(self):
         logger.info('--> controlp.clear_sourcecode <--')
 
-        sourcecode = self.getControlPSourceDir()
+        controlp_source_dir = self.getControlPSourceDir()
 
-        if not os.path.exists(sourcecode):
-            os.makedirs(sourcecode)
+        if not os.path.exists(controlp_source_dir):
+            os.makedirs(controlp_source_dir)
 
-        if not os.path.isdir(sourcecode):
+        if not os.path.isdir(controlp_source_dir):
             logger.error(
-                '\'sourcecode\' does not indicate a folder in setting file.')
+                '\'controlp_source_dir\' does not indicate a folder in setting file.')
             return False
 
-        for item in os.listdir(sourcecode):
-            itemsrc = os.path.join(sourcecode, item)
+        for item in os.listdir(controlp_source_dir):
+            itemsrc = os.path.join(controlp_source_dir, item)
             if os.path.isdir(itemsrc):
                 shutil.rmtree(itemsrc)
             else:
                 os.remove(itemsrc)
 
-        if len(os.listdir(sourcecode)) > 0:
+        if len(os.listdir(controlp_source_dir)) > 0:
             logger.error(
-                'failed to clear \'sourcecode\' shown in setting file.')
+                'failed to clear \'controlp_source_dir\' shown in setting file.')
             return False
 
         return True

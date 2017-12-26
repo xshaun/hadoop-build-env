@@ -69,7 +69,7 @@ def _parse_yaml_settings(abspath_filename):
         """
 
         # checker
-        for item in ('mode', 'sourcecode', 'binarycode', 'roles', 'steps', 'stages'):
+        for item in ('mode', 'controlp_base_path', 'cluster_base_path', 'roles', 'steps', 'stages'):
             if item not in ys:
                 raise Exception(
                     "not found field '%s' in setting file." % (item))
@@ -129,5 +129,5 @@ if __name__ == '__main__':
 
     retcode = main(stage=sys.argv[1], params=sys.argv[2:])
     if retcode != 0:
-        print("stage '%s' failed" % (sys.argv[i]))
+        print("stage '%s' failed" % (sys.argv[1]))
         exit()

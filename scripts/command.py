@@ -50,7 +50,7 @@ class ParaIns(Thread):
         return
 
 
-class Command(Object):
+class Command(object):
 
     @staticmethod
     def do(arg):
