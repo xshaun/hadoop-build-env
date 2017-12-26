@@ -25,11 +25,13 @@ if [[ ! -e /usr/bin/python3 ]]; then
     exit 
 fi
 
-# Find your origin file
-softlink=`which hbe`
-if [[ ${softlink} != 'hbe not found' && -L ${softlink} ]]; then
-    var=readlink ${softlink}
-    cd ${var%/*}
+# Find basepath of origin file
+basepath='.'
+softlink=$0 
+if [[ -L ${softlink} ]]; then
+    echo ${softlink}
+    var=`readlink ${softlink}`
+    basepath=${var%/*}
 fi
 
-/usr/bin/python3 -B ./hadoop-build-env.py $@
+/usr/bin/python3 -B ${basepath}/hadoop-build-env.py $@
