@@ -37,3 +37,6 @@ cd ${basepath}
 
 # Run
 /usr/bin/python3 -B ./hadoop-build-env.py $@
+
+# cd back
+cd ;
