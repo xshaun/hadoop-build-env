@@ -27,16 +27,16 @@ class Custom(Basis):
 
         rm_list = self.getHosts(roles=['resourcem', ])
 
-        cluster_script_dir = self.getClusterScriptDir()
+        cluster_binary_dir = self.getClusterBinaryDir()
 
         candidates = list()
         for p in self.ys['params']:
             candidates.append(os.path.join(
-                cluster_script_dir, self.__parse(p)))
-            
+                cluster_binary_dir, self.__parse(p)))
+
         if len(candidates) == 0:
             candidates.append(os.path.join(
-                cluster_script_dir, 'sbin/start-all.sh'))
+                cluster_binary_dir, 'sbin/start-all.sh'))
 
         threads = list()
         for host in rm_list:
