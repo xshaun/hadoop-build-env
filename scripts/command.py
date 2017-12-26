@@ -22,16 +22,17 @@ class ParaIns(Thread):
         # redirect stdout to logger
         sys.stdout
 
-        runins = "source ./utilities/*.profile && %s " % (self.ins)
+        runins = ("source ~/.profile && "
+                  "source ./utilities/*.profile && %s") % (self.ins)
 
         process = None
 
-        if self.pwd is None: 
+        if self.pwd is None:
             process = subprocess.Popen(
                 runins, stdout=sys.stdout, stderr=sys.stdout,
                 shell=True, cwd='./', executable='/bin/bash')
 
-        else: # sudo
+        else:  # sudo
             echopwd = subprocess.Popen(
                 ['echo', self.pwd], stdout=subprocess.PIPE, shell=False)
 
@@ -60,7 +61,9 @@ class Command(object):
         # redirect stdout to logger
         sys.stdout
 
-        ins = "source ./utilities/*.profile && %s" % (arg)
+        ins = ("source ~/.profile && "
+               "source ./utilities/*.profile && %s") % (arg)
+
         process = subprocess.Popen(
             ins, stdout=sys.stdout, stderr=sys.stdout,
             shell=True, cwd='./', executable='/bin/bash')
@@ -82,7 +85,9 @@ class Command(object):
         # redirect stdout to logger
         sys.stdout
 
-        ins = "source ./utilities/*.profile && %s " % (arg)
+        ins = ("source ~/.profile && "
+               "source ./utilities/*.profile && %s") % (arg)
+
         echopwd = subprocess.Popen(
             ['echo', pwd], stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(
