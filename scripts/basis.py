@@ -79,6 +79,7 @@ class Basis(object):
         else:
             self.status = self.finite()
 
+        logger.info("--> one step is end. status is %s <--" % self.status)
         return
 
     def getHosts(self, roles=['resourcem', 'nodem', 'namen', 'datan']):

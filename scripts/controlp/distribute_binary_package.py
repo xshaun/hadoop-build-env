@@ -100,7 +100,7 @@ class Custom(Basis):
         hbe_configs = './configs/*.xml ./configs/workers'
 
         for host in host_list:
-            ins = "scp -r {0} {3} {2}@{1}:{3} ".format(
+            ins = "scp -r {0} {3} {2}@{1}:{4} ".format(
                 ssh_option, host['ip'], host['usr'],
                 hbe_configs, cluster_hadoop_conf_dir)
 
