@@ -180,9 +180,9 @@ class Basis(object):
         return self.__joinClusterDir(sdir)
 
     def getClusterHadoopConfDir(self):
-        dir = os.path.join(self.getClusterBinaryDir, 'etc/hadoop/')
+        dir = os.path.join(self.getClusterBinaryDir(), 'etc/hadoop/')
         return dir
 
     def getClusterHadoopLibNativeDir(self):
-        dir = os.path.join(self.getClusterBinaryDir, 'lib/native/')
+        dir = os.path.join(self.getClusterBinaryDir(), 'lib/native/')
         return dir

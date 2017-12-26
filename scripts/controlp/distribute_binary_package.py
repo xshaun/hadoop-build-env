@@ -17,7 +17,7 @@ class Custom(Basis):
         # TODO: hard code version
         if 'nm' == param:
             return [os.path.join(self.getControlPSourceDir(),
-                                 'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/',
+                                 'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager',
                                  'target/hadoop-yarn-server-nodemanager-3.0.0-beta1.jar'),
                     os.path.join(self.getClusterBinaryDir(),
                                  'share/hadoop/yarn/')
@@ -67,6 +67,7 @@ class Custom(Basis):
         ret = True
         for t in threads:
             ret = t.ret == ret
+            
         if len(candidates) != 0:
             return ret
 

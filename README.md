@@ -37,6 +37,8 @@ $ hbe deploy # compile source code, configure site, distribute binary libs into 
 $ hbe compile # compile source code in control-proxy. default compile hadoop-main.
 			  # params: rm, nm
 
+$ hbe syncp # add permissions for stage-sync
+
 $ hbe sync # distribute binary libs into cluster. default sync hadoop-main.
  		   # params: rm, nm
 
