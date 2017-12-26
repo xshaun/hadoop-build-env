@@ -29,9 +29,9 @@ fi
 basepath='.'
 softlink=$0 
 if [[ -L ${softlink} ]]; then
-    echo ${softlink}
     var=`readlink ${softlink}`
     basepath=${var%/*}
+    echo "${softlink} --> ${basepath}/hbe"
 fi
 cd ${basepath}
 
