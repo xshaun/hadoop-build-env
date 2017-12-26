@@ -33,5 +33,7 @@ if [[ -L ${softlink} ]]; then
     var=`readlink ${softlink}`
     basepath=${var%/*}
 fi
+cd ${basepath}
 
-/usr/bin/python3 -B ${basepath}/hadoop-build-env.py $@
+# Run
+/usr/bin/python3 -B ./hadoop-build-env.py $@

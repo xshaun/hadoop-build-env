@@ -5,50 +5,61 @@ Here mainly focus on hadoop-3.0.0-beta1.
 And we take delight in contribution in efficient cluster scheduling and approaches that can help it.
 
 ## How to run
-1. customize `setting.yaml` according to user demands.
+1. [optional]. Customize `setting.yaml` according to user demands.
 
-2. optional. 
+2. [optional]. Create soft/hard link in the folder within $PATH.
 ```bash
-ln -s <absolute path>/hbe /usr/bin/hbe
+# sudo ln -s <absolute path>/hbe <folder in $PATH>/<name you liked>
+#
+# example. Enter hadoop-build-env folder 
+$ sudo ln -s `pwd`/hbe /usr/bin/hbe
 ```
 
-3. run `bhe <stage(s)>`  e.g.
+3. Run `bhe <stage(s)>`  . 
 ```shell
 
-hbe init # prepare enviroment in control-proxy and cluster for all actions 
+$ hbe init # prepare enviroment in control-proxy and cluster for all actions 
 
-hbe initcontrolp # install nessary libs in control-proxy for compiling...
+$ hbe initcontrolp # install nessary libs in control-proxy for compiling...
 
-hbe initcompile # initially compile source code in control-proxy. This will resolve maven depandency and download a number of jar libs.
+$ hbe initdeploy # initally compile source code, configure site, distribute binary libs 
+				 # into cluster, prepare runtime environment for cluster
 
-hbe initcluster # install nessary libs in cluster for running... 
+$ hbe initcluster # prepare runtime environment for cluster 
 
-hbe initdeploy  # initally compile source code, configure site, distribute binary libs into cluster, prepare execution environment in cluster
+$ hbe initcompile # initially compile source code in control-proxy. 
+				  # This stage will resolve maven depandency and download necessary jars.
 
-hbe config # configure site.xml, worker and some configuration.
+$ hbe config # configure site.xml, worker, hadoop-env.sh ...
 
-hbe deploy  # compile source code, configure site, distribute binary libs into cluster to cluster
+$ hbe deploy # compile source code, configure site, distribute binary libs into cluster
 
-hbe compile  # compile source code in control-proxy
+$ hbe compile # compile source code in control-proxy. default compile hadoop-main.
+			  # params: rm, nm
 
-hbe sync  # distribute binary libs into cluster 
+$ hbe sync # distribute binary libs into cluster. default sync hadoop-main.
+ 		   # params: rm, nm
 
-hbe start  # run start-all.sh
+$ hbe clean # clean cluster files. params: log
 
-hbe stop  # run stop-all.sh
+$ hbe start # default start-all.sh. params: yarn, hdfs
 
-================================================================
-# usually used:
+$ hbe stop # default stop-all.sh. params: yarn, hdfs 
 
-hbe initcompile # first compile
+# ========================EXAMPLES AS FOLLOWING========================
+$ hbe initcompile # first compile
 
-hbe initdeploy # first compile and deploy
+$ hbe initdeploy # first compile and deploy
 
-hbe compile config stop sync strart
+$ hbe deploy
 
-hbe compile stop sync strart
+$ hbe compile && hbe config && hbe stop && hbe sync && hbe strart
 
-hbe deploy
+$ hbe compile rm nm 
+
+$ hbe sync rm nm 
+
+$ hbe clean log
 
 ```
 
