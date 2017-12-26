@@ -23,24 +23,24 @@ $ hbe init # prepare enviroment in control-proxy and cluster for all actions
 $ hbe initcontrolp # install nessary libs in control-proxy for compiling...
 
 $ hbe initdeploy # initally compile source code, configure site, distribute binary libs 
-				 # into cluster, prepare runtime environment for cluster
+		 # into cluster, prepare runtime environment for cluster
 
 $ hbe initcluster # prepare runtime environment for cluster 
 
 $ hbe initcompile # initially compile source code in control-proxy. 
-				  # This stage will resolve maven depandency and download necessary jars.
+		  # This stage will resolve maven depandency and download necessary jars.
 
 $ hbe config # configure site.xml, worker, hadoop-env.sh ...
 
 $ hbe deploy # compile source code, configure site, distribute binary libs into cluster
 
 $ hbe compile # compile source code in control-proxy. default compile hadoop-main.
-			  # params: rm, nm
+              # params: rm, nm
 
 $ hbe syncp # add permissions for stage-sync
 
 $ hbe sync # distribute binary libs into cluster. default sync hadoop-main.
- 		   # params: rm, nm
+           # params: rm, nm
 
 $ hbe clean # clean cluster files. params: log
 
