@@ -17,36 +17,51 @@ $ sudo ln -s `pwd`/hbe /usr/bin/hbe
 
 3. Run `bhe <stage(s)>`  . 
 ```shell
+# prepare enviroment in control-proxy and cluster for all actions 
+$ hbe init 
 
-$ hbe init # prepare enviroment in control-proxy and cluster for all actions 
+# install nessary libs in control-proxy for compiling...
+$ hbe initcontrolp 
 
-$ hbe initcontrolp # install nessary libs in control-proxy for compiling...
+# initally compile source code, configure site, distribute binary libs into cluster, 
+# prepare runtime environment for cluster
+$ hbe initdeploy 
 
-$ hbe initdeploy # initally compile source code, configure site, distribute binary libs 
-		 # into cluster, prepare runtime environment for cluster
+# prepare runtime environment for cluster 
+$ hbe initcluster 
 
-$ hbe initcluster # prepare runtime environment for cluster 
+# initially compile source code in control-proxy.
+# This stage will resolve maven depandency and download necessary jars.
+$ hbe initcompile  
+		  
+# configure site.xml, worker, hadoop-env.sh ...
+$ hbe config 
 
-$ hbe initcompile # initially compile source code in control-proxy. 
-		  # This stage will resolve maven depandency and download necessary jars.
+# compile source code, configure site, distribute binary libs into cluster
+$ hbe deploy 
 
-$ hbe config # configure site.xml, worker, hadoop-env.sh ...
+# compile source code in control-proxy. default compile hadoop-main.
+# params: rm, nm
+$ hbe compile 
+              
+# add permissions for stage-sync, and also create hdfs dirs ...
+$ hbe syncp 
 
-$ hbe deploy # compile source code, configure site, distribute binary libs into cluster
+# distribute binary libs into cluster. default sync hadoop-main.
+# params: rm, nm
+$ hbe sync
+           
+# clean cluster files. 
+# params: log
+$ hbe clean 
 
-$ hbe compile # compile source code in control-proxy. default compile hadoop-main.
-              # params: rm, nm
+# default start-all.sh. 
+# params: yarn, hdfs
+$ hbe start
 
-$ hbe syncp # add permissions for stage-sync
-
-$ hbe sync # distribute binary libs into cluster. default sync hadoop-main.
-           # params: rm, nm
-
-$ hbe clean # clean cluster files. params: log
-
-$ hbe start # default start-all.sh. params: yarn, hdfs
-
-$ hbe stop # default stop-all.sh. params: yarn, hdfs 
+# default stop-all.sh.
+# params: yarn, hdfs 
+$ hbe stop 
 
 # ========================EXAMPLES AS FOLLOWING======================== #
 
@@ -63,7 +78,6 @@ $ hbe compile rm nm
 $ hbe sync rm nm 
 
 $ hbe clean log
-
 ```
 
 
@@ -90,12 +104,12 @@ run, benchmark, performance log are in cluster-PCs.
 ```
 
 ## How to customize step(s) and organize stage(s)
-```
+
 Rules:
 1. put `*.py` into `./scripts/` and `*.sh` into `./utilities/`
 2. customized python files need to inherit `basis.py` and overwrite its `action()` method.
 3. define `tigger` function to support automatical execution. 
-```
+
 
 ## Notes
 
