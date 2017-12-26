@@ -58,6 +58,8 @@ class Custom(Basis):
         cluster_hdfs_dir = self.getClusterHdfsDir()
         cluster_log_dir = self.getClusterLogDir()
 
+        controlp_binary_dir = self.getControlPBinaryDir()
+
         #
         # wirte slaves' ip into workers
         #
@@ -172,7 +174,7 @@ class Custom(Basis):
         # configure ./etc/hadoop/*.sh
         #
         hadoop_env_file = os.path.join(
-            cluster_hadoop_conf_dir, 'hadoop-env.sh')
+            controlp_binary_dir, 'etc/hadoop/hadoop-env.sh')
 
         ins = ':'
         envlist = [
@@ -190,8 +192,7 @@ class Custom(Basis):
             ['HADOOP_LOG_DIR', cluster_log_dir],                 # custom
             ['HADOOP_ROOT_LOGGER', 'DEBUG,console,RFA'],         # DEBUG mode custom
             ['HADOOP_DAEMON_ROOT_LOGGER', 'DEBUG,console,RFA'],  # DEBUG mode custom
-            # DEBUG mode # custom
-            ['HADOOP_SECURITY_LOGGER', 'DEBUG,console,RFA'],
+            ['HADOOP_SECURITY_LOGGER', 'DEBUG,console,RFA'],     # DEBUG mode custom
             # ['YARN_CONF_DIR', cluster_hadoop_conf_dir],        # Deprecated
             # ['YARN_ROOT_LOGGER', 'DEBUG,console,RFA'],         # Deprecated
         ]
