@@ -101,14 +101,19 @@ def main(stage=None, params=list()):
     if ys is None:
         return 1
 
-    ys['params'] = params
+    steps = list()
 
-    if stage not in ys['stages']:
+    if stage == 'step':
+        steps = params
+    elif stage in ys['stages']:
+        ys['params'] = params
+        steps = ys['stages'][stage]
+    else:
         logger.error('defined stage is not in settings.yaml')
         return 1
 
     try:
-        for step in ys['stages'][stage]:
+        for step in steps:
             obj = __import__("scripts.%s" % (ys['steps'][step]), fromlist=True)
             func = getattr(obj, 'trigger')
             if not func(ys):
