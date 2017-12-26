@@ -3,6 +3,7 @@
 from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command as cmd
+from scripts.command import ParaIns
 import os
 
 #---------------------------------------------------------------------------
@@ -25,33 +26,27 @@ class Custom(Basis):
         #
         # build master and slaves environment
         #
-        # TODO [support to parallel execution]
 
-        runtime_env = os.path.join(
+        remote_ins = os.path.join(
             cluster_script_dir, 'install_runtime_prerequisites.sh')
 
+        threads = list()
         for host in host_list:
             ins = "ssh {0} {2}@{1} -tt 'sudo -S {3}'".format(
                 ssh_option, host['ip'], host['usr'],
                 runtime_env)
 
-            retcode = cmd.sudo(ins, host['pwd'])
+            t = ParaIns(ins, host['pwd'])
+            t.start()
+            threads.append(t)
 
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+        for t in threads:
+            t.join()
 
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-        #
-        # wait to end
-        #
-        ins = 'wait'
-        retcode = cmd.do(ins)
-        if retcode != 0:
-            return False
-
-        return True
+        ret = True
+        for t in threads:
+            ret = t.ret == ret
+        return ret
 
 
 def trigger(ys):

@@ -3,19 +3,20 @@
 from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command as cmd
+from scripts.command import ParaIns
 import os
 
 
 class Custom(Basis):
 
     def __parse(self, param):
-        if param is 'nm':
+        if 'nm' == param:
             return os.path.join(self.getControlPSourceDir(),
                                 'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/')
 
-        if param is 'rm':
+        if 'rm' == param:
             return os.path.join(self.getControlPSourceDir(),
-                                'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-resourcemanager')
+                                'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-resourcemanager/')
 
         # TODO, add more
         return
@@ -27,12 +28,11 @@ class Custom(Basis):
         controlp_source_dir = self.getControlPSourceDir()
 
         candidates = list()
+        for p in self.ys['params']:
+            candidates.append(self.__parse(p))
 
-        if len(self.ys['params']) == 0:
+        if len(candidates) == 0:
             candidates.append(controlp_source_dir)
-        else:
-            for p in self.ys['params']:
-                candidates.append(self.__parse(p))
 
         threads = list()
         for can in candidates:
@@ -52,7 +52,7 @@ class Custom(Basis):
 
         ret = True
         for t in threads:
-            ret = ret and t.ret
+            ret = t.ret == ret
         return ret
 
 

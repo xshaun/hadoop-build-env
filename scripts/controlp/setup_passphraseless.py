@@ -3,6 +3,7 @@
 from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command as cmd
+from scripts.command import ParaIns
 
 #---------------------------------------------------------------------------
 #   Definitions
@@ -15,22 +16,27 @@ class Custom(Basis):
     def action(self):
         logger.info('--> controlp.setup_passphraseless <--')
 
-        # setup passphraseless
         host_list = self.getHosts()
 
+        threads = list()
+
         for host in host_list:
+            # setup passphraseless
             ins = "./utilities/setup_passphraseless.sh '%s@%s' '%s'" % (
                 host['usr'], host['ip'], host['pwd'])
 
-            retcode = cmd.do(ins)
+            t = ParaIns(ins)
+            t.start()
+            threads.append(t)
 
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+        # wait
+        for t in threads:
+            t.join()
 
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-        return True
+        ret = True
+        for t in threads:
+            ret = t.ret == ret
+        return ret
 
 
 def trigger(ys):

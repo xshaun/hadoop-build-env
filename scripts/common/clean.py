@@ -3,13 +3,14 @@
 from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command as cmd
+from scripts.command import ParaIns
 import os
 
 
 class Custom(Basis):
 
     def __parse(self, param):
-        if param is 'log':
+        if 'log' == param:
             return "cd {0} && for l in `ls ./*.log`; do echo \'\' > $l ; done".format(
                 self.getClusterLogDir())
 
@@ -29,29 +30,25 @@ class Custom(Basis):
         for p in self.ys['params']:
             remote_ins = self.__parse(p)
 
+            threads = list()
             for host in rm_list:
                 #!!! donot use -tt option
                 ins = "ssh {0} {2}@{1} -T '{3}' ".format(
                     ssh_option, host['ip'], host['usr'],
                     remote_ins)
 
-                retcode = cmd.do(ins)
+                t = ParaIns(ins)
+                t.start()
+                threads.append(t)
 
-                logger.info("ins: %s; retcode: %d." % (ins, retcode))
+            for t in threads:
+                t.join()
 
-                if retcode != 0:
-                    logger.error(ins)
+            for t in threads:
+                if t.ret == False:
                     return False
 
-            #
-            # wait to end
-            #
-            ins = 'wait'
-            retcode = cmd.do(ins)
-            if retcode != 0:
-                return False
-
-            return True
+        return True
 
 
 def trigger(ys):

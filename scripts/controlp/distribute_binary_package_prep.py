@@ -3,6 +3,7 @@
 from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command as cmd
+from scripts.command import ParaIns
 import os
 
 #---------------------------------------------------------------------------
@@ -24,8 +25,11 @@ class Custom(Basis):
         cluster_binary_dir = self.getClusterBinaryDir()
         cluster_hdfs_dir = self.getClusterHdfsDir()
 
+        threads = list()
+
         #
         # add permissions
+        # -------------------------------------------------------
         #
         for host in host_list:
             """
@@ -34,13 +38,9 @@ class Custom(Basis):
             ins = "ssh {0} {2}@{1} -tt 'sudo -S mkdir -p {3}' ".format(
                 ssh_option, host['ip'], host['usr'], cluster_binary_dir)
 
-            retcode = cmd.sudo(ins, host['pwd'])
-
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
+            t = ParaIns(ins, host['pwd'])
+            t.start()
+            threads.append(t)
 
             """
             chown
@@ -48,13 +48,9 @@ class Custom(Basis):
             ins = "ssh {0} {2}@{1} -tt 'sudo -S chown -R {2} {3}' ".format(
                 ssh_option, host['ip'], host['usr'], cluster_binary_dir)
 
-            retcode = cmd.sudo(ins, host['pwd'])
-
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
+            t = ParaIns(ins, host['pwd'])
+            t.start()
+            threads.append(t)
 
             """
             chmod
@@ -62,21 +58,19 @@ class Custom(Basis):
             ins = "ssh {0} {2}@{1} -tt 'sudo -S chmod -R 777 {3}' ".format(
                 ssh_option, host['ip'], host['usr'], cluster_binary_dir)
 
-            retcode = cmd.sudo(ins, host['pwd'])
+            t = ParaIns(ins, host['pwd'])
+            t.start()
+            threads.append(t)
 
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
+        # wait
+        for t in threads:
+            t.join()
 
         #
         # create hdfs folders
+        # -------------------------------------------------------
         #
-
-        """
-        folders for namenode
-        """
+        """ folders for namenode """
         name_nodes = self.getHosts(roles=['namen', ])
 
         namedir = os.path.join(cluster_hdfs_dir,
@@ -88,17 +82,11 @@ class Custom(Basis):
             ins = "ssh {0} {2}@{1} -tt 'mkdir -p {3} {4}' ".format(
                 ssh_option, host['ip'], host['usr'], namedir, namesdir)
 
-            retcode = cmd.do(ins)
+            t = ParaIns(ins)
+            t.start()
+            threads.append(t)
 
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-        """
-        folders for datanodes
-        """
+        """ folders for datanodes """
         data_nodes = self.getHosts(roles=['datan', ])
 
         datadir = os.path.join(cluster_hdfs_dir,
@@ -108,16 +96,17 @@ class Custom(Basis):
             ins = "ssh {0} {2}@{1} -tt 'mkdir -p {3}' ".format(
                 ssh_option, host['ip'], host['usr'], datadir)
 
-            retcode = cmd.do(ins)
+            t = ParaIns(ins)
+            t.start()
+            threads.append(t)
 
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
+        # wait
+        for t in threads:
+            t.join()
 
         #
         # scripts about building env
+        # -------------------------------------------------------
         #
         hbe_utilities = './utilities/*'
 
@@ -127,16 +116,17 @@ class Custom(Basis):
                 ssh_option, host['ip'], host['usr'],
                 hbe_utilities, cluster_script_dir)
 
-            retcode = cmd.do(ins)
+            t = ParaIns(ins)
+            t.start()
+            threads.append(t)
 
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
+        # wait
+        for t in threads:
+            t.join()
 
         #
         # config setup_passphraseless from master to slaves
+        # -------------------------------------------------------
         #
         setup_passphraseless = os.path.join(
             cluster_script_dir, 'setup_passphraseless.sh')
@@ -155,13 +145,9 @@ class Custom(Basis):
                 setup_passphraseless, ",".join(datanodes_hostname),
                 self.ys['roles']['datan']['pwd'])
 
-            retcode = cmd.do(ins)
-
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
+            t = ParaIns(ins)
+            t.start()
+            threads.append(t)
 
         # yarn
         resourcemanager = self.getHosts(roles=['resourcem', ])
@@ -177,24 +163,18 @@ class Custom(Basis):
                 setup_passphraseless, ",".join(nodemanagers_hostname),
                 self.ys['roles']['nodem']['pwd'])
 
-            retcode = cmd.do(ins)
+            t = ParaIns(ins)
+            t.start()
+            threads.append(t)
 
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+        # wait
+        for t in threads:
+            t.join()
 
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-        #
-        # wait to end
-        #
-        ins = 'wait'
-        retcode = cmd.do(ins)
-        if retcode != 0:
-            logger.error(ins)
-            return False
-
-        return True
+        ret = True
+        for t in threads:
+            ret = t.ret == ret
+        return ret
 
 
 def trigger(ys):

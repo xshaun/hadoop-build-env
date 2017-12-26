@@ -3,6 +3,7 @@
 from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command as cmd
+from scripts.command import ParaIns
 import os
 
 #---------------------------------------------------------------------------
@@ -14,7 +15,7 @@ class Custom(Basis):
 
     def __parse(self, param):
         # TODO: hard code version
-        if param is 'nm':
+        if 'nm' == param:
             return [os.path.join(self.getControlPSourceDir(),
                                  'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/',
                                  'target/hadoop-yarn-server-nodemanager-3.0.0-beta1.jar'),
@@ -22,7 +23,7 @@ class Custom(Basis):
                                  'share/hadoop/yarn/')
                     ]
 
-        if param is 'rm':
+        if 'rm' == param:
             return [os.path.join(self.getControlPSourceDir(),
                                  'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-resourcemanager',
                                  'target/hadoop-yarn-server-resourcemanager-3.0.0-beta1.jar'),
@@ -41,34 +42,46 @@ class Custom(Basis):
 
         host_list = self.getHosts()
 
-        if len(self.ys['params']) != 0:
-            for p in self.ys['params']:
+        # 
+        # with params
+        # -------------------------------------------------------
+        #
+        candidates = list()
+        for p in self.ys['params']:
+            candidates.append(self.__parse(p))
 
-                file = self.__parse(p)
+        threads = list()
+        for can in candidates:
+            for host in host_list:
+                ins = ("scp -r {0} {3} {2}@{1}:{4}").format(
+                    ssh_option, host['ip'], host['usr'],
+                    can[0], can[1])
 
-                for host in host_list:
-                    ins = ("scp -r {0} {3} {2}@{1}:{4}").format(
-                        ssh_option, host['ip'], host['usr'],
-                        file[0], file[1])
+                t = ParaIns(ins)
+                t.start()
+                threads.append(t)
 
-                    retcode = cmd.do(ins)
+        for t in threads:
+            t.join()
 
-                    logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-                    if retcode != 0:
-                        logger.error(ins)
-                        return False
-            return True
+        ret = True
+        for t in threads:
+            ret = t.ret == ret
+        if len(candidates) != 0:
+            return ret
 
         #
-
+        # without params
+        # -------------------------------------------------------
+        #
         controlp_binary_dir = self.getControlPBinaryDir()
         cluster_binary_dir = self.getClusterBinaryDir()
         controlp_binary_files = os.path.join(controlp_binary_dir, '*')
         cluster_binary_files = os.path.join(cluster_binary_dir, '*')
         cluster_hadoop_conf_dir = self.getClusterHadoopConfDir()
 
-        #
+        threads = list()
+
         # binary code
         #
         for host in host_list:
@@ -77,15 +90,10 @@ class Custom(Basis):
                 ssh_option, host['ip'], host['usr'],
                 controlp_binary_files, cluster_binary_dir, cluster_binary_files)
 
-            retcode = cmd.do(ins)
+            t = ParaIns(ins)
+            t.start()
+            threads.append(t)
 
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-        #
         # configs
         #
         hbe_configs = './configs/*.xml ./configs/workers'
@@ -95,24 +103,17 @@ class Custom(Basis):
                 ssh_option, host['ip'], host['usr'],
                 hbe_configs, cluster_hadoop_conf_dir)
 
-            retcode = cmd.do(ins)
+            t = ParaIns(ins)
+            t.start()
+            threads.append(t)
 
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+        for t in threads:
+            t.join()
 
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-        #
-        # wait to end
-        #
-        ins = 'wait'
-        retcode = cmd.do(ins)
-        if retcode != 0:
-            logger.error(ins)
-            return False
-
-        return True
+        ret = True
+        for t in threads:
+            ret = t.ret == ret
+        return ret
 
 
 def trigger(ys):

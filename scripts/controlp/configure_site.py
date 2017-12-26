@@ -3,11 +3,13 @@
 from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command as cmd
+from scripts.command import ParaIns
+import os
+import shutil
 from lxml import etree as ElementTree
 from lxml.etree import Element as Element
 from lxml.etree import SubElement as SubElement
-import os
-import shutil
+
 
 #---------------------------------------------------------------------------
 #   Definitions
@@ -188,7 +190,8 @@ class Custom(Basis):
             ['HADOOP_LOG_DIR', cluster_log_dir],                 # custom
             ['HADOOP_ROOT_LOGGER', 'DEBUG,console,RFA'],         # DEBUG mode custom
             ['HADOOP_DAEMON_ROOT_LOGGER', 'DEBUG,console,RFA'],  # DEBUG mode custom
-            ['HADOOP_SECURITY_LOGGER', 'DEBUG,console,RFA'],     # DEBUG mode # custom
+            # DEBUG mode # custom
+            ['HADOOP_SECURITY_LOGGER', 'DEBUG,console,RFA'],
             # ['YARN_CONF_DIR', cluster_hadoop_conf_dir],        # Deprecated
             # ['YARN_ROOT_LOGGER', 'DEBUG,console,RFA'],         # Deprecated
         ]

@@ -45,7 +45,7 @@ class ParaIns(Thread):
         self.result = True if self.retcode == 0 else False
 
         logger.info("Ins retcode is: %d" % (self.retcode))
-        logger.info('Finished Ins : ' + this.ins)
+        logger.info('Finished Ins : ' + self.ins)
 
         return
 

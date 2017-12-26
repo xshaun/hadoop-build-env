@@ -3,16 +3,17 @@
 from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command as cmd
+from scripts.command import ParaIns
 import os
 
 
 class Custom(Basis):
 
     def __parse(self, param):
-        if param is 'hdfs':
+        if 'hdfs' == param:
             return 'sbin/start-dfs.sh'
 
-        if param is 'yarn':
+        if 'yarn' == param:
             return 'sbin/start-yarn.sh'
 
         # TODO, add more
@@ -28,38 +29,33 @@ class Custom(Basis):
 
         cluster_script_dir = self.getClusterScriptDir()
 
-        remote_ins = list()
-        if self.ys['params'] == 0:
-            remote_ins.append(os.path.join(
+        candidates = list()
+        for p in self.ys['params']:
+            candidates.append(os.path.join(
+                cluster_script_dir, self.__parse(p)))
+            
+        if len(candidates) == 0:
+            candidates.append(os.path.join(
                 cluster_script_dir, 'sbin/start-all.sh'))
-        else:
-            for p in self.ys['params']:
-                remote_ins.append(os.path.join(
-                    cluster_script_dir, self.__parse(p)))
 
+        threads = list()
         for host in rm_list:
             #!!! donot use -tt option
             ins = "ssh {0} {2}@{1} -T '{3}' ".format(
                 ssh_option, host['ip'], host['usr'],
-                ' && '.join(remote_ins))
+                ' && '.join(candidates))
 
-            retcode = cmd.do(ins)
+            t = ParaIns(ins)
+            t.start()
+            threads.append(t)
 
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
+        for t in threads:
+            t.join()
 
-            if retcode != 0:
-                logger.error(ins)
-                return False
-
-        #
-        # wait to end
-        #
-        ins = 'wait'
-        retcode = cmd.do(ins)
-        if retcode != 0:
-            return False
-
-        return True
+        ret = True
+        for t in threads:
+            ret = t.ret == ret
+        return ret
 
 
 def trigger(ys):
