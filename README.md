@@ -7,7 +7,12 @@ And we take delight in contribution in efficient cluster scheduling and approach
 ## How to run
 1. customize `setting.yaml` according to user demands.
 
-2. run `bhe <stage(s)>`  e.g.
+2. optional. 
+```bash
+ln -s <absolute path>/hbe /usr/bin/hbe
+```
+
+3. run `bhe <stage(s)>`  e.g.
 ```shell
 
 hbe init # prepare enviroment in control-proxy and cluster for all actions 
@@ -23,8 +28,6 @@ hbe initdeploy  # initally compile source code, configure site, distribute binar
 hbe config # configure site.xml, worker and some configuration.
 
 hbe deploy  # compile source code, configure site, distribute binary libs into cluster to cluster
-
-================================================================
 
 hbe compile  # compile source code in control-proxy
 
