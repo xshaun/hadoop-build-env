@@ -41,14 +41,14 @@ $ hbe config
 $ hbe deploy 
 
 # compile source code in control-proxy. default compile hadoop-main.
-# params: rm, nm
+# params: yapi, yclient, ycommon, yscommon, ysrm, ysnm
 $ hbe compile 
               
 # add permissions for stage-sync, and also create hdfs dirs ...
 $ hbe syncp 
 
 # distribute binary libs into cluster. default sync hadoop-main.
-# params: rm, nm
+# params: yapi, yclient, ycommon, yscommon, ysrm, ysnm
 $ hbe sync
            
 # clean cluster files. 

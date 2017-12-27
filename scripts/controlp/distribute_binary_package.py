@@ -14,22 +14,47 @@ import os
 class Custom(Basis):
 
     def __parse(self, param):
+        yarn_dir = os.path.join(
+            self.getClusterBinaryDir(), 'share/hadoop/yarn/')
+
         # TODO: hard code version
-        if 'nm' == param:
+        version = '3.0.0-beta1'
+
+        if 'yapi' == param:  # yarn-api
+            return [os.path.join(self.getControlPSourceDir(),
+                                 'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-api',
+                                 "target/hadoop-yarn-api-%s.jar" % version),
+                    yarn_dir]
+
+        if 'yclient' == param:  # yarn-client
+            return [os.path.join(self.getControlPSourceDir(),
+                                 'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-client',
+                                 "target/hadoop-yarn-client-%s.jar" % version),
+                    yarn_dir]
+
+        if 'ycommon' == param:  # yarn-common
+            return [os.path.join(self.getControlPSourceDir(),
+                                 'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common',
+                                 "target/hadoop-yarn-common-%s.jar" % version),
+                    yarn_dir]
+
+        if 'yscommon' == param:  # yarn-server-common
+            return [os.path.join(self.getControlPSourceDir(),
+                                 'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-common'
+                                 "target/hadoop-yarn-server-common-%s.jar" % version),
+                    yarn_dir]
+
+        if 'ysnm' == param:
             return [os.path.join(self.getControlPSourceDir(),
                                  'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager',
-                                 'target/hadoop-yarn-server-nodemanager-3.0.0-beta1.jar'),
-                    os.path.join(self.getClusterBinaryDir(),
-                                 'share/hadoop/yarn/')
-                    ]
+                                 "target/hadoop-yarn-server-nodemanager-%s.jar" % version),
+                    yarn_dir]
 
-        if 'rm' == param:
+        if 'ysrm' == param:
             return [os.path.join(self.getControlPSourceDir(),
                                  'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-resourcemanager',
-                                 'target/hadoop-yarn-server-resourcemanager-3.0.0-beta1.jar'),
-                    os.path.join(self.getClusterBinaryDir(),
-                                 'share/hadoop/yarn/')
-                    ]
+                                 "target/hadoop-yarn-server-resourcemanager-%s.jar" % version),
+                    yarn_dir]
 
         # TODO, add more
         return
@@ -42,7 +67,7 @@ class Custom(Basis):
 
         host_list = self.getHosts()
 
-        # 
+        #
         # with params
         # -------------------------------------------------------
         #
@@ -67,7 +92,7 @@ class Custom(Basis):
         ret = True
         for t in threads:
             ret = t.ret == ret
-            
+
         if len(candidates) != 0:
             return ret
 
@@ -95,7 +120,7 @@ class Custom(Basis):
             t.start()
             threads.append(t)
 
-        # must wait 
+        # must wait
         for t in threads:
             t.join()
 

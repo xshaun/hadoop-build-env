@@ -10,11 +10,27 @@ import os
 class Custom(Basis):
 
     def __parse(self, param):
-        if 'nm' == param:
+        if 'yapi' == param:  # yarn-api
+            return os.path.join(self.getControlPSourceDir(),
+                                'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-api/')
+
+        if 'yclient' == param:  # yarn-client
+            return os.path.join(self.getControlPSourceDir(),
+                                'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-client/')
+
+        if 'ycommon' == param:  # yarn-common
+            return os.path.join(self.getControlPSourceDir(),
+                                'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common/')
+
+        if 'yscommon' == param:  # yarn-server-common
+            return os.path.join(self.getControlPSourceDir(),
+                                'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-common/')
+
+        if 'ysnm' == param:  # yarn-server-nodemanager
             return os.path.join(self.getControlPSourceDir(),
                                 'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/')
 
-        if 'rm' == param:
+        if 'ysrm' == param:  # yarn-server-resourcemanager
             return os.path.join(self.getControlPSourceDir(),
                                 'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-resourcemanager/')
 
@@ -40,7 +56,7 @@ class Custom(Basis):
                 "cd %s" % (can),
                 # "mvn package -Pdist,native,docs,src -DskipTests -Dtar" # -Pdocs will enforce to check the format correction of docs and some mvn errors will occur.
                 # "mvn package -Pdist,native,src -T 1C -Dmaven.test.skip=true  -Dmaven.compile.fork=true"
-                "mvn clean && mvn package -Pdist,native -DskipTests -Dtar"
+                "mvn clean && mvn install -Pdist,native -DskipTests -Dtar"
             ])
 
             t = ParaIns(ins)
