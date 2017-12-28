@@ -56,7 +56,7 @@ class Custom(Basis):
                 "cd %s" % (can),
                 # "mvn package -Pdist,native,docs,src -DskipTests -Dtar" # -Pdocs will enforce to check the format correction of docs and some mvn errors will occur.
                 # "mvn package -Pdist,native,src -T 1C -Dmaven.test.skip=true  -Dmaven.compile.fork=true"
-                "mvn clean && mvn install -Pdist,native -DskipTests -Dtar"
+                "mvn clean install -Pdist,native -DskipTests -Dtar"
             ])
 
             t = ParaIns(ins)
