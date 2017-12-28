@@ -40,7 +40,7 @@ class Custom(Basis):
 
         if 'yscommon' == param:  # yarn-server-common
             return [os.path.join(self.getControlPSourceDir(),
-                                 'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-common'
+                                 'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-common',
                                  "target/hadoop-yarn-server-common-%s.jar" % version),
                     yarn_dir]
 

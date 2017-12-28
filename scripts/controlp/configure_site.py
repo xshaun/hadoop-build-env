@@ -137,7 +137,11 @@ class Custom(Basis):
 
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.scheduler.address',
-                  value='0.0.0.0:8049')
+                  value='0.0.0.0:8049') # NMs  -> we need to change it into rm-ip:8030 on RM
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.amrmproxy.realrm.scheduler.address',
+                  value="%s:8030" % self.ys['roles']['resourcem']['hosts'][0])
 
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.nodemanager.amrmproxy.client.thread-count',
