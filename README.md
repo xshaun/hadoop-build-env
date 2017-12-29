@@ -83,7 +83,7 @@ $ hbe sync ysrm ysnm
 
 $ hbe clean log
 
-$ hbe submit './bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.num-opportunistic-maps-percent="100" 50 50' './bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.num-opportunistic-maps-percent="50" 100 100'
+$ hbe submit "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.num-opportunistic-maps-percent='100' 50 50" "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.num-opportunistic-maps-percent='50' 100 100"
 
 ```
 

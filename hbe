@@ -36,7 +36,7 @@ fi
 cd ${basepath}
 
 # Run
-/usr/bin/python3 -B ./hadoop-build-env.py $@
+/usr/bin/python3 -B ./hadoop-build-env.py "$@"
 
 # Go back default directory
 cd ;
