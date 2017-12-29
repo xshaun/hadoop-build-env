@@ -15,7 +15,8 @@ class Custom(Basis):
             return os.path.join(
                 cluster_binary_dir, 'sbin/stop-dfs.sh')
 
-        if 'yarn' = os.path.join(
+        if 'yarn' == param:
+            return os.path.join(
             cluster_binary_dir, 'sbin/stop-yarn.sh')
 
         if 'jobhistory' == param:
