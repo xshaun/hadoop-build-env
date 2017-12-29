@@ -27,7 +27,7 @@ class Custom(Basis):
                 ssh_option, host['ip'], host['usr'],
                 remote_ins)
 
-            instructions.append([ins, host['pwd']])
+            instructions.append((ins, host['pwd']))
 
         return Command.parallel(instructions)
 

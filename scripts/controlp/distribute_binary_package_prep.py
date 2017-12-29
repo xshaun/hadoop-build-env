@@ -27,6 +27,7 @@ class Custom(Basis):
         # add permissions
         # -------------------------------------------------------
         #
+        ret = True
         instructions = list()
         for host in host_list:
             """
@@ -35,25 +36,33 @@ class Custom(Basis):
             ins = "ssh {0} {2}@{1} -tt 'sudo -S mkdir -p {3}' ".format(
                 ssh_option, host['ip'], host['usr'], cluster_binary_dir)
 
-            instructions.append([ins, host['pwd']])
+            instructions.append((ins, host['pwd']))
 
+        ret = ret == Command.parallel(instructions)
+
+        instructions = list()
+        for host in host_list:
             """
             chown
             """
             ins = "ssh {0} {2}@{1} -tt 'sudo -S chown -R {2} {3}' ".format(
                 ssh_option, host['ip'], host['usr'], cluster_binary_dir)
 
-            instructions.append([ins, host['pwd']])
+            instructions.append((ins, host['pwd']))
 
+        ret = ret == Command.parallel(instructions)
+
+        instructions = list()
+        for host in host_list:
             """
             chmod
             """
             ins = "ssh {0} {2}@{1} -tt 'sudo -S chmod -R 777 {3}' ".format(
                 ssh_option, host['ip'], host['usr'], cluster_binary_dir)
 
-            instructions.append([ins, host['pwd']])
+            instructions.append((ins, host['pwd']))
 
-        ret = Command.parallel(instructions)
+        ret = ret == Command.parallel(instructions)
         if not ret:
             return ret
 

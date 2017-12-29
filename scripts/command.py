@@ -109,7 +109,7 @@ class Command(object):
     def parallel(args):
         threads = list()
         for ins in args:
-            t = ParaIns(ins)
+            t = ParaIns(ins[0], ins[1]) if isinstance(ins, tuple) else ParaIns(ins)
             t.start()
             threads.append(t)
 

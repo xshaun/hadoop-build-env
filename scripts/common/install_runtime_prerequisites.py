@@ -33,9 +33,9 @@ class Custom(Basis):
         for host in host_list:
             ins = "ssh {0} {2}@{1} -tt 'sudo -S {3}'".format(
                 ssh_option, host['ip'], host['usr'],
-                runtime_env)
+                remote_ins)
 
-            instructions.append([ins, host['pwd']])
+            instructions.append((ins, host['pwd']))
 
         return Command.parallel(instructions)
 
