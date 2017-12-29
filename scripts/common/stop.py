@@ -9,11 +9,18 @@ import os
 class Custom(Basis):
 
     def __parse(self, param):
-        if 'hdfs' == param:
-            return 'sbin/stop-dfs.sh'
+        cluster_binary_dir = self.getClusterBinaryDir()
 
-        if 'yarn' == param:
-            return 'sbin/stop-yarn.sh'
+        if 'hdfs' == param:
+            return os.path.join(
+                cluster_binary_dir, 'sbin/stop-dfs.sh')
+
+        if 'yarn' = os.path.join(
+            cluster_binary_dir, 'sbin/stop-yarn.sh')
+
+        if 'jobhistory' == param:
+            return os.path.join(
+                cluster_binary_dir, 'bin/mapred --daemon stop historyserver')
 
         # TODO, add more
         return
@@ -25,16 +32,16 @@ class Custom(Basis):
 
         rm_list = self.getHosts(roles=['resourcem', ])
 
-        cluster_binary_dir = self.getClusterBinaryDir()
-
+        params = self.ys['params']
         candidates = list()
-        for p in self.ys['params']:
-            candidates.append(os.path.join(
-                cluster_binary_dir, self.__parse(p)))
 
-        if len(candidates) == 0:
-            candidates.append(os.path.join(
-                cluster_binary_dir, 'sbin/stop-all.sh'))
+        if len(params) == 0:
+            params.append('hdfs')
+            params.append('yarn')
+            params.append('jobhistory')
+
+        for p in params:
+            candidates.append(self.__parse(p))
 
         instructions = list()
         for host in rm_list:
