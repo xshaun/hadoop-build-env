@@ -15,7 +15,7 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-# Ensure python3 is installed.
+# Ensure python3 that have been installed.
 # The 'hadoop-build-env.py' script execution relys on python3.
 # Note here just check installation path as ubuntu(debian) package rules.
 if [[ ! -e /usr/bin/python3 ]]; then 
@@ -25,7 +25,7 @@ if [[ ! -e /usr/bin/python3 ]]; then
     exit 
 fi
 
-# Find basepath of origin file
+# Find real origin file(hadoop-build-env.py) directory
 basepath='.'
 softlink=$0 
 if [[ -L ${softlink} ]]; then
@@ -38,5 +38,5 @@ cd ${basepath}
 # Run
 /usr/bin/python3 -B ./hadoop-build-env.py $@
 
-# cd back
+# Go back default directory
 cd ;

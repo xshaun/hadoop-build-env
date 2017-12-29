@@ -32,14 +32,14 @@ import logging.config
 #---------------------------------------------------------------------------
 
 #
-# _logging_config is used to configue logging
-# _logging_logger is used to get a logger
+# _logging_config targets to configue logging
+# _logging_logger targets to get a logger
 #
 _logging_config = './configs/logging.config'
 _logging_logger = 'develop'
 
 #
-# _settings_file indicates where is
+# _settings_file targets where is your setting file.
 #
 _settings_file = './settings.yaml'
 
@@ -60,13 +60,9 @@ def _parse_yaml_settings(abspath_filename):
             raise Exception('not found the setting file.')
 
         file = open(abspath_filename)
-        ys = yaml.load(file)  # setting file with yaml format
+        ys = yaml.load(file)
 
-        """
-        @annotation:
-            to detect necessary fields within setting file.
-            to judge whether each field value is legal.
-        """
+        """ Checking the setting file's legality """
 
         # checker
         for item in ('version', 'controlp_base_path', 'cluster_base_path',

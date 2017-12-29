@@ -18,9 +18,7 @@ class Custom(Basis):
         #
         # clear hdfs files
         #
-        """
-        folders for namenode
-        """
+        """ folders for namenode """
         name_nodes = self.getHosts(roles=['namen', ])
 
         namefiles = os.path.join(self.getClusterHdfsDir(
@@ -40,9 +38,7 @@ class Custom(Basis):
         if not ret:
             return ret
 
-        """
-        folders for datanodes
-        """
+        """ folders for datanodes """
         data_nodes = self.getHosts(roles=['datan', ])
 
         datafiles = os.path.join(self.getClusterHdfsDir(

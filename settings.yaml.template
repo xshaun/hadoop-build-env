@@ -25,12 +25,12 @@
 # Users can customize each field as their own demands. 
 
 # [$]
-# It defines the version of source code, which affects the name of binary jars.
+# Defines the version of source code, which affects the name of binary jars.
 #
 version: '3.0.0-beta1' 
 
 # [$]
-# It defines the folder's absolute path of sourcecode. 
+# Defines the folder's absolute path of sourcecode. 
 # Empty or non-existing folder is fine bacasuse the stage of 
 # 'clear' and 'download' can create it automatically.
 # !!! Must ensure its correctness and avoid misoperations.!!!
@@ -38,7 +38,7 @@ version: '3.0.0-beta1'
 controlp_base_path: '/opt/rose-source-on-hadoop/'
 
 # [$]
-# It defines the folder's absolute path of binary code. 
+# Defines the folder's absolute path of binary code. 
 # Empty or non-existing folder is fine bacasuse the stage of 
 # 'distribute' can create it automatically.
 # !!! Must ensure its correctness and avoid misoperations.!!!
@@ -46,16 +46,15 @@ controlp_base_path: '/opt/rose-source-on-hadoop/'
 cluster_base_path: '/opt/rose/'
 
 # [$]
-# GROUP & USER definition for operation and runtime in cluster
+# Defines operation GROUP & USER for hadoop runtime in cluster
 #
 opt:
   group: 'hadoop'
   user: 'yarn'
 
 # [$]
-# Here descripts host, username and password of overall roles 
-# including deamons in Yarn and HDFS and also a proxy that helps
-# manage the cluster. 
+# Defines the cluster roles including 'controlp', 'resourcem', 'nodem', 
+# 'namen' and 'datan'. That targets to indicate host's ip, usr and pwd. 
 #
 # Abbreviation: 
 #   controlp - control proxy (controller)
@@ -92,7 +91,7 @@ roles:
   nodem:
     <<: *tmpslaves    
     # hosts+:
-    #   -
+    #   - '?.?.?.?'
     'usr': 'ivic'
     'pwd': 'cloudos$123'
 
@@ -115,7 +114,7 @@ roles:
     'dir': 'hdfs/dn' # <-*
 
 # [$]
-# Here defines concrete content/script(s) in each step that is
+# Defines concrete content/script(s) in each step that is
 # minimum unit of scheduling.
 # 
 # Make 'scripts/' as root directory and define value format is 
@@ -163,7 +162,7 @@ steps:
   'nnffs': 'namen.format_file_system'
 
 # [$]
-# Here defines concrete steps in each stage that is combination 
+# Defines concrete steps in each stage that is combination 
 # of several processes/steps.
 #
 stages:
@@ -186,7 +185,6 @@ stages:
     - 'cpsp'
   # - 'cpcc'
   # - 'cpdsc'
-  # - 'cpicsc'
 
   'initcompile':
     - 'cpicsc'

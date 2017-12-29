@@ -17,7 +17,7 @@ class Custom(Basis):
 
         if 'yarn' == param:
             return os.path.join(
-            cluster_binary_dir, 'sbin/stop-yarn.sh')
+                cluster_binary_dir, 'sbin/stop-yarn.sh')
 
         if 'jobhistory' == param:
             return os.path.join(
@@ -31,8 +31,10 @@ class Custom(Basis):
 
         ssh_option = '-o StrictHostKeyChecking=no -o ConnectTimeout=600'
 
+        host_list = self.getHosts()
         rm_list = self.getHosts(roles=['resourcem', ])
 
+        # -- step1
         params = self.ys['params']
         candidates = list()
 
@@ -41,17 +43,23 @@ class Custom(Basis):
             params.append('yarn')
             params.append('jobhistory')
 
-        for p in params:
-            candidates.append(self.__parse(p))
-
+        # -- step2
+        EACH_HOST_INS = ['jobhistory', ]
         instructions = list()
-        for host in rm_list:
-            #!!! donot use -tt option
-            ins = "ssh {0} {2}@{1} -T '{3}' ".format(
-                ssh_option, host['ip'], host['usr'],
-                ' && '.join(candidates))
 
-            instructions.append(ins)
+        for p in params:
+            tlist = None
+            if p in EACH_HOST_INS:
+                tlist = host_list
+            else:
+                tlist = rm_list
+
+            for host in tlist:
+                #!!! donot use -tt option
+                ins = "ssh {0} {2}@{1} -T '{3}' ".format(
+                    ssh_option, host['ip'], host['usr'],
+                    self.__parse(p))
+                instructions.append(ins)
 
         return Command.parallel(instructions)
 

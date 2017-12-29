@@ -5,14 +5,9 @@ from scripts.basis import logger
 from scripts.command import Command
 import os
 
-#---------------------------------------------------------------------------
-#   Definitions
-#---------------------------------------------------------------------------
-
 
 class Custom(Basis):
 
-    # override
     def action(self):
         logger.info('--> controlp.distribute_binary_package_prep <--')
 
@@ -28,11 +23,10 @@ class Custom(Basis):
         # -------------------------------------------------------
         #
         ret = True
+
+        """ create folders """
         instructions = list()
         for host in host_list:
-            """
-            create folders
-            """
             ins = "ssh {0} {2}@{1} -tt 'sudo -S mkdir -p {3}' ".format(
                 ssh_option, host['ip'], host['usr'], cluster_binary_dir)
 
@@ -40,11 +34,9 @@ class Custom(Basis):
 
         ret = ret == Command.parallel(instructions)
 
+        """ chown """
         instructions = list()
         for host in host_list:
-            """
-            chown
-            """
             ins = "ssh {0} {2}@{1} -tt 'sudo -S chown -R {2} {3}' ".format(
                 ssh_option, host['ip'], host['usr'], cluster_binary_dir)
 
@@ -52,11 +44,9 @@ class Custom(Basis):
 
         ret = ret == Command.parallel(instructions)
 
+        """ chmod """
         instructions = list()
         for host in host_list:
-            """
-            chmod
-            """
             ins = "ssh {0} {2}@{1} -tt 'sudo -S chmod -R 777 {3}' ".format(
                 ssh_option, host['ip'], host['usr'], cluster_binary_dir)
 
@@ -132,7 +122,7 @@ class Custom(Basis):
         setup_passphraseless = os.path.join(
             cluster_script_dir, 'setup_passphraseless.sh')
 
-        # hdfs
+        """ hdfs """
         namenode = self.getHosts(roles=['namen', ])
         datanodes = self.getHosts(roles=['datan', ])
 
@@ -148,7 +138,7 @@ class Custom(Basis):
 
             instructions.append(ins)
 
-        # yarn
+        """ yarn """
         resourcemanager = self.getHosts(roles=['resourcem', ])
         nodemanagers = self.getHosts(roles=['nodem', ])
 

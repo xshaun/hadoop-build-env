@@ -5,14 +5,9 @@ from scripts.basis import logger
 from scripts.command import Command
 import os
 
-#---------------------------------------------------------------------------
-#   Definitions
-#---------------------------------------------------------------------------
-
 
 class Custom(Basis):
 
-    # override
     def action(self):
         logger.info('--> controlp.download_bin_code <--')
 

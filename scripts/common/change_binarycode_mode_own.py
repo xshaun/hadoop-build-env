@@ -5,10 +5,6 @@ from scripts.basis import logger
 from scripts.command import Command
 import os
 
-#---------------------------------------------------------------------------
-#   Definitions
-#---------------------------------------------------------------------------
-
 
 class Custom(Basis):
 

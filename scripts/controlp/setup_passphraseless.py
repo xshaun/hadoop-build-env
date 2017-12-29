@@ -4,14 +4,9 @@ from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command
 
-#---------------------------------------------------------------------------
-#   Definitions
-#---------------------------------------------------------------------------
-
 
 class Custom(Basis):
 
-    # override
     def action(self):
         logger.info('--> controlp.setup_passphraseless <--')
 

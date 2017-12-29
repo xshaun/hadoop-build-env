@@ -41,7 +41,6 @@ class Custom(Basis):
         raise Exception("cannot find such param: %s" % param)
         return
 
-    # override
     def action(self):
         logger.info('--> controlp.compile_src_code <--')
 

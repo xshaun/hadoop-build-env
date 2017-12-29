@@ -5,14 +5,9 @@ from scripts.basis import logger
 from scripts.command import Command
 import os
 
-#---------------------------------------------------------------------------
-#   Definitions
-#---------------------------------------------------------------------------
-
 
 class Custom(Basis):
 
-    # override
     def action(self):
         logger.info('--> controlp.download_src_code <--')
 
@@ -29,7 +24,7 @@ class Custom(Basis):
         link_address = "http://www-eu.apache.org/dist/hadoop/common/hadoop-{0}/hadoop-{0}-src.tar.gz".format(
             self.ys['version'])
         ins = "curl -sSL {0} | tar -C {1} -xzv".format(
-            link_address, os.path.join(controlp_source_dir, '../')) # TODO, only exclude files
+            link_address, os.path.join(controlp_source_dir, '../'))  # TODO, only exclude files
 
         retcode = Command.do(ins)
         if retcode != 0:

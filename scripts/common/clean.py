@@ -15,7 +15,6 @@ class Custom(Basis):
         # TODO, add more
         return
 
-    # override
     def action(self):
         logger.info('--> common.clean <--')
 

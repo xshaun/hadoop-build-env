@@ -7,7 +7,6 @@ from scripts.command import Command
 
 class Custom(Basis):
 
-    # override
     def action(self):
         logger.info('--> controlp.init_compile_src_code <--')
 

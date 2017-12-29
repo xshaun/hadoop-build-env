@@ -5,10 +5,6 @@ from scripts.basis import logger
 from scripts.command import Command
 import os
 
-#---------------------------------------------------------------------------
-#   Definitions
-#---------------------------------------------------------------------------
-
 
 class Custom(Basis):
 
@@ -51,7 +47,6 @@ class Custom(Basis):
         raise Exception("cannot find such param: %s" % param)
         return
 
-    # override
     def action(self):
         logger.info('--> controlp.distribute_binary_package <--')
 

@@ -10,11 +10,6 @@ from lxml.etree import Element as Element
 from lxml.etree import SubElement as SubElement
 
 
-#---------------------------------------------------------------------------
-#   Definitions
-#---------------------------------------------------------------------------
-
-
 def putconfig(file, name, value):
     root = ElementTree.parse(file).getroot()
 
@@ -187,7 +182,7 @@ class Custom(Basis):
         shutil.copy2('./configs/default/hadoop-env.sh',
                      './configs/hadoop-env.sh')
         hadoop_env_file = './configs/hadoop-env.sh'
-        
+
         envlist = [
             ['PDSH_RCMD_TYPE', 'ssh'],
             ['JAVA_HOME', '/usr/lib/jvm/java-8-openjdk-amd64/'],

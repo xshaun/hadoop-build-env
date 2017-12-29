@@ -8,7 +8,6 @@ import shutil
 
 class Custom(Basis):
 
-    # override
     def action(self):
         logger.info('--> controlp.clear_sourcecode <--')
 
