@@ -186,6 +186,8 @@ class Custom(Basis):
         #
         shutil.copy2('./configs/default/hadoop-env.sh',
                      './configs/hadoop-env.sh')
+        hadoop_env_file = './configs/hadoop-env.sh'
+        
         envlist = [
             ['PDSH_RCommand_TYPE', 'ssh'],
             ['JAVA_HOME', '/usr/lib/jvm/java-8-openjdk-amd64/'],
@@ -242,7 +244,7 @@ class Custom(Basis):
             return ret
 
         for host in rm_list:
-            ins = "scp ./configs/yarn-rm-site.xml {1}@{0}:{3}/yarn-site.xml ".format(
+            ins = "scp ./configs/yarn-rm-site.xml {1}@{0}:{2}/yarn-site.xml ".format(
                 host['ip'], host['usr'], cluster_hadoop_conf_dir)
 
             instructions.append(ins)
