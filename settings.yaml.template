@@ -197,7 +197,6 @@ stages:
     - 'ccbmo'
 
   'initdeploy':
-    - 'cpsp'
     - 'cpicsc'
     - 'cpdbpp'
     - 'cpdbp'
