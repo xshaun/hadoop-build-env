@@ -16,20 +16,6 @@ class Custom(Basis):
         cluster_binary_dir = self.getClusterBinaryDir()
 
         #
-        # stop all deamons
-        #
-        remote_ins = "{0} && {0}".format(
-            os.path.join(cluster_binary_dir, 'sbin/stop-all.sh'))
-
-        ins = "ssh {0} {2}@{1} -tt '{3}' ".format(
-            ssh_option, self.ys['roles']['namen']['hosts'][0],
-            self.ys['roles']['namen']['usr'], remote_ins)
-
-        retcode = Command.do(ins)
-
-        logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-        #
         # clear hdfs files
         #
         """
@@ -42,18 +28,17 @@ class Custom(Basis):
         namesfiles = os.path.join(self.getClusterHdfsDir(
             subdir=self.ys['roles']['namen']['sdir']), '*')
 
+        instructions = list()
         for host in name_nodes:
             ins = "ssh {0} {2}@{1} -tt 'rm -rf {3} {4}' ".format(
                 ssh_option, host['ip'], host['usr'],
                 namefiles, namesfiles)
 
-            retcode = Command.do(ins)
+            instructions.append(ins)
 
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
+        ret = Command.parallel(instructions)
+        if not ret:
+            return ret
 
         """
         folders for datanodes
@@ -63,18 +48,17 @@ class Custom(Basis):
         datafiles = os.path.join(self.getClusterHdfsDir(
             subdir=self.ys['roles']['datan']['dir']), '*')
 
+        instructions = list()
         for host in data_nodes:
             ins = "ssh {0} {2}@{1} -tt 'rm -rf {3}' ".format(
                 ssh_option, host['ip'], host['usr'],
                 datafiles)
 
-            retcode = Command.do(ins)
+            instructions.append(ins)
 
-            logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-            if retcode != 0:
-                logger.error(ins)
-                return False
+        ret = Command.parallel(instructions)
+        if not ret:
+            return ret
 
         #
         # formate
@@ -86,23 +70,7 @@ class Custom(Basis):
             ssh_option, self.ys['roles']['namen']['hosts'][0],
             self.ys['roles']['namen']['usr'], remote_ins)
 
-        retcode = Command.do(ins)
-
-        logger.info("ins: %s; retcode: %d." % (ins, retcode))
-
-        if retcode != 0:
-            logger.error(ins)
-            return False
-
-        # wait to end
-        #
-        ins = 'wait'
-        retcode = Command.do(ins)
-        if retcode != 0:
-            logger.error(ins)
-            return False
-
-        return True
+        return 0 == Command.do(ins)
 
 
 def trigger(ys):

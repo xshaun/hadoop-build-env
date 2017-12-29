@@ -189,7 +189,7 @@ class Custom(Basis):
         hadoop_env_file = './configs/hadoop-env.sh'
         
         envlist = [
-            ['PDSH_RCommand_TYPE', 'ssh'],
+            ['PDSH_RCMD_TYPE', 'ssh'],
             ['JAVA_HOME', '/usr/lib/jvm/java-8-openjdk-amd64/'],
             ['HADOOP_HOME', cluster_binary_dir],
             ['HADOOP_YARN_HOME', cluster_binary_dir],
