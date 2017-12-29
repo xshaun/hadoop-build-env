@@ -2,8 +2,7 @@
 
 from scripts.basis import Basis
 from scripts.basis import logger
-from scripts.command import Command as cmd
-from scripts.command import ParaIns
+from scripts.command import Command
 import os
 
 
@@ -22,23 +21,15 @@ class Custom(Basis):
             os.path.join(cluster_script_dir, 'add_user_group.sh'),
             self.ys['opt']['group'], self.ys['opt']['user'])
 
-        threads = list()
+        instructions = list()
         for host in host_list:
             ins = "ssh {0} {2}@{1} -tt '{3}' ".format(
                 ssh_option, host['ip'], host['usr'],
                 remote_ins)
 
-            t = ParaIns(ins, host['pwd'])
-            t.start()
-            threads.append(t)
+            instructions.append([ins, host['pwd']])
 
-        for t in threads:
-            t.join()
-
-        ret = True
-        for t in threads:
-            ret = t.ret == ret
-        return ret
+        return Command.parallel(instructions)
 
 
 def trigger(ys):

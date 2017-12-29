@@ -36,8 +36,7 @@ class Basis(object):
         self.ys = ys
         self.attempts = attempts
         self.interval = interval  # seconds
-        # @TODO
-        # support status machine
+        # TODO support status machine
         self.status = False
 
         if auto:  # automatically occur
@@ -138,52 +137,51 @@ class Basis(object):
         """
         return self.getHosts(roles=['nodem', 'datan'])
 
-    def getControlPSourceDir(self):
+    """
+    Functions: get*Dir
+    """
 
-        return self.ys['controlp_base_path']
+    def getControlPSourceDir(self, subdir=''):
 
-    def getControlPBinaryDir(self):
-        base = self.ys['controlp_base_path']
+        return os.path.join(self.ys['controlp_base_path'],
+                            subdir)
 
-        dir_father = os.path.join(base, 'hadoop-dist/target')
+    def getControlPBinaryDir(self, subdir=''):
 
-        dir = os.path.join(dir_father, 'hadoop-3.0.0-beta1')
-        # TODO fix
-        #
-        # items = os.listdir(dir_father)
-        # dir = None
-        # for item in items:
-        #     if item.endswith('.tar.gz'):
-        #         dir = os.path.join(dir_father, item[0:-7])
-        #         break
+        return self.getControlPSourceDir(subdir=os.path.join(
+            "hadoop-dist/target/hadoop-%s" % self.ys['version'], subdir))
 
-        return dir
+    def getClusterBaseDir(self, subdir=''):
 
-    def __joinClusterDir(self, sdir):
-        base = self.ys['cluster_base_path']
-        dir = os.path.join(base, sdir)
-        return dir
+        return os.path.join(self.ys['cluster_base_path'],
+                            subdir)
 
-    def getClusterScriptDir(self):
-        sdir = 'scripts'
-        return self.__joinClusterDir(sdir)
+    def getClusterScriptDir(self, subdir=''):
 
-    def getClusterBinaryDir(self):
-        sdir = 'rose-on-yarn'
-        return self.__joinClusterDir(sdir)
+        return self.getClusterBaseDir(subdir=os.path.join(
+            'scripts', subdir))
 
-    def getClusterLogDir(self):
-        sdir = 'logs'
-        return self.__joinClusterDir(sdir)
+    def getClusterBinaryDir(self, subdir=''):
 
-    def getClusterHdfsDir(self):
-        sdir = 'hdfs'
-        return self.__joinClusterDir(sdir)
+        return self.getClusterBaseDir(subdir=os.path.join(
+            'rose-on-yarn', subdir))
 
-    def getClusterHadoopConfDir(self):
-        dir = os.path.join(self.getClusterBinaryDir(), 'etc/hadoop/')
-        return dir
+    def getClusterLogDir(self, subdir=''):
 
-    def getClusterHadoopLibNativeDir(self):
-        dir = os.path.join(self.getClusterBinaryDir(), 'lib/native/')
-        return dir
+        return self.getClusterBaseDir(subdir=os.path.join(
+            'logs', subdir))
+
+    def getClusterHdfsDir(self, subdir=''):
+
+        return self.getClusterBaseDir(subdir=os.path.join(
+            'hdfs', subdir))
+
+    def getClusterHadoopConfDir(self, subdir=''):
+
+        return self.getClusterBinaryDir(subdir=os.path.join(
+            'etc/hadoop/', subdir))
+
+    def getClusterHadoopLibNativeDir(self, subdir=''):
+
+        return self.getClusterBinaryDir(subdir=os.path.join(
+            'lib/native', subdir))

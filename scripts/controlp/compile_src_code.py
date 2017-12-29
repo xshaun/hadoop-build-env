@@ -2,39 +2,43 @@
 
 from scripts.basis import Basis
 from scripts.basis import logger
-from scripts.command import Command as cmd
-from scripts.command import ParaIns
-import os
+from scripts.command import Command
 
 
 class Custom(Basis):
 
     def __parse(self, param):
+        YARNDIR = self.getControlPSourceDir(
+            subdir='hadoop-yarn-project/hadoop-yarn')
+        YARNDIRFOR = "%s/{0}" % (YARNDIR)
+
+        YARNSERVERDIR = self.getControlPSourceDir(
+            subdir='hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server')
+        YARNSERVERDIRFOR = "%s/{0}" % (YARNSERVERDIR)
+
         if 'yapi' == param:  # yarn-api
-            return os.path.join(self.getControlPSourceDir(),
-                                'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-api/')
+            return YARNDIRFOR.format('hadoop-yarn-api')
 
         if 'yclient' == param:  # yarn-client
-            return os.path.join(self.getControlPSourceDir(),
-                                'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-client/')
+            return YARNDIRFOR.format('hadoop-yarn-client')
+
+        if 'yregistry' == param:  # yarn-registry
+            return YARNDIRFOR.format('hadoop-yarn-registry')
 
         if 'ycommon' == param:  # yarn-common
-            return os.path.join(self.getControlPSourceDir(),
-                                'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common/')
+            return YARNDIRFOR.format('hadoop-yarn-common')
 
         if 'yscommon' == param:  # yarn-server-common
-            return os.path.join(self.getControlPSourceDir(),
-                                'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-common/')
+            return YARNSERVERDIRFOR.formta('hadoop-yarn-server-common')
 
         if 'ysnm' == param:  # yarn-server-nodemanager
-            return os.path.join(self.getControlPSourceDir(),
-                                'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/')
+            return YARNSERVERDIRFOR.formta('hadoop-yarn-server-nodemanager')
 
         if 'ysrm' == param:  # yarn-server-resourcemanager
-            return os.path.join(self.getControlPSourceDir(),
-                                'hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-resourcemanager/')
+            return YARNSERVERDIRFOR.formta('hadoop-yarn-server-resourcemanager')
 
         # TODO, add more
+        raise Exception("cannot find such param: %s" % param)
         return
 
     # override
@@ -50,26 +54,16 @@ class Custom(Basis):
         if len(candidates) == 0:
             candidates.append(controlp_source_dir)
 
-        threads = list()
+        instructions = list()
         for can in candidates:
             ins = " && ".join([
                 "cd %s" % (can),
-                # "mvn package -Pdist,native,docs,src -DskipTests -Dtar" # -Pdocs will enforce to check the format correction of docs and some mvn errors will occur.
-                # "mvn package -Pdist,native,src -T 1C -Dmaven.test.skip=true  -Dmaven.compile.fork=true"
                 "mvn clean install -Pdist,native -DskipTests -Dtar"
             ])
 
-            t = ParaIns(ins)
-            t.start()
-            threads.append(t)
+            instructions.append(ins)
 
-        for t in threads:
-            t.join()
-
-        ret = True
-        for t in threads:
-            ret = t.ret == ret
-        return ret
+        return Command.parallel(instructions)
 
 
 def trigger(ys, params=[]):

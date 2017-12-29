@@ -2,8 +2,7 @@
 
 from scripts.basis import Basis
 from scripts.basis import logger
-from scripts.command import Command as cmd
-from scripts.command import ParaIns
+from scripts.command import Command
 
 #---------------------------------------------------------------------------
 #   Definitions
@@ -18,25 +17,14 @@ class Custom(Basis):
 
         host_list = self.getHosts()
 
-        threads = list()
-
+        instructions = list()
         for host in host_list:
             # setup passphraseless
             ins = "./utilities/setup_passphraseless.sh '%s@%s' '%s'" % (
                 host['usr'], host['ip'], host['pwd'])
+            instructions.append(ins)
 
-            t = ParaIns(ins)
-            t.start()
-            threads.append(t)
-
-        # wait
-        for t in threads:
-            t.join()
-
-        ret = True
-        for t in threads:
-            ret = t.ret == ret
-        return ret
+        return Command.parallel(ins_list)
 
 
 def trigger(ys):

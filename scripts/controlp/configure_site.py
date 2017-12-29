@@ -2,8 +2,7 @@
 
 from scripts.basis import Basis
 from scripts.basis import logger
-from scripts.command import Command as cmd
-from scripts.command import ParaIns
+from scripts.command import Command
 import os
 import shutil
 from lxml import etree as ElementTree
@@ -57,8 +56,6 @@ class Custom(Basis):
         cluster_binary_dir = self.getClusterBinaryDir()
         cluster_hdfs_dir = self.getClusterHdfsDir()
         cluster_log_dir = self.getClusterLogDir()
-
-        controlp_binary_dir = self.getControlPBinaryDir()
 
         #
         # wirte slaves' ip into workers
@@ -114,6 +111,19 @@ class Custom(Basis):
                   name='yarn.resourcemanager.hostname',
                   value=self.ys['roles']['resourcem']['hosts'][0])
 
+        # mapreduce
+        putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.framework.name',
+                  value='yarn')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.aux-services',
+                  value='mapreduce_shuffle')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.env-whitelist',
+                  value='JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME')
+
         # support distributed scheduler
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.opportunistic-container-allocation.enabled',
@@ -136,37 +146,34 @@ class Custom(Basis):
                   value='0.0.0.0:8049')
 
         putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.amrmproxy.client.thread-count',
+                  value='3')
+
+        putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.scheduler.address',
-                  value='0.0.0.0:8049') # NMs  -> we need to change it into rm-ip:8030 on RM
+                  value='0.0.0.0:8049')  # on RM, must change it into rm-ip:8030
 
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.nodemanager.amrmproxy.realrm.scheduler.address',
                   value="%s:8030" % self.ys['roles']['resourcem']['hosts'][0])
 
-        putconfig(file='./configs/yarn-site.xml',
-                  name='yarn.nodemanager.amrmproxy.client.thread-count',
-                  value='3')
+        # on RM, must change it into rm-ip:8030
+        shutil.copy2('./configs/yarn-site.xml',
+                     './configs/yarn-rm-site.xml')
 
-        # mapreduce
-        putconfig(file='./configs/mapred-site.xml',
-                  name='mapreduce.framework.name',
-                  value='yarn')
+        putconfig(file='./configs/yarn-rm-site.xml',
+                  name='yarn.resourcemanager.scheduler.address',
+                  value="%s:8030" % self.ys['roles']['resourcem']['hosts'][0])
 
-        putconfig(file='./configs/yarn-site.xml',
-                  name='yarn.nodemanager.aux-services',
-                  value='mapreduce_shuffle')
+        files = ['./configs/core-site.xml',
+                 './configs/hdfs-site.xml',
+                 './configs/mapred-site.xml',
+                 './configs/yarn-site.xml',
+                 './configs/yarn-rm-site.xml']
 
-        putconfig(file='./configs/yarn-site.xml',
-                  name='yarn.nodemanager.env-whitelist',
-                  value='JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME')
+        ins = " && ".join(map(lambda x: "format_file %s" % x, files))
 
-        ins = "format_file %s && format_file %s && format_file %s && format_file %s" % (
-            './configs/core-site.xml',
-            './configs/hdfs-site.xml',
-            './configs/yarn-site.xml',
-            './configs/mapred-site.xml')
-
-        retcode = cmd.do(ins)
+        retcode = Command.do(ins)
 
         logger.info("ins: %s; retcode: %d." % (ins, retcode))
 
@@ -177,12 +184,10 @@ class Custom(Basis):
         #
         # configure ./etc/hadoop/*.sh
         #
-        hadoop_env_file = os.path.join(
-            controlp_binary_dir, 'etc/hadoop/hadoop-env.sh')
-
-        ins = ':'
+        shutil.copy2('./configs/default/hadoop-env.sh',
+                     './configs/hadoop-env.sh')
         envlist = [
-            ['PDSH_RCMD_TYPE', 'ssh'],
+            ['PDSH_RCommand_TYPE', 'ssh'],
             ['JAVA_HOME', '/usr/lib/jvm/java-8-openjdk-amd64/'],
             ['HADOOP_HOME', cluster_binary_dir],
             ['HADOOP_YARN_HOME', cluster_binary_dir],
@@ -201,11 +206,11 @@ class Custom(Basis):
             # ['YARN_ROOT_LOGGER', 'DEBUG,console,RFA'],         # Deprecated
         ]
 
-        for e in envlist:
-            ins += " && put_config_line --file {0} --property {1} --value {2} --prefix 'export' ".format(
-                hadoop_env_file, e[0], e[1])
+        ins = " && ".join(map(lambda x:
+                              "put_config_line --file %s --property %s --value %s --prefix 'export' " %
+                              (hadoop_env_file, x[0], x[1]), envlist))
 
-        retcode = cmd.do(ins)
+        retcode = Command.do(ins)
 
         logger.info("ins: %s; retcode: %d." % (ins, retcode))
 
@@ -213,7 +218,36 @@ class Custom(Basis):
             logger.error(ins)
             return False
 
-        return True
+        #
+        # sync configures
+        #
+        instructions = list()
+
+        host_list = self.getHosts()
+        rm_list = self.getHosts(roles=['resourcem', ])
+
+        hbe_configs = './configs/hdfs-site.xml ./configs/mapred-site.xml \
+                       ./configs/yarn-site.xml ./configs/core-site.xml \
+                       ./configs/workers ./configs/hadoop-env.sh'
+
+        for host in host_list:
+            ins = "scp {2} {1}@{0}:{3} ".format(
+                host['ip'], host['usr'],
+                hbe_configs, cluster_hadoop_conf_dir)
+
+            instructions.append(ins)
+
+        ret = Command.parallel(instructions)
+        if not ret:
+            return ret
+
+        for host in rm_list:
+            ins = "scp ./configs/yarn-rm-site.xml {1}@{0}:{3}/yarn-site.xml ".format(
+                host['ip'], host['usr'], cluster_hadoop_conf_dir)
+
+            instructions.append(ins)
+
+        return Command.parallel(instructions)
 
 
 def trigger(ys):

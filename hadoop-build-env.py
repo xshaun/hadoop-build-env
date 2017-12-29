@@ -69,21 +69,23 @@ def _parse_yaml_settings(abspath_filename):
         """
 
         # checker
-        for item in ('mode', 'controlp_base_path', 'cluster_base_path', 'roles', 'steps', 'stages'):
+        for item in ('version', 'controlp_base_path', 'cluster_base_path',
+                     'opt', 'roles', 'steps', 'stages'):
             if item not in ys:
                 raise Exception(
                     "not found field '%s' in setting file." % (item))
 
         # checker
-        if ys['mode'] not in ('pseudo-distributed', 'fully-distributed'):
-            raise Exception("ys['mode'] has an illegal value in setting file.")
+        for item in ('group', 'user'):
+            if item not in ys['opt']:
+                raise Exception(
+                    "not found field '%s' in setting file." % (item))
 
         # checker
-        if ys['mode'] == 'pseudo-distributed' and (
-                len(ys['roles']['resourcem']['hosts']) != 1 or
-                ys['roles']['resourcem'] != ys['roles']['nodem']):
-            raise Exception(
-                'rm and nms must only have one, and same value under pseudo-distributed mode in setting file.')
+        for item in ('controlp', 'resourcem', 'nodem', 'namen', 'datan'):
+            if item not in ys['roles']:
+                raise Exception(
+                    "not found field '%s' in setting file." % (item))
 
         return ys
 

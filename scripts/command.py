@@ -13,37 +13,41 @@ class ParaIns(Thread):
         self.ins = ins
         self.pwd = pwd
         self.ret = True
-        self.retcode = 0
+        self.retcode = 1000
 
     def run(self):
         logger.info('Executing Ins : ' + self.ins)
 
-        # @TODO
-        # redirect stdout to logger
+        # TODO redirect stdout to logger
         sys.stdout
 
         runins = ("source ~/.profile && "
                   "source ./utilities/*.profile && %s") % (self.ins)
 
-        process = None
+        try:
+            process = None
 
-        if self.pwd is None:
-            process = subprocess.Popen(
-                runins, stdout=sys.stdout, stderr=sys.stdout,
-                shell=True, cwd='./', executable='/bin/bash')
+            if self.pwd is None:
+                process = subprocess.Popen(
+                    runins, stdout=sys.stdout, stderr=sys.stdout,
+                    shell=True, cwd='./', executable='/bin/bash')
 
-        else:  # sudo
-            echopwd = subprocess.Popen(
-                ['echo', self.pwd], stdout=subprocess.PIPE, shell=False)
+            else:  # sudo
+                echopwd = subprocess.Popen(
+                    ['echo', self.pwd], stdout=subprocess.PIPE, shell=False)
 
-            process = subprocess.Popen(
-                runins, stdin=echopwd.stdout, stdout=sys.stdout,
-                shell=True, cwd='./', executable='/bin/bash')
+                process = subprocess.Popen(
+                    runins, stdin=echopwd.stdout, stdout=sys.stdout,
+                    shell=True, cwd='./', executable='/bin/bash')
 
-        process.wait()
+            process.wait()
 
-        self.retcode = process.returncode
-        self.result = True if self.retcode == 0 else False
+            self.retcode = process.returncode
+            self.ret = True if self.retcode == 0 else False
+
+        except Exception as e:
+            self.retcode = -1000
+            self.ret = False
 
         logger.info("Ins retcode is: %d" % (self.retcode))
         logger.info('Finished Ins : ' + self.ins)
@@ -57,8 +61,7 @@ class Command(object):
     def do(arg):
         logger.info('command.do: ' + arg)
 
-        # @TODO
-        # redirect stdout to logger
+        # TODO redirect stdout to logger
         sys.stdout
 
         ins = ("source ~/.profile && "
@@ -81,8 +84,7 @@ class Command(object):
     def sudo(arg, pwd):
         logger.info('command.sudo: ' + arg)
 
-        # @TODO
-        # redirect stdout to logger
+        # TODO redirect stdout to logger
         sys.stdout
 
         ins = ("source ~/.profile && "
@@ -102,3 +104,19 @@ class Command(object):
         logger.info("command.do.returncode: %d" % (retcode))
 
         return retcode
+
+    @staticmethod
+    def parallel(args):
+        threads = list()
+        for ins in args:
+            t = ParaIns(ins)
+            t.start()
+            threads.append(t)
+
+        for t in threads:
+            t.join()
+
+        ret = True
+        for t in threads:
+            ret = t.ret == ret
+        return ret

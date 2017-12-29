@@ -2,8 +2,7 @@
 
 from scripts.basis import Basis
 from scripts.basis import logger
-from scripts.command import Command as cmd
-from scripts.command import ParaIns
+from scripts.command import Command
 import os
 
 
@@ -37,24 +36,16 @@ class Custom(Basis):
             candidates.append(os.path.join(
                 cluster_binary_dir, 'sbin/stop-all.sh'))
 
-        threads = list()
+        instructions = list()
         for host in rm_list:
             #!!! donot use -tt option
             ins = "ssh {0} {2}@{1} -T '{3}' ".format(
                 ssh_option, host['ip'], host['usr'],
                 ' && '.join(candidates))
 
-            t = ParaIns(ins)
-            t.start()
-            threads.append(t)
+            instructions.append(ins)
 
-        for t in threads:
-            t.join()
-
-        ret = True
-        for t in threads:
-            ret = t.ret == ret
-        return ret
+        return Command.parallel(instructions)
 
 
 def trigger(ys):

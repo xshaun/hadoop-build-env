@@ -33,12 +33,12 @@ $ hbe initcluster
 # initially compile source code in control-proxy.
 # This stage will resolve maven depandency and download necessary jars.
 $ hbe initcompile  
-		  
-# configure site.xml, worker, hadoop-env.sh ...
-$ hbe config 
-
+	
 # compile source code, configure site, distribute binary libs into cluster
 $ hbe deploy 
+
+# configure site.xml, worker, hadoop-env.sh and sync into cluster ...
+$ hbe config 
 
 # compile source code in control-proxy. default compile hadoop-main.
 # params: yapi, yclient, ycommon, yscommon, ysrm, ysnm
@@ -71,11 +71,11 @@ $ hbe initdeploy # first compile and deploy
 
 $ hbe deploy
 
-$ hbe compile && hbe config && hbe stop && hbe sync && hbe strart
+$ hbe compile && hbe stop && hbe sync && hbe config && hbe strart
 
-$ hbe compile rm nm 
+$ hbe compile ysrm ysnm 
 
-$ hbe sync rm nm 
+$ hbe sync ysrm ysnm 
 
 $ hbe clean log
 ```

@@ -25,14 +25,9 @@
 # Users can customize each field as their own demands. 
 
 # [$]
-# It defines the mode of deploying hadoop cluster. 
-# Optional values as following:
-#   - standalone
-#   - pseudo-distributed 
-#   - fully-distributed
+# It defines the version of source code, which affects the name of binary jars.
 #
-#mode: 'pseudo-distributed' 
-mode: 'fully-distributed' 
+version: '3.0.0-beta1' 
 
 # [$]
 # It defines the folder's absolute path of sourcecode. 
@@ -51,7 +46,7 @@ controlp_base_path: '/opt/rose-source-on-hadoop/'
 cluster_base_path: '/opt/rose/'
 
 # [$]
-# GROUP & USER definition of operation and runtime
+# GROUP & USER definition for operation and runtime in cluster
 #
 opt:
   group: 'hadoop'
@@ -144,12 +139,12 @@ steps:
   'cpicsc': 'controlp.init_compile_src_code'
   # compile source code under codepath folder
   'cpcsc': 'controlp.compile_src_code'
-  # configure *-site.xml
-  'cpcs': 'controlp.configure_site'
   # prepare for distributing
   'cpdbpp': 'controlp.distribute_binary_package_prep'
   # distribute binary package to nodes
   'cpdbp': 'controlp.distribute_binary_package'
+  # configure *-site.xml
+  'cpcs': 'controlp.configure_site'
 
   # prerequisites while running hadoop
   'cirp': 'common.install_runtime_prerequisites'
@@ -178,9 +173,9 @@ stages:
   # - 'cpcc'
   # - 'cpdsc'
     - 'cpicsc'
-    - 'cpcs'
     - 'cpdbpp'
     - 'cpdbp'
+    - 'cpcs'
     - 'cirp'
     - 'caug'
     - 'ccbmo'
@@ -204,9 +199,9 @@ stages:
   'initdeploy':
     - 'cpsp'
     - 'cpicsc'
-    - 'cpcs'
     - 'cpdbpp'
     - 'cpdbp'
+    - 'cpcs'
     - 'cirp'
     - 'caug'
     - 'ccbmo'
@@ -215,9 +210,9 @@ stages:
 
   'deploy':
     - 'cpcsc'
-    - 'cpcs'
     - 'cstop'
     - 'cpdbp'
+    - 'cpcs'
     - 'caug'
     - 'ccbmo'
     - 'cstart'

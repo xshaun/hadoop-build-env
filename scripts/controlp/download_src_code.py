@@ -2,18 +2,12 @@
 
 from scripts.basis import Basis
 from scripts.basis import logger
-from scripts.command import Command as cmd
-from scripts.command import ParaIns
+from scripts.command import Command
 import os
 
 #---------------------------------------------------------------------------
 #   Definitions
 #---------------------------------------------------------------------------
-
-#
-# _version indicates downloading binary code version
-#
-_version = '3.0.0-beta1'
 
 
 class Custom(Basis):
@@ -33,11 +27,11 @@ class Custom(Basis):
             return False
 
         link_address = "http://www-eu.apache.org/dist/hadoop/common/hadoop-{0}/hadoop-{0}-src.tar.gz".format(
-            _version)
+            self.ys['version'])
         ins = "curl -sSL {0} | tar -C {1} -xzv".format(
             link_address, os.path.join(controlp_source_dir, '../')) # TODO, only exclude files
 
-        retcode = cmd.do(ins)
+        retcode = Command.do(ins)
         if retcode != 0:
             return False
 

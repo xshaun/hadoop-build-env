@@ -2,8 +2,7 @@
 
 from scripts.basis import Basis
 from scripts.basis import logger
-from scripts.command import Command as cmd
-from scripts.command import ParaIns
+from scripts.command import Command
 import os
 
 
@@ -15,7 +14,6 @@ class Custom(Basis):
         ssh_option = '-o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
         cluster_binary_dir = self.getClusterBinaryDir()
-        cluster_hdfs_dir = self.getClusterHdfsDir()
 
         #
         # stop all deamons
@@ -27,7 +25,7 @@ class Custom(Basis):
             ssh_option, self.ys['roles']['namen']['hosts'][0],
             self.ys['roles']['namen']['usr'], remote_ins)
 
-        retcode = cmd.do(ins)
+        retcode = Command.do(ins)
 
         logger.info("ins: %s; retcode: %d." % (ins, retcode))
 
@@ -39,17 +37,17 @@ class Custom(Basis):
         """
         name_nodes = self.getHosts(roles=['namen', ])
 
-        namefiles = os.path.join(cluster_hdfs_dir,
-                                 self.ys['roles']['namen']['dir'], '*')
-        namesfiles = os.path.join(cluster_hdfs_dir,
-                                  self.ys['roles']['namen']['sdir'], '*')
+        namefiles = os.path.join(self.getClusterHdfsDir(
+            subdir=self.ys['roles']['namen']['dir']), '*')
+        namesfiles = os.path.join(self.getClusterHdfsDir(
+            subdir=self.ys['roles']['namen']['sdir']), '*')
 
         for host in name_nodes:
             ins = "ssh {0} {2}@{1} -tt 'rm -rf {3} {4}' ".format(
                 ssh_option, host['ip'], host['usr'],
                 namefiles, namesfiles)
 
-            retcode = cmd.do(ins)
+            retcode = Command.do(ins)
 
             logger.info("ins: %s; retcode: %d." % (ins, retcode))
 
@@ -62,15 +60,15 @@ class Custom(Basis):
         """
         data_nodes = self.getHosts(roles=['datan', ])
 
-        datafiles = os.path.join(cluster_hdfs_dir,
-                                 self.ys['roles']['datan']['dir'], '*')
+        datafiles = os.path.join(self.getClusterHdfsDir(
+            subdir=self.ys['roles']['datan']['dir']), '*')
 
         for host in data_nodes:
             ins = "ssh {0} {2}@{1} -tt 'rm -rf {3}' ".format(
                 ssh_option, host['ip'], host['usr'],
                 datafiles)
 
-            retcode = cmd.do(ins)
+            retcode = Command.do(ins)
 
             logger.info("ins: %s; retcode: %d." % (ins, retcode))
 
@@ -88,7 +86,7 @@ class Custom(Basis):
             ssh_option, self.ys['roles']['namen']['hosts'][0],
             self.ys['roles']['namen']['usr'], remote_ins)
 
-        retcode = cmd.do(ins)
+        retcode = Command.do(ins)
 
         logger.info("ins: %s; retcode: %d." % (ins, retcode))
 
@@ -99,7 +97,7 @@ class Custom(Basis):
         # wait to end
         #
         ins = 'wait'
-        retcode = cmd.do(ins)
+        retcode = Command.do(ins)
         if retcode != 0:
             logger.error(ins)
             return False

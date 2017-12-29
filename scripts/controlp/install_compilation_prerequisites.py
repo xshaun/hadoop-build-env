@@ -2,8 +2,7 @@
 
 from scripts.basis import Basis
 from scripts.basis import logger
-from scripts.command import Command as cmd
-from scripts.command import ParaIns
+from scripts.command import Command
 
 #---------------------------------------------------------------------------
 #   Definitions
@@ -17,12 +16,12 @@ class Custom(Basis):
         logger.info('--> controlp.install_compilation_prerequisites <--')
 
         ins = './utilities/setup_aliyun_maven_mirror.sh'
-        retcode = cmd.do(ins)
+        retcode = Command.do(ins)
         if retcode != 0:
             return False
 
         ins = 'sudo -S ./utilities/install_compilation_prerequisites.sh'
-        retcode = cmd.sudo(ins, self.ys['roles']['controlp']['pwd'])
+        retcode = Command.sudo(ins, self.ys['roles']['controlp']['pwd'])
         if retcode != 0:
             return False
 

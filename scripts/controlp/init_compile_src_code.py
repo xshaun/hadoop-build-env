@@ -2,9 +2,7 @@
 
 from scripts.basis import Basis
 from scripts.basis import logger
-from scripts.command import Command as cmd
-from scripts.command import ParaIns
-import os
+from scripts.command import Command
 
 
 class Custom(Basis):
@@ -14,11 +12,12 @@ class Custom(Basis):
         logger.info('--> controlp.init_compile_src_code <--')
 
         controlp_source_dir = self.getControlPSourceDir()
+        controlp_source_maven_plugins_dir = self.getControlPSourceDir(
+            subdir='hadoop-maven-plugins')
 
         ins = " && ".join([
             "free",
-            "cd %s" % (os.path.join(
-                controlp_source_dir, 'hadoop-maven-plugins')),
+            "cd %s" % (controlp_source_maven_plugins_dir),
             "mvn install",
             "cd %s" % (controlp_source_dir),
             "mvn clean",
@@ -27,9 +26,9 @@ class Custom(Basis):
             # "mvn package -Pdist,native,docs,src -DskipTests -Dtar" # -Pdocs will enforce to check the format correction of docs and some mvn errors will occur.
             "mvn package -Pdist,native -DskipTests -Dtar"
         ])
-        retcode = cmd.do(ins)
+        retcode = Command.do(ins)
         if retcode != 0:
-            cmd.do("mvn package -DskipTests")
+            Command.do("mvn package -DskipTests")
             return False
 
         return True
