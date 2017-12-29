@@ -161,6 +161,9 @@ steps:
   # name-node formats file system
   'nnffs': 'namen.format_file_system'
 
+  # submit app
+  'appsubmit': 'appexamples.submit'
+
 # [$]
 # Defines concrete steps in each stage that is combination 
 # of several processes/steps.
@@ -234,6 +237,9 @@ stages:
 
   'clean':
     - 'cclean'
+
+  'submit':
+    - 'appsubmit'
 
   'step':
     - 'anyone'

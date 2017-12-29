@@ -63,6 +63,10 @@ $ hbe start
 # params: yarn, hdfs 
 $ hbe stop 
 
+# submit applications into cluster. 
+# The basepath of execution is cluster binary libs path.
+$ hbe submit <ins1> <ins2>
+
 # ========================EXAMPLES AS FOLLOWING======================== #
 
 $ hbe initcompile # first compile
@@ -78,6 +82,9 @@ $ hbe compile ysrm ysnm
 $ hbe sync ysrm ysnm 
 
 $ hbe clean log
+
+$ hbe submit './bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.num-opportunistic-maps-percent="100" 50 50' './bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.num-opportunistic-maps-percent="50" 100 100'
+
 ```
 
 
