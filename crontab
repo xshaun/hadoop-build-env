@@ -1,0 +1,8 @@
+#!/bin/bash
+
+mkdir -p /tmp/hbe/ &&
+hbe initdeploy 1>/tmp/hbe/stdout.txt 2>/tmp/hbe/stderr.txt && 
+hbe submit "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.num-opportunistic-maps-percent='50' 50 50" "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.num-opportunistic-maps-percent='50' 50000 10000" 1>>/tmp/hbe/stdout.txt 2>>/tmp/hbe/stderr.txt &&  
+hbe submit "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.num-opportunistic-maps-percent='50' 5000 5000" "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.num-opportunistic-maps-percent='100' 50 50" 1>>/tmp/hbe/stdout.txt 2>>/tmp/hbe/stderr.txt && 
+hbe submit "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.num-opportunistic-maps-percent='100' 10000 50000" "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.num-opportunistic-maps-percent='0' 10000 50000"  1>>/tmp/hbe/stdout.txt 2>>/tmp/hbe/stderr.txt &&
+:

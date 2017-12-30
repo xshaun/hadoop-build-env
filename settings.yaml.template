@@ -176,6 +176,7 @@ stages:
   # - 'cpdsc'
     - 'cpicsc'
     - 'cpdbpp'
+    - 'cstop'
     - 'cpdbp'
     - 'cpcs'
     - 'cirp'

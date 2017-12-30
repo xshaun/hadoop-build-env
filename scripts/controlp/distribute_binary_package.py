@@ -13,12 +13,12 @@ class Custom(Basis):
 
         YARNDIR = self.getControlPSourceDir(
             subdir='hadoop-yarn-project/hadoop-yarn')
-        YARNDIRFOR = "%s/{0}/target/{0}-%s.jar" % (YARNDIR, VERSION)
+        YARNDIRFOR = ("%s/{0}/target/{0}-%s.jar" % (YARNDIR, VERSION))
 
         YARNSERVERDIR = self.getControlPSourceDir(
             subdir='hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server')
-        YARNSERVERDIRFOR = "%s/{0}/target/{0}-%s.jar" % (
-            YARNSERVERDIR, VERSION)
+        YARNSERVERDIRFOR = ("%s/{0}/target/{0}-%s.jar" % (
+            YARNSERVERDIR, VERSION))
 
         DESTDIR = self.getClusterBinaryDir(subdir='share/hadoop/yarn/')
 
