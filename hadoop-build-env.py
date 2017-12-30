@@ -17,7 +17,7 @@
 # OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 """
-WELCOME YOUR EMAILS ABOUT COMMUNICATION AND CONSULTATION 
+WELCOME YOUR EMAILS ABOUT COMMUNICATION AND CONSULTATION
 AUTHOR: XIAOYANG SUN (xshaun@outlook.com).ALL RIGHTS RESERVED
 """
 
@@ -128,9 +128,9 @@ def main(stage=None, params=list()):
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         logger.error('Missing the necessary stage parameter')
-        exit()
+        exit(-1)
 
     retcode = main(stage=sys.argv[1], params=sys.argv[2:])
     if retcode != 0:
         print("stage '%s' failed" % (sys.argv[1]))
-        exit()
+        exit(-1)

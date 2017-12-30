@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import copy
 import time
 import os
 import logging
@@ -107,7 +108,7 @@ class Basis(object):
                     res.append({'ip': h, 'usr': v['usr'], 'pwd': v['pwd']})
                     res_flag.append(t)
 
-        return res
+        return copy.deepcopy(res)
 
     def getMasterHosts(self):
         """

@@ -3,6 +3,7 @@
 from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command
+import copy
 import os
 
 
@@ -35,7 +36,7 @@ class Custom(Basis):
         rm_list = self.getHosts(roles=['resourcem', ])
 
         # -- step1
-        params = self.ys['params']
+        params = copy.deepcopy(self.ys['params'])
         candidates = list()
 
         if len(params) == 0:

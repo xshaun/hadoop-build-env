@@ -37,6 +37,10 @@ cd ${basepath}
 
 # Run
 /usr/bin/python3 -B ./hadoop-build-env.py "$@"
+retcode=$?
 
 # Go back default directory
 cd ;
+
+# Return python script retcode
+exit ${retcode}
