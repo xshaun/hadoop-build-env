@@ -1,9 +1,9 @@
 # ==============================================================
-# The document descripts deployment parameters that defines 
-# which file is fundamental and how to install these necessary 
-# components. 
+# The document descripts deployment parameters that defines
+# which file is fundamental and how to install these necessary
+# components.
 #
-# WELCOME YOUR EMAILS ABOUT COMMUNICATION AND CONSULTATION 
+# WELCOME YOUR EMAILS ABOUT COMMUNICATION AND CONSULTATION
 # AUTHOR: XIAOYANG SUN (xshaun@outlook.com).ALL RIGHTS RESERVED
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -22,24 +22,24 @@
 
 # ==============================================================
 # The following descripts parameters' definations and values.
-# Users can customize each field as their own demands. 
+# Users can customize each field as their own demands.
 
 # [$]
 # Defines the version of source code, which affects the name of binary jars.
 #
-version: '3.0.0-beta1' 
+version: '3.0.0-beta1'
 
 # [$]
-# Defines the folder's absolute path of sourcecode. 
-# Empty or non-existing folder is fine bacasuse the stage of 
+# Defines the folder's absolute path of sourcecode.
+# Empty or non-existing folder is fine bacasuse the stage of
 # 'clear' and 'download' can create it automatically.
 # !!! Must ensure its correctness and avoid misoperations.!!!
 #
 controlp_base_path: '/opt/rose-source-on-hadoop/'
 
 # [$]
-# Defines the folder's absolute path of binary code. 
-# Empty or non-existing folder is fine bacasuse the stage of 
+# Defines the folder's absolute path of binary code.
+# Empty or non-existing folder is fine bacasuse the stage of
 # 'distribute' can create it automatically.
 # !!! Must ensure its correctness and avoid misoperations.!!!
 #
@@ -53,10 +53,10 @@ opt:
   user: 'yarn'
 
 # [$]
-# Defines the cluster roles including 'controlp', 'resourcem', 'nodem', 
-# 'namen' and 'datan'. That targets to indicate host's ip, usr and pwd. 
+# Defines the cluster roles including 'controlp', 'resourcem', 'nodem',
+# 'namen' and 'datan'. That targets to indicate host's ip, usr and pwd.
 #
-# Abbreviation: 
+# Abbreviation:
 #   controlp - control proxy (controller)
 #   resourcem - reource manager (in Yarn)
 #   nodem - node manager (in Yarn)
@@ -76,7 +76,7 @@ tmpslaves: &tmpslaves
     - '192.168.7.76'
 
 roles:
-  controlp: 
+  controlp:
     'host': 'localhost'
     'usr': 'boy'
     'pwd': 'xboy'
@@ -89,7 +89,7 @@ roles:
     'pwd': 'cloudos$123'
 
   nodem:
-    <<: *tmpslaves    
+    <<: *tmpslaves
     # hosts+:
     #   - '?.?.?.?'
     'usr': 'ivic'
@@ -97,8 +97,8 @@ roles:
 
   namen:
     <<: *tmpmaster
-    # hosts+:  
-    #   - '?.?.?.?' # primary 
+    # hosts+:
+    #   - '?.?.?.?' # primary
     #   - '?.?.?.?' # secondary
     'usr': 'ivic'
     'pwd': 'cloudos$123'
@@ -116,10 +116,10 @@ roles:
 # [$]
 # Defines concrete content/script(s) in each step that is
 # minimum unit of scheduling.
-# 
-# Make 'scripts/' as root directory and define value format is 
-# 'roles.function', such as 'controlp.clear_sourcecode'. The 
-# point(.) means folder separator so users can customize 
+#
+# Make 'scripts/' as root directory and define value format is
+# 'roles.function', such as 'controlp.clear_sourcecode'. The
+# point(.) means folder separator so users can customize
 # hierarchical structure to organize customized scripts, such as
 # 'fruit.banana.eaten' means './scripts/fruit/banana/eaten.py'
 #
@@ -165,11 +165,11 @@ steps:
   'appsubmit': 'appexamples.submit'
 
 # [$]
-# Defines concrete steps in each stage that is combination 
+# Defines concrete steps in each stage that is combination
 # of several processes/steps.
 #
 stages:
-  'init': 
+  'init':
     - 'cpicp'
     - 'cpsp'
   # - 'cpcc'
@@ -200,6 +200,7 @@ stages:
   'initdeploy':
     - 'cpicsc'
     - 'cpdbpp'
+    - 'cstop'
     - 'cpdbp'
     - 'cpcs'
     - 'cirp'

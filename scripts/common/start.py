@@ -45,8 +45,8 @@ class Custom(Basis):
 
         # -- step2
         EACH_HOST_INS = ['jobhistory', ]
-        instructions = list()
 
+        instructions = list()
         for p in params:
             tlist = None
             if p in EACH_HOST_INS:
