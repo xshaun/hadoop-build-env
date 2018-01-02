@@ -218,8 +218,6 @@ class Custom(Basis):
         #
         # sync configures
         #
-        instructions = list()
-
         host_list = self.getHosts()
         rm_list = self.getHosts(roles=['resourcem', ])
 
@@ -227,6 +225,7 @@ class Custom(Basis):
                        ./configs/yarn-site.xml ./configs/core-site.xml \
                        ./configs/workers ./configs/hadoop-env.sh'
 
+        instructions = list()
         for host in host_list:
             ins = "scp {2} {1}@{0}:{3} ".format(
                 host['ip'], host['usr'],
