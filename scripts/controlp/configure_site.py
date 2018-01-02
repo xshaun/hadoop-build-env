@@ -238,9 +238,10 @@ class Custom(Basis):
         if not ret:
             return ret
 
+        instructions = list()
         for host in rm_list:
-            ins = "scp ./configs/yarn-rm-site.xml {1}@{0}:{2}/yarn-site.xml ".format(
-                host['ip'], host['usr'], cluster_hadoop_conf_dir)
+            ins = "scp ./configs/yarn-rm-site.xml {1}@{0}:{2}".format(
+                host['ip'], host['usr'], os.path.join(cluster_hadoop_conf_dir, 'yarn-site.xml'))
 
             instructions.append(ins)
 
