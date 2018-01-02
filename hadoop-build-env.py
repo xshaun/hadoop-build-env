@@ -107,7 +107,7 @@ def main(stage=None, params=list()):
         ys['params'] = params
         steps = ys['stages'][stage]
     else:
-        logger.error('defined stage is not in settings.yaml')
+        logger.error("The stage is not defined in settings.yaml: %s" % stage)
         return 1
 
     try:

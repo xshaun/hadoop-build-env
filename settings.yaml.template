@@ -175,8 +175,8 @@ stages:
   # - 'cpcc'
   # - 'cpdsc'
     - 'cpicsc'
-    - 'cpdbpp'
     - 'cstop'
+    - 'cpdbpp'
     - 'cpdbp'
     - 'cpcs'
     - 'cirp'
@@ -200,8 +200,8 @@ stages:
 
   'initdeploy':
     - 'cpicsc'
-    - 'cpdbpp'
     - 'cstop'
+    - 'cpdbpp'
     - 'cpdbp'
     - 'cpcs'
     - 'cirp'
@@ -213,6 +213,7 @@ stages:
   'deploy':
     - 'cpcsc'
     - 'cstop'
+    - 'cpdbpp'
     - 'cpdbp'
     - 'cpcs'
     - 'caug'
