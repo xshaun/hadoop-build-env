@@ -11,6 +11,13 @@ hbe submit \
     "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='PI-500maps-50op' -Dmapreduce.job.num-opportunistic-maps-percent='50' 500 1" \
     "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='PI-1000maps-100op' -Dmapreduce.job.num-opportunistic-maps-percent='100' 1000 1" \
     "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='PI-1000maps-0op' -Dmapreduce.job.num-opportunistic-maps-percent='0' 1000 1"  \
+    1>>/tmp/hbe/stdout.txt 2>>/tmp/hbe/stderr.txt &
+
+hbe submit \
     "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='PI-5000maps-50op' -Dmapreduce.job.num-opportunistic-maps-percent='50' 5000 1" \
     "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='PI-5000maps-100op' -Dmapreduce.job.num-opportunistic-maps-percent='100' 5000 1" \
-    1>>/tmp/hbe/stdout.txt 2>>/tmp/hbe/stderr.txt
+    "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='PI-10000maps-100op' -Dmapreduce.job.num-opportunistic-maps-percent='100' 10000 1" \
+    "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='PI-10000maps-0op' -Dmapreduce.job.num-opportunistic-maps-percent='0' 10000 1"  \
+    1>>/tmp/hbe/stdout.txt 2>>/tmp/hbe/stderr.txt &
+
+echo "use ' ps aux | grep hadoop-build-env ' to find more background processes"
