@@ -10,10 +10,9 @@ from lxml.etree import Element as Element
 from lxml.etree import SubElement as SubElement
 
 
-def putconfig(file, name, value):
+def putconfig(file, name, value, description=''):
     root = ElementTree.parse(file).getroot()
 
-    description = ''
     for existing_prop in root.getchildren():
         ename = existing_prop.find('name')
         if ename is not None and ename.text == name:
@@ -45,6 +44,8 @@ class Custom(Basis):
 
     def action(self):
         logger.info('--> common.configure_site <--')
+
+        ssh_option = '-o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
         cluster_hadoop_lib_native = self.getClusterHadoopLibNativeDir()
         cluster_hadoop_conf_dir = self.getClusterHadoopConfDir()
@@ -150,7 +151,8 @@ class Custom(Basis):
 
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.nodemanager.amrmproxy.realrm.scheduler.address',
-                  value="%s:8030" % self.ys['roles']['resourcem']['hosts'][0])
+                  value="%s:8030" % self.ys['roles']['resourcem']['hosts'][0],
+                  description="SUNXY-ROSE: targets to help AMRMProxy find real RM scheduler address")
 
         # on RM, must change it into rm-ip:8030
         shutil.copy2('./configs/yarn-site.xml',
@@ -221,6 +223,19 @@ class Custom(Basis):
         host_list = self.getHosts()
         rm_list = self.getHosts(roles=['resourcem', ])
 
+        """ chmod """
+        instructions = list()
+        for host in host_list:
+            ins = "ssh {0} {2}@{1} -tt 'sudo -S chmod -R 777 {3}' ".format(
+                ssh_option, host['ip'], host['usr'], cluster_hadoop_conf_dir)
+
+            instructions.append((ins, host['pwd']))
+
+        ret = Command.parallel(instructions)
+        if not ret:
+            return ret
+
+        """ sync files to all nodes """
         hbe_configs = './configs/hdfs-site.xml ./configs/mapred-site.xml \
                        ./configs/yarn-site.xml ./configs/core-site.xml \
                        ./configs/workers ./configs/hadoop-env.sh'
@@ -237,6 +252,7 @@ class Custom(Basis):
         if not ret:
             return ret
 
+        """ sync files to RMs """
         instructions = list()
         for host in rm_list:
             ins = "scp ./configs/yarn-rm-site.xml {1}@{0}:{2}".format(
