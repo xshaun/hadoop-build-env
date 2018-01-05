@@ -30,5 +30,5 @@ class Custom(Basis):
         return Command.parallel(instructions)
 
 def trigger(ys):
-    e = Custom(ys, attempts=3, interval=3, auto=True)
+    e = Custom(ys, attempts=1, interval=30, auto=True)
     return e.status
