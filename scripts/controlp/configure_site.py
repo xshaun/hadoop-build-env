@@ -120,6 +120,19 @@ class Custom(Basis):
                   name='yarn.nodemanager.env-whitelist',
                   value='JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME')
 
+        ## log-level
+        putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.map.log.level',
+                  value='DEBUG')
+
+        putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.reduce.log.level',
+                  value='DEBUG')
+
+        putconfig(file='./configs/mapred-site.xml',
+                  name='yarn.app.mapreduce.am.log.level',
+                  value='DEBUG')
+
         # support distributed scheduler
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.opportunistic-container-allocation.enabled',
