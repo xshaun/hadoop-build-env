@@ -54,8 +54,20 @@ class Custom(Basis):
 
         host_list = self.getHosts()
 
+        """ chmod """
         instructions = list()
+        for host in host_list:
+            ins = "ssh {0} {2}@{1} -tt 'sudo -S chmod -R 777 {3}' ".format(
+                ssh_option, host['ip'], host['usr'], cluster_binary_dir)
 
+            instructions.append((ins, host['pwd']))
+
+        ret = Command.parallel(instructions)
+        if not ret:
+            return ret
+
+        """ sync binary files """
+        instructions = list()
         if len(self.ys['params']) > 0:
             """
             # with params

@@ -29,13 +29,13 @@ class Custom(Basis):
             return YARNDIRFOR.format('hadoop-yarn-common')
 
         if 'yscommon' == param:  # yarn-server-common
-            return YARNSERVERDIRFOR.formta('hadoop-yarn-server-common')
+            return YARNSERVERDIRFOR.format('hadoop-yarn-server-common')
 
         if 'ysnm' == param:  # yarn-server-nodemanager
-            return YARNSERVERDIRFOR.formta('hadoop-yarn-server-nodemanager')
+            return YARNSERVERDIRFOR.format('hadoop-yarn-server-nodemanager')
 
         if 'ysrm' == param:  # yarn-server-resourcemanager
-            return YARNSERVERDIRFOR.formta('hadoop-yarn-server-resourcemanager')
+            return YARNSERVERDIRFOR.format('hadoop-yarn-server-resourcemanager')
 
         # TODO, add more
         raise Exception("cannot find such param: %s" % param)
