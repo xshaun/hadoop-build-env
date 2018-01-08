@@ -103,6 +103,7 @@ def main(stage=None, params=list()):
 
     if stage == 'step':
         steps = params
+        ys['params'] = list()
     elif stage in ys['stages']:
         ys['params'] = params
         steps = ys['stages'][stage]
