@@ -8,34 +8,62 @@ from scripts.command import Command
 class Custom(Basis):
 
     def __parse(self, param):
-        YARNDIR = self.getControlPSourceDir(
+        YARN_DIR = self.getControlPSourceDir(
             subdir='hadoop-yarn-project/hadoop-yarn')
-        YARNDIRFOR = "%s/{0}" % (YARNDIR)
+        YARN_DIR_FOR = "%s/{0}" % (YARN_DIR)
 
-        YARNSERVERDIR = self.getControlPSourceDir(
+        YARN_SERVER_DIR = self.getControlPSourceDir(
             subdir='hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server')
-        YARNSERVERDIRFOR = "%s/{0}" % (YARNSERVERDIR)
+        YARN_SERVER_DIR_FOR = "%s/{0}" % (YARN_SERVER_DIR)
 
-        if 'yapi' == param:  # yarn-api
-            return YARNDIRFOR.format('hadoop-yarn-api')
+        MAPREDUCE_CLIENT_DIR = self.getControlPSourceDir(
+            subdir='hadoop-mapreduce-project/hadoop-mapreduce-client')
+        MAPREDUCE_CLIENT_DIR_FOR = "%s/{0}" % (MAPREDUCE_CLIENT_DIR)
 
-        if 'yclient' == param:  # yarn-client
-            return YARNDIRFOR.format('hadoop-yarn-client')
+        if 'hadoop-yarn-api' == param:  # yarn-api
+            return YARN_DIR_FOR.format('hadoop-yarn-api')
 
-        if 'yregistry' == param:  # yarn-registry
-            return YARNDIRFOR.format('hadoop-yarn-registry')
+        if 'hadoop-yarn-client' == param:  # yarn-client
+            return YARN_DIR_FOR.format('hadoop-yarn-client')
 
-        if 'ycommon' == param:  # yarn-common
-            return YARNDIRFOR.format('hadoop-yarn-common')
+        if 'hadoop-yarn-registry' == param:  # yarn-registry
+            return YARN_DIR_FOR.format('hadoop-yarn-registry')
 
-        if 'yscommon' == param:  # yarn-server-common
-            return YARNSERVERDIRFOR.format('hadoop-yarn-server-common')
+        if 'hadoop-yarn-common' == param:  # yarn-common
+            return YARN_DIR_FOR.format('hadoop-yarn-common')
+
+        if 'hadoop-yarn-server-common' == param:  # yarn-server-common
+            return YARN_SERVER_DIR_FOR.format('hadoop-yarn-server-common')
 
         if 'ysnm' == param:  # yarn-server-nodemanager
-            return YARNSERVERDIRFOR.format('hadoop-yarn-server-nodemanager')
+            return YARN_SERVER_DIR_FOR.format('hadoop-yarn-server-nodemanager')
 
         if 'ysrm' == param:  # yarn-server-resourcemanager
-            return YARNSERVERDIRFOR.format('hadoop-yarn-server-resourcemanager')
+            return YARN_SERVER_DIR_FOR.format('hadoop-yarn-server-resourcemanager')
+
+        if 'hadoop-mapreduce-client-app' == param:
+            return MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-app')
+
+        if 'hadoop-mapreduce-client-common' == param:
+            return MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-common')
+
+        if 'hadoop-mapreduce-client-core' == param:
+            return MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-core')
+
+        if 'hadoop-mapreduce-client-hs-plugins' == param:
+            return MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-hs-plugins')
+
+        if 'hadoop-mapreduce-client-hs' == param:
+            return MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-hs')
+
+        if 'hadoop-mapreduce-client-jobclient' == param:
+            return MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-jobclient')
+
+        if 'hadoop-mapreduce-client-nativetask' == param:
+            return MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-nativetask')
+
+        if 'hadoop-mapreduce-client-shuffle' == param:
+            return MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-shuffle')
 
         # TODO, add more
         raise Exception("cannot find such param: %s" % param)

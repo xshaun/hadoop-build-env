@@ -11,37 +11,68 @@ class Custom(Basis):
     def __parse(self, param):
         VERSION = self.ys['version']
 
-        YARNDIR = self.getControlPSourceDir(
+        YARN_DIR = self.getControlPSourceDir(
             subdir='hadoop-yarn-project/hadoop-yarn')
-        YARNDIRFOR = ("%s/{0}/target/{0}-%s.jar" % (YARNDIR, VERSION))
+        YARN_DIR_FOR = ("%s/{0}/target/{0}-%s.jar" % (YARN_DIR, VERSION))
 
-        YARNSERVERDIR = self.getControlPSourceDir(
+        YARN_SERVER_DIR = self.getControlPSourceDir(
             subdir='hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server')
-        YARNSERVERDIRFOR = ("%s/{0}/target/{0}-%s.jar" % (
-            YARNSERVERDIR, VERSION))
+        YARN_SERVER_DIR_FOR = ("%s/{0}/target/{0}-%s.jar" % (
+            YARN_SERVER_DIR, VERSION))
 
-        DESTDIR = self.getClusterBinaryDir(subdir='share/hadoop/yarn/')
+        MAPREDUCE_CLIENT_DIR = self.getControlPSourceDir(
+            subdir='hadoop-mapreduce-project/hadoop-mapreduce-client')
+        MAPREDUCE_CLIENT_DIR_FOR = ("%s/{0}/target/{0}-%s.jar" % (
+            MAPREDUCE_CLIENT_DIR, VERSION))
 
-        if 'yapi' == param:  # yarn-api
-            return [YARNDIRFOR.format('hadoop-yarn-api'), DESTDIR]
+        YARN_DESTDIR = self.getClusterBinaryDir(subdir='share/hadoop/yarn/')
+        MAPREDUCE_DESTDIR = self.getClusterBinaryDir(
+            subdir='share/hadoop/mapreduce//')
 
-        if 'yclient' == param:  # yarn-client
-            return [YARNDIRFOR.format('hadoop-yarn-client'), DESTDIR]
+        if 'hadoop-yarn-api' == param:  # yarn-api
+            return [YARN_DIR_FOR.format('hadoop-yarn-api'), YARN_DESTDIR]
 
-        if 'ycommon' == param:  # yarn-common
-            return [YARNDIRFOR.format('hadoop-yarn-common'), DESTDIR]
+        if 'hadoop-yarn-client' == param:  # yarn-client
+            return [YARN_DIR_FOR.format('hadoop-yarn-client'), YARN_DESTDIR]
 
-        if 'yregistry' == param:  # yarn-registry
-            return [YARNDIRFOR.format('hadoop-yarn-registry'), DESTDIR]
+        if 'hadoop-yarn-common' == param:  # yarn-common
+            return [YARN_DIR_FOR.format('hadoop-yarn-common'), YARN_DESTDIR]
 
-        if 'yscommon' == param:  # yarn-server-common
-            return [YARNSERVERDIRFOR.format('hadoop-yarn-server-common'), DESTDIR]
+        if 'hadoop-yarn-registry' == param:  # yarn-registry
+            return [YARN_DIR_FOR.format('hadoop-yarn-registry'), YARN_DESTDIR]
+
+        if 'hadoop-yarn-server-common' == param:  # yarn-server-common
+            return [YARN_SERVER_DIR_FOR.format('hadoop-yarn-server-common'), YARN_DESTDIR]
 
         if 'ysnm' == param:  # yarn-server-nodemanager
-            return [YARNSERVERDIRFOR.format('hadoop-yarn-server-nodemanager'), DESTDIR]
+            return [YARN_SERVER_DIR_FOR.format('hadoop-yarn-server-nodemanager'), YARN_DESTDIR]
 
         if 'ysrm' == param:  # yarn-server-resourcemanager
-            return [YARNSERVERDIRFOR.format('hadoop-yarn-server-resourcemanager'), DESTDIR]
+            return [YARN_SERVER_DIR_FOR.format('hadoop-yarn-server-resourcemanager'), YARN_DESTDIR]
+
+        if 'hadoop-mapreduce-client-app' == param:
+            return [MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-app'), MAPREDUCE_DESTDIR]
+
+        if 'hadoop-mapreduce-client-common' == param:
+            return [MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-common'), MAPREDUCE_DESTDIR]
+
+        if 'hadoop-mapreduce-client-core' == param:
+            return [MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-core'), MAPREDUCE_DESTDIR]
+
+        if 'hadoop-mapreduce-client-hs-plugins' == param:
+            return [MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-hs-plugins'), MAPREDUCE_DESTDIR]
+
+        if 'hadoop-mapreduce-client-hs' == param:
+            return [MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-hs'), MAPREDUCE_DESTDIR]
+
+        if 'hadoop-mapreduce-client-jobclient' == param:
+            return [MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-jobclient'), MAPREDUCE_DESTDIR]
+
+        if 'hadoop-mapreduce-client-nativetask' == param:
+            return [MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-nativetask'), MAPREDUCE_DESTDIR]
+
+        if 'hadoop-mapreduce-client-shuffle' == param:
+            return [MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-shuffle'), MAPREDUCE_DESTDIR]
 
         # TODO, add more
         raise Exception("cannot find such param: %s" % param)
@@ -53,6 +84,9 @@ class Custom(Basis):
         ssh_option = '-o StrictHostKeyChecking=no -o ConnectTimeout=5'
 
         host_list = self.getHosts()
+
+        controlp_binary_dir = self.getControlPBinaryDir()
+        cluster_binary_dir = self.getClusterBinaryDir()
 
         """ chmod """
         instructions = list()
@@ -88,11 +122,8 @@ class Custom(Basis):
             """
             # without params
             """
-            controlp_binary_dir = self.getControlPBinaryDir()
-            cluster_binary_dir = self.getClusterBinaryDir()
             controlp_binary_files = os.path.join(controlp_binary_dir, '*')
             cluster_binary_files = os.path.join(cluster_binary_dir, '*')
-            cluster_hadoop_conf_dir = self.getClusterHadoopConfDir()
 
             for host in host_list:
                 ins = ("ssh {0} {2}@{1} -tt 'mkdir -p {4} && rm -rf {5}'"
