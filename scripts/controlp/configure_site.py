@@ -137,7 +137,7 @@ class Custom(Basis):
         # yarn
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.scheduler.minimum-allocation-mb',
-                  value='128')
+                  value='512')
 
         # support distributed scheduler
         putconfig(file='./configs/yarn-site.xml',
