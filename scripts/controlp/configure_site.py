@@ -75,6 +75,20 @@ class Custom(Basis):
         shutil.copy2('./configs/default/hadoop-mapred.xml',
                      './configs/mapred-site.xml')
 
+        # log-level
+        putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.map.log.level',
+                  value='DEBUG')
+
+        putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.reduce.log.level',
+                  value='DEBUG')
+
+        putconfig(file='./configs/mapred-site.xml',
+                  name='yarn.app.mapreduce.am.log.level',
+                  value='DEBUG')
+
+        # hdfs
         putconfig(file='./configs/core-site.xml',
                   name='fs.defaultFS',
                   value="hdfs://%s:9000" % self.ys['roles']['namen']['hosts'][0])
@@ -120,18 +134,10 @@ class Custom(Basis):
                   name='yarn.nodemanager.env-whitelist',
                   value='JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME')
 
-        ## log-level
-        putconfig(file='./configs/mapred-site.xml',
-                  name='mapreduce.map.log.level',
-                  value='DEBUG')
-
-        putconfig(file='./configs/mapred-site.xml',
-                  name='mapreduce.reduce.log.level',
-                  value='DEBUG')
-
-        putconfig(file='./configs/mapred-site.xml',
-                  name='yarn.app.mapreduce.am.log.level',
-                  value='DEBUG')
+        # yarn
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.scheduler.minimum-allocation-mb',
+                  value='128')
 
         # support distributed scheduler
         putconfig(file='./configs/yarn-site.xml',
