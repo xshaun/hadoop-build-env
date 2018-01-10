@@ -19,11 +19,25 @@ class Custom(Basis):
         cluster_binary_dir = self.getClusterBinaryDir()
 
         #
-        # add permissions
+        # clear cluster base dir
         # -------------------------------------------------------
         #
         ret = True
+        instructions = list()
+        for host in host_list:
+             ins = "ssh {0} {2}@{1} -tt 'sudo -S rm -rf {3}' ".format(
+                 ssh_option, host['ip'], host['usr'], self.getClusterBaseDir())
 
+             instructions.append((ins, host['pwd']))
+
+        ret = ret == Command.parallel(instructions)
+        if not ret:
+            return ret
+
+        #
+        # add permissions
+        # -------------------------------------------------------
+        #
         """ create folders """
         instructions = list()
         for host in host_list:

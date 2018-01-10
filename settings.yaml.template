@@ -102,8 +102,8 @@ roles:
     #   - '?.?.?.?' # secondary
     'usr': 'ivic'
     'pwd': 'cloudos$123'
-    'dir': 'hdfs/nn' # <-*
-    'sdir': 'hdfs/snn' # <-*
+    'dir': 'nn' # <-*
+    'sdir': 'snn' # <-*
 
   datan:
     <<: *tmpslaves
@@ -111,7 +111,7 @@ roles:
     #   -
     'usr': 'ivic'
     'pwd': 'cloudos$123'
-    'dir': 'hdfs/dn' # <-*
+    'dir': 'dn' # <-*
 
 # [$]
 # Defines concrete content/script(s) in each step that is
