@@ -95,7 +95,7 @@ class Custom(Basis):
 
         putconfig(file='./configs/hdfs-site.xml',
                   name='dfs.replication',
-                  value='1')
+                  value='3')
 
         putconfig(file='./configs/hdfs-site.xml',
                   name='dfs.namenode.name.dir',
@@ -103,12 +103,12 @@ class Custom(Basis):
                                      self.ys['roles']['namen']['dir']))
 
         putconfig(file='./configs/hdfs-site.xml',
-                  name='fs.checkpoint.dir',
+                  name='dfs.namenode.checkpoint.dir',
                   value=os.path.join('file:', cluster_hdfs_dir,
                                      self.ys['roles']['namen']['sdir']))
 
         putconfig(file='./configs/hdfs-site.xml',
-                  name='fs.checkpoint.edits.dir',
+                  name='dfs.namenode.checkpoint.edits.dir',
                   value=os.path.join('file:', cluster_hdfs_dir,
                                      self.ys['roles']['namen']['sdir']))
 
@@ -116,10 +116,6 @@ class Custom(Basis):
                   name='dfs.datanode.data.dir',
                   value=os.path.join('file:', cluster_hdfs_dir,
                                      self.ys['roles']['datan']['dir']))
-
-        putconfig(file='./configs/yarn-site.xml',
-                  name='yarn.resourcemanager.hostname',
-                  value=self.ys['roles']['resourcem']['hosts'][0])
 
         # mapreduce
         putconfig(file='./configs/mapred-site.xml',
@@ -138,6 +134,10 @@ class Custom(Basis):
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.scheduler.minimum-allocation-mb',
                   value='512')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.resourcemanager.hostname',
+                  value=self.ys['roles']['resourcem']['hosts'][0])
 
         # support distributed scheduler
         putconfig(file='./configs/yarn-site.xml',
