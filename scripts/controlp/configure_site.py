@@ -139,6 +139,10 @@ class Custom(Basis):
                   name='yarn.resourcemanager.hostname',
                   value=self.ys['roles']['resourcem']['hosts'][0])
 
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.delete.debug-delay-sec',
+                  value='172800') # 86400sec = 1day
+
         # support distributed scheduler
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.opportunistic-container-allocation.enabled',
