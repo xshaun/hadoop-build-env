@@ -26,7 +26,7 @@ class Custom(Basis):
 
         if 'timelineserver' == param:
             return os.path.join(
-                cluster_binary_dir, 'sbin/yarn-daemon.sh start timelineserver')
+                cluster_binary_dir, 'bin/yarn --daemon start timelineserver')
 
         # TODO, add more
         return
