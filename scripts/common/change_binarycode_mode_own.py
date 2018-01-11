@@ -15,6 +15,7 @@ class Custom(Basis):
 
         host_list = self.getHosts()
 
+        cluster_base_dir = self.getClusterBaseDir()
         cluster_binary_dir = self.getClusterBinaryDir()
         cluster_script_dir = self.getClusterScriptDir()
 
@@ -22,6 +23,17 @@ class Custom(Basis):
             os.path.join(cluster_script_dir, 'change_binarycode_mode_own.sh'),
             self.ys['opt']['group'], self.ys['opt']['user'],
             cluster_binary_dir)
+
+        instructions = list()
+        for host in host_list:
+            ins = "ssh {0} {2}@{1} -tt 'sudo -S chmod 777 {3}' ".format(
+                ssh_option, host['ip'], host['usr'],
+                cluster_base_dir)
+
+            instructions.append((ins, host['pwd']))
+
+        # Donot consider ret
+        Command.parallel(instructions)
 
         instructions = list()
         for host in host_list:
