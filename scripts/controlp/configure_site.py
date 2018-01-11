@@ -141,9 +141,58 @@ class Custom(Basis):
 
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.nodemanager.delete.debug-delay-sec',
-                  value='172800') # 86400sec = 1day
+                  value='86400')  # 86400sec = 1day
 
-        # support distributed scheduler
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.log.retain-seconds',
+                  value='86400')  # 86400sec = 1day
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.log-aggregation-enable',
+                  value='true')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.remote-app-log-dir',
+                  value=self.getClusterLogDir(subdir='remote-app-logs'))
+
+        # timeline service
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.timeline-service.enabled',
+                  value='true')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.timeline-service.version',
+                  value='1.0f')  # 1.0f 1.5f
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.system-metrics-publisher.enabled',
+                  value='true')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.timeline-service.generic-application-history.enabled',
+                  value='true')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.timeline-service.leveldb-timeline-store.ttl-interval-ms ',
+                  value='60000')  # ms
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.timeline-service.hostname',
+                  value='${yarn.resourcemanager.hostname}')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.timeline-service.recovery.enabled',
+                  value='true')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.timeline-service.ttl-enable',
+                  value='true')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.timeline-service.ttl-ms',
+                  value='86400000')  # 86400000ms = 1day
+
+        # support opportunistic container scheduler
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.opportunistic-container-allocation.enabled',
                   value='true')
@@ -152,6 +201,7 @@ class Custom(Basis):
                   name='yarn.nodemanager.opportunistic-containers-max-queue-length',
                   value='20')
 
+        # support distributed scheduler
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.nodemanager.distributed-scheduling.enabled',
                   value='true')
@@ -260,8 +310,8 @@ class Custom(Basis):
 
         """ sync files to all nodes """
         hbe_configs = './configs/hdfs-site.xml ./configs/mapred-site.xml \
-                       ./configs/yarn-site.xml ./configs/core-site.xml \
-                       ./configs/workers ./configs/hadoop-env.sh'
+                           ./configs/yarn-site.xml ./configs/core-site.xml \
+                           ./configs/workers ./configs/hadoop-env.sh'
 
         instructions = list()
         for host in host_list:

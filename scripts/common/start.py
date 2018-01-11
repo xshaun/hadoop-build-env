@@ -24,6 +24,10 @@ class Custom(Basis):
             return os.path.join(
                 cluster_binary_dir, 'bin/mapred --daemon start historyserver')
 
+        if 'timelineserver' == param:
+            return os.path.join(
+                cluster_binary_dir, 'sbin/yarn-daemon.sh start timelineserver')
+
         # TODO, add more
         return
 
@@ -43,6 +47,7 @@ class Custom(Basis):
             params.append('hdfs')
             params.append('yarn')
             params.append('jobhistory')
+            params.append('timelineserver')
 
         # -- step2
         EACH_HOST_INS = ['jobhistory', ]
