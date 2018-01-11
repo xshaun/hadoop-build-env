@@ -132,6 +132,10 @@ class Custom(Basis):
 
         # yarn
         putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.webapp.ui2.enable',
+                  value='true')
+
+        putconfig(file='./configs/yarn-site.xml',
                   name='yarn.nodemanager.resource.detect-hardware-capabilities',
                   value='true')
 
@@ -181,9 +185,9 @@ class Custom(Basis):
                   name='yarn.timeline-service.leveldb-timeline-store.ttl-interval-ms ',
                   value='60000')  # ms
 
-        putconfig(file='./configs/yarn-site.xml',
-                  name='yarn.timeline-service.hostname',
-                  value='${yarn.resourcemanager.hostname}')
+        # putconfig(file='./configs/yarn-site.xml',
+        #           name='yarn.timeline-service.hostname',
+        #           value='${yarn.resourcemanager.hostname}')
 
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.timeline-service.recovery.enabled',
