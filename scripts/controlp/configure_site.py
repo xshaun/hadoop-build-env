@@ -185,9 +185,9 @@ class Custom(Basis):
                   name='yarn.timeline-service.leveldb-timeline-store.ttl-interval-ms ',
                   value='60000')  # ms
 
-        # putconfig(file='./configs/yarn-site.xml',
-        #           name='yarn.timeline-service.hostname',
-        #           value='${yarn.resourcemanager.hostname}')
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.timeline-service.hostname',
+                  value='${yarn.resourcemanager.hostname}')
 
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.timeline-service.recovery.enabled',
