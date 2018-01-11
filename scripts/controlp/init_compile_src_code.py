@@ -21,7 +21,7 @@ class Custom(Basis):
             "cd %s" % (controlp_source_dir),
             "mvn clean",
             "mvn eclipse:eclipse -DdownloadSources=true -DdownloadJavadocs=true -DskipTests",
-            "mvn dependency-check:aggregate",
+            # "mvn dependency-check:aggregate", # TODO, fix hanging
             # "mvn package -Pdist,native,docs,src -DskipTests -Dtar" # -Pdocs will enforce to check the format correction of docs and some mvn errors will occur.
             "mvn clean install -Pdist,native -DskipTests -Dmaven.test.skip=true -Dtar"
         ])
