@@ -132,9 +132,14 @@ class Custom(Basis):
 
         # yarn
         putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.resource.detect-hardware-capabilities',
+                  value='true')
+
+        putconfig(file='./configs/yarn-site.xml',
                   name='yarn.scheduler.minimum-allocation-mb',
                   value='512')
 
+        # -- logs
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.hostname',
                   value=self.ys['roles']['resourcem']['hosts'][0])
@@ -155,7 +160,7 @@ class Custom(Basis):
                   name='yarn.nodemanager.remote-app-log-dir',
                   value=self.getClusterLogDir(subdir='remote-app-logs'))
 
-        # timeline service
+        # -- timeline service
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.timeline-service.enabled',
                   value='true')
