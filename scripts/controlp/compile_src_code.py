@@ -85,7 +85,7 @@ class Custom(Basis):
         for can in candidates:
             ins = " && ".join([
                 "cd %s" % (can),
-                "mvn clean install -Pdist,native -DskipTests -Dmaven.test.skip=true -Dtar"
+                "mvn clean install -Pdist,native -DskipTests -Dtar"
             ])
 
             instructions.append(ins)
