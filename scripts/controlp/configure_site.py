@@ -133,7 +133,7 @@ class Custom(Basis):
         # yarn
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.webapp.ui2.enable',
-                  value='true')
+                  value='false')
 
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.nodemanager.resource.detect-hardware-capabilities',
