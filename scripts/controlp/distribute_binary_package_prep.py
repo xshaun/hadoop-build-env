@@ -17,27 +17,13 @@ class Custom(Basis):
 
         cluster_script_dir = self.getClusterScriptDir()
         cluster_binary_dir = self.getClusterBinaryDir()
+        cluster_base_dir = self.getClusterBaseDir()
 
         #
         # clear cluster base dir
         # -------------------------------------------------------
         #
         ret = True
-        instructions = list()
-        for host in host_list:
-             ins = "ssh {0} {2}@{1} -tt 'sudo -S rm -rf {3}' ".format(
-                 ssh_option, host['ip'], host['usr'], self.getClusterBaseDir())
-
-             instructions.append((ins, host['pwd']))
-
-        ret = ret == Command.parallel(instructions)
-        if not ret:
-            return ret
-
-        #
-        # add permissions
-        # -------------------------------------------------------
-        #
         """ create folders """
         instructions = list()
         for host in host_list:
@@ -48,11 +34,24 @@ class Custom(Basis):
 
         ret = ret == Command.parallel(instructions)
 
+        instructions = list()
+        for host in host_list:
+             ins = "ssh {0} {2}@{1} -tt 'find {3} -type f | xargs rm -rf' ".format(
+                 ssh_option, host['ip'], host['usr'], cluster_base_dir)
+
+             instructions.append((ins, host['pwd']))
+
+        ret = ret == Command.parallel(instructions)
+
+        #
+        # add permissions
+        # -------------------------------------------------------
+        #
         """ chown """
         instructions = list()
         for host in host_list:
             ins = "ssh {0} {2}@{1} -tt 'sudo -S chown -R {2} {3}' ".format(
-                ssh_option, host['ip'], host['usr'], cluster_binary_dir)
+                ssh_option, host['ip'], host['usr'], cluster_base_dir)
 
             instructions.append((ins, host['pwd']))
 
@@ -62,7 +61,7 @@ class Custom(Basis):
         instructions = list()
         for host in host_list:
             ins = "ssh {0} {2}@{1} -tt 'sudo -S chmod -R 777 {3}' ".format(
-                ssh_option, host['ip'], host['usr'], cluster_binary_dir)
+                ssh_option, host['ip'], host['usr'], cluster_base_dir)
 
             instructions.append((ins, host['pwd']))
 
