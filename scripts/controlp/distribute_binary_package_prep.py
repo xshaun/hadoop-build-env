@@ -24,6 +24,19 @@ class Custom(Basis):
         # -------------------------------------------------------
         #
         ret = True
+        instructions = list()
+        for host in host_list:
+             ins = "ssh {0} {2}@{1} -tt 'sudo -S rm -rf {3}/*' ".format(
+                 ssh_option, host['ip'], host['usr'], cluster_base_dir)
+
+             instructions.append((ins, host['pwd']))
+
+        Command.parallel(instructions)
+
+        #
+        # add permissions
+        # -------------------------------------------------------
+        #
         """ create folders """
         instructions = list()
         for host in host_list:
@@ -32,21 +45,8 @@ class Custom(Basis):
 
             instructions.append((ins, host['pwd']))
 
-        ret = ret == Command.parallel(instructions)
+        Command.parallel(instructions)
 
-        instructions = list()
-        for host in host_list:
-             ins = "ssh {0} {2}@{1} -tt 'find {3} -type f | xargs rm -rf' ".format(
-                 ssh_option, host['ip'], host['usr'], cluster_base_dir)
-
-             instructions.append((ins, host['pwd']))
-
-        ret = ret == Command.parallel(instructions)
-
-        #
-        # add permissions
-        # -------------------------------------------------------
-        #
         """ chown """
         instructions = list()
         for host in host_list:
@@ -55,7 +55,7 @@ class Custom(Basis):
 
             instructions.append((ins, host['pwd']))
 
-        ret = ret == Command.parallel(instructions)
+        Command.parallel(instructions)
 
         """ chmod """
         instructions = list()
@@ -65,9 +65,7 @@ class Custom(Basis):
 
             instructions.append((ins, host['pwd']))
 
-        ret = ret == Command.parallel(instructions)
-        if not ret:
-            return ret
+        Command.parallel(instructions)
 
         #
         # create hdfs folders

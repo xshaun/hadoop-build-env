@@ -67,7 +67,8 @@ class Custom(Basis):
                     self.__parse(p))
                 instructions.append(ins)
 
-        return Command.parallel(instructions)
+        Command.parallel(instructions)
+        return True
 
 
 def trigger(ys):
