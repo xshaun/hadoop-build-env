@@ -21,8 +21,7 @@ class ParaIns(Thread):
         # TODO redirect stdout to logger
         sys.stdout
 
-        runins = ("source ~/.profile && "
-                  "source ./utilities/*.profile && %s") % (self.ins)
+        runins = ("source ./utilities/*.profile && %s") % (self.ins)
 
         try:
             process = None
@@ -64,8 +63,7 @@ class Command(object):
         # TODO redirect stdout to logger
         sys.stdout
 
-        ins = ("source ~/.profile && "
-               "source ./utilities/*.profile && %s") % (arg)
+        ins = ("source ./utilities/*.profile && %s") % (arg)
 
         process = subprocess.Popen(
             ins, stdout=sys.stdout, stderr=sys.stdout,
@@ -87,8 +85,7 @@ class Command(object):
         # TODO redirect stdout to logger
         sys.stdout
 
-        ins = ("source ~/.profile && "
-               "source ./utilities/*.profile && %s") % (arg)
+        ins = ("source ./utilities/*.profile && %s") % (arg)
 
         echopwd = subprocess.Popen(
             ['echo', pwd], stdout=subprocess.PIPE, shell=False)

@@ -69,17 +69,17 @@ fi
 # * pdsh set rsh to connect default,
 #       reset ssh and reconnect terminal
 #   -- pdsh -w localhost -l root uptime # test
-put_config_line --file ~/.profile --property 'PDSH_RCMD_TYPE' --value 'ssh' --prefix 'export'
+put_config_line --file './utilities/user.profile' --property 'PDSH_RCMD_TYPE' --value 'ssh' --prefix 'export'
 
 #
 # * set findbugs home
-put_config_line --file ~/.profile --property 'FINDBUGS_HOME' --value '/opt/findbugs-3.0.1' --prefix 'export'
+put_config_line --file './utilities/user.profile' --property 'FINDBUGS_HOME' --value '/opt/findbugs-3.0.1' --prefix 'export'
 
 #
 # * set maven opts
-put_config_line --file ~/.profile --property 'MAVEN_OPTS' --value '"-Xms512m -Xmx2048m"' --prefix 'export'
-put_config_line --file ~/.profile --property 'JAVA_TOOL_OPTIONS' --value '"-Xms512m -Xmx2048m -XX:+UseConcMarkSweepGC -XX:-UseGCOverheadLimit"' --prefix 'export'
-put_config_line --file ~/.profile --property 'JAVA_OPTS' --value '"-Xms512m -Xmx4096m"' --prefix 'export'
+put_config_line --file './utilities/user.profile' --property 'MAVEN_OPTS' --value '"-Xms512m -Xmx2048m"' --prefix 'export'
+put_config_line --file './utilities/user.profile' --property 'JAVA_TOOL_OPTIONS' --value '"-Xms512m -Xmx2048m -XX:+UseConcMarkSweepGC -XX:-UseGCOverheadLimit"' --prefix 'export'
+put_config_line --file './utilities/user.profile' --property 'JAVA_OPTS' --value '"-Xms512m -Xmx4096m"' --prefix 'export'
 
 # ----------------------------
 # Clean and Upgrade libs:
