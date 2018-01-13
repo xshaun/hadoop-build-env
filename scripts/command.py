@@ -24,6 +24,7 @@ class ParaIns(Thread):
         runins = ("source ./utilities/*.profile && %s") % (self.ins)
 
         try:
+            echopwd = None
             process = None
 
             if self.pwd is None:
@@ -47,6 +48,12 @@ class ParaIns(Thread):
         except Exception as e:
             self.retcode = -1000
             self.ret = False
+
+        finally:
+            if echopwd is not None:
+                echopwd.kill()
+            if process is not None:
+                process.kill()
 
         logger.info("Ins retcode is: %d" % (self.retcode))
         logger.info('Finished Ins : ' + self.ins)
@@ -76,6 +83,8 @@ class Command(object):
         retcode = process.returncode
         logger.info("command.do.returncode: %d" % (retcode))
 
+        process.kill()
+
         return retcode
 
     @staticmethod
@@ -99,6 +108,9 @@ class Command(object):
 
         retcode = process.returncode
         logger.info("command.do.returncode: %d" % (retcode))
+
+        echopwd.kill()
+        process.kill()
 
         return retcode
 
