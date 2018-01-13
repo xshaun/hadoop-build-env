@@ -21,7 +21,7 @@ class ParaIns(Thread):
     def run(self):
         logger.info('Executing Ins : ' + self.ins)
 
-        runins = ("source ./utilities/*.profile && %s") % (self.ins)
+        runins = ("source ./utilities/user.profile && %s") % (self.ins)
 
         try:
             echopwd = None
@@ -68,7 +68,7 @@ class Command(object):
     def do(arg):
         logger.info('command.do: ' + arg)
 
-        ins = ("source ./utilities/*.profile && %s") % (arg)
+        ins = ("source ./utilities/user.profile && %s") % (arg)
 
         process = subprocess.Popen(
             ins, stdout=sys.stdout, stderr=sys.stdout,
@@ -87,7 +87,7 @@ class Command(object):
     def sudo(arg, pwd):
         logger.info('command.sudo: ' + arg)
 
-        ins = ("source ./utilities/*.profile && %s") % (arg)
+        ins = ("source ./utilities/user.profile && %s") % (arg)
 
         echopwd = subprocess.Popen(
             ['echo', pwd], stdout=subprocess.PIPE, shell=False)

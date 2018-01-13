@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-source ./utilities/*.profile
+source ./utilities/functions.profile
 
 # Recommend trusty (14.04LTS)
 
