@@ -5,6 +5,9 @@ from threading import Thread
 import subprocess
 import sys
 
+# TODO redirect stdout to logger
+#sys.stdout=open('/tmp/hbe/out.log','w+')
+sys.stdout
 
 class ParaIns(Thread):
 
@@ -17,9 +20,6 @@ class ParaIns(Thread):
 
     def run(self):
         logger.info('Executing Ins : ' + self.ins)
-
-        # TODO redirect stdout to logger
-        sys.stdout
 
         runins = ("source ./utilities/*.profile && %s") % (self.ins)
 
@@ -37,7 +37,7 @@ class ParaIns(Thread):
                     ['echo', self.pwd], stdout=subprocess.PIPE, shell=False)
 
                 process = subprocess.Popen(
-                    runins, stdin=echopwd.stdout, stdout=sys.stdout,
+                    runins, stdin=echopwd.stdout, stdout=sys.stdout, stderr=sys.stdout,
                     shell=True, cwd='./', executable='/bin/bash')
 
             process.wait()
@@ -52,6 +52,7 @@ class ParaIns(Thread):
         finally:
             if echopwd is not None:
                 echopwd.kill()
+
             if process is not None:
                 process.kill()
 
@@ -67,9 +68,6 @@ class Command(object):
     def do(arg):
         logger.info('command.do: ' + arg)
 
-        # TODO redirect stdout to logger
-        sys.stdout
-
         ins = ("source ./utilities/*.profile && %s") % (arg)
 
         process = subprocess.Popen(
@@ -77,8 +75,6 @@ class Command(object):
             shell=True, cwd='./', executable='/bin/bash')
 
         process.wait()
-        # process_output, = process.communicate()
-        # logger.info("command.do.stdout: \n %s" % (process_output))
 
         retcode = process.returncode
         logger.info("command.do.returncode: %d" % (retcode))
@@ -91,27 +87,21 @@ class Command(object):
     def sudo(arg, pwd):
         logger.info('command.sudo: ' + arg)
 
-        # TODO redirect stdout to logger
-        sys.stdout
-
         ins = ("source ./utilities/*.profile && %s") % (arg)
 
         echopwd = subprocess.Popen(
             ['echo', pwd], stdout=subprocess.PIPE, shell=False)
         process = subprocess.Popen(
-            ins, stdin=echopwd.stdout, stdout=sys.stdout,
+            ins, stdin=echopwd.stdout, stdout=sys.stdout, stderr=sys.stdout,
             shell=True, cwd='./', executable='/bin/bash')
 
         process.wait()
-        # process_output, = process.communicate()
-        # logger.info("command.do.stdout: \n %s" % (process_output))
-
         retcode = process.returncode
-        logger.info("command.do.returncode: %d" % (retcode))
 
         echopwd.kill()
         process.kill()
 
+        logger.info("command.do.returncode: %d" % (retcode))
         return retcode
 
     @staticmethod
@@ -119,8 +109,9 @@ class Command(object):
         threads = list()
         for ins in args:
             t = ParaIns(ins[0], ins[1]) if isinstance(ins, tuple) else ParaIns(ins)
-            t.start()
             threads.append(t)
+            t.start()
+            t.join() # TODO, fix terminal insanity
 
         for t in threads:
             t.join()
