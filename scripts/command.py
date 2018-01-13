@@ -2,12 +2,34 @@
 
 from scripts.basis import logger
 from threading import Thread
+import logging
 import subprocess
 import sys
 
-# TODO redirect stdout to logger
-#sys.stdout=open('/tmp/hbe/out.log','w+')
-sys.stdout
+# #
+# redirect stdout, stderr to logger
+#
+class StreamToLogger(object):
+    """
+    Fake file-like stream object that redirects writes to a logger instance.
+    """
+    def __init__(self, logger, log_level=logging.INFO):
+        self.logger = logger
+        self.log_level = log_level
+        self.linebuf = ''
+
+    def write(self, buf):
+        for line in buf.rstrip().splitlines():
+            self.logger.log(self.log_level, line.rstrip())
+
+    def flush(self):
+        pass
+#
+#  reset stdout, stderr
+#
+#sys.stdout=StreamToLogger(logger, logging.INFO)
+#sys.stderr=StreamToLogger(logger, logging.ERROR)
+# #
 
 class ParaIns(Thread):
 

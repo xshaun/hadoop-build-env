@@ -17,6 +17,7 @@ class Custom(Basis):
 
         cluster_script_dir = self.getClusterScriptDir()
         cluster_binary_dir = self.getClusterBinaryDir()
+        cluster_hdfs_dir = self.getClusterHdfsDir()
         cluster_base_dir = self.getClusterBaseDir()
 
         #
@@ -26,8 +27,8 @@ class Custom(Basis):
         ret = True
         instructions = list()
         for host in host_list:
-             ins = "ssh {0} {2}@{1} -tt 'sudo -S rm -rf {3}/*' ".format(
-                 ssh_option, host['ip'], host['usr'], cluster_base_dir)
+             ins = "ssh {0} {2}@{1} -tt 'sudo -S rm -rf `ls {3}/* | egrep -v {4}` ' ".format(
+                 ssh_option, host['ip'], host['usr'], cluster_base_dir, cluster_hdfs_dir)
 
              instructions.append((ins, host['pwd']))
 
