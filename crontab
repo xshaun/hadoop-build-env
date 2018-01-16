@@ -6,7 +6,7 @@ echo "step: create dirs"
 mkdir -p /tmp/hbe/
 
 echo "step: initdeploy"
-hbe initdeploy 1>/tmp/hbe/stdout.txt 2>/tmp/hbe/stderr.txt
+hbe initdeploy 0>/tmp/hbe/stdout.txt 1>/tmp/hbe/stdout.txt 2>/tmp/hbe/stdout.txt
 
 echo "step: submit applications"
 hbe submit \
