@@ -330,7 +330,7 @@ class Custom(Basis):
         ]
 
         ins = " && ".join(map(lambda x:
-                              "put_config_line --file %s --property %s --value %s --prefix 'export' " %
+                              "put_config_line --file %s --property %s --value %s " %
                               (hadoop_metrics_file, x[0], x[1]), envlist))
 
         retcode = Command.do(ins)
