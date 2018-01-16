@@ -114,6 +114,12 @@ roles:
     'dir': 'dn' # <-*
 
 # [$]
+# Defines gmond's ip:port for hadoop-metrics2.properties
+#
+gmond:
+    '192.168.7.81:8655'
+
+# [$]
 # Defines concrete content/script(s) in each step that is
 # minimum unit of scheduling.
 #

@@ -300,6 +300,48 @@ class Custom(Basis):
             return False
 
         #
+        # configure ./etc/hadoop/hadoop-metrics2.properties
+        #
+        shutil.copy2('./configs/default/hadoop-metrics2.properties',
+                     './configs/hadoop-metrics2.properties')
+        hadoop_metrics_file = './configs/hadoop-metrics2.properties'
+
+        envlist = [
+            ['datanode.sink.file.filename', 'datanode-metrics.out'],
+            ['resourcemanager.sink.file.filename', 'resourcemanager-metrics.out'],
+            ['nodemanager.sink.file.filename', 'nodemanager-metrics.out'],
+            ['mrappmaster.sink.file.filename', 'mrappmaster-metrics.out'],
+            ['jobhistoryserver.sink.file.filename', 'jobhistoryserver-metrics.out'],
+            ['nodemanager.sink.file_jvm.class', 'org.apache.hadoop.metrics2.sink.FileSink'],
+            ['nodemanager.sink.file_jvm.context', 'jvm'],
+            ['nodemanager.sink.file_jvm.filename', 'nodemanager-jvm-metrics.out'],
+            ['nodemanager.sink.file_mapred.class', 'org.apache.hadoop.metrics2.sink.FileSink'],
+            ['nodemanager.sink.file_mapred.context', 'mapred'],
+            ['nodemanager.sink.file_mapred.filename', 'nodemanager-mapred-metrics.out'],
+            ['*.sink.ganglia.class', 'org.apache.hadoop.metrics2.sink.ganglia.GangliaSink31'],
+            ['*.sink.ganglia.period', '10'],
+            ['*.sink.ganglia.supportsparse', 'true'],
+            ['*.sink.ganglia.slope', 'jvm.metrics.gcCount=zero,jvm.metrics.memHeapUsedM=both'],
+            ['*.sink.ganglia.dmax', 'jvm.metrics.threadsBlocked=70,jvm.metrics.memHeapUsedM=40'],
+            ['resourcemanager.sink.ganglia.servers', self.ys['gmond']],
+            ['nodemanager.sink.ganglia.servers', self.ys['gmond']],
+            ['mrappmaster.sink.ganglia.servers', self.ys['gmond']],
+            ['jobhistoryserver.sink.ganglia.servers', self.ys['gmond']],
+        ]
+
+        ins = " && ".join(map(lambda x:
+                              "put_config_line --file %s --property %s --value %s --prefix 'export' " %
+                              (hadoop_metrics_file, x[0], x[1]), envlist))
+
+        retcode = Command.do(ins)
+
+        logger.info("ins: %s; retcode: %d." % (ins, retcode))
+
+        if retcode != 0:
+            logger.error(ins)
+            return False
+
+        #
         # sync configures
         #
         host_list = self.getHosts()
@@ -320,7 +362,8 @@ class Custom(Basis):
         """ sync files to all nodes """
         hbe_configs = './configs/hdfs-site.xml ./configs/mapred-site.xml \
                            ./configs/yarn-site.xml ./configs/core-site.xml \
-                           ./configs/workers ./configs/hadoop-env.sh'
+                           ./configs/workers ./configs/hadoop-env.sh \
+                           ./configs/hadoop-metrics2.properties'
 
         instructions = list()
         for host in host_list:
