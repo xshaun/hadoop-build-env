@@ -50,6 +50,10 @@ class Custom(Basis):
         sudo ln -s /usr/share/ganglia-webfrontend/ /var/www/html/ganglia
         sudo /etc/init.d/apache2 start
 
+        sudo chown -R nobody /storage1/ganglia/
+        sudo chown -R ganglia /storage1/ganglia/
+        sudo chmod -R 777 /storage1/ganglia/
+
         客户端
         修改/etc/ganglia/gmond.conf中
             cluster.name
