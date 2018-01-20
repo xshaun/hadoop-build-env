@@ -23,4 +23,5 @@ configs/yarn-site.xml
 configs/yarn-rm-site.xml
 configs/mapred-site.xml
 configs/hadoop-env.sh
+configs/hadoop-metrics2.properties
 
