@@ -146,7 +146,7 @@ class Custom(Basis):
         # yarn->webapp
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.webapp.rrds.clusterdir',
-                  value='/storage1/ganglia/rrds/ACT-Cars-Cluster')  # user change it as need
+                  value=self.ys['gmetad']['rrds']['dir'])
 
         # -- logs
         putconfig(file='./configs/yarn-site.xml',
@@ -310,14 +310,15 @@ class Custom(Basis):
         shutil.copy2('./configs/default/hadoop-metrics2.properties',
                      './configs/hadoop-metrics2.properties')
         hadoop_metrics_file = './configs/hadoop-metrics2.properties'
+        gmond_host = self.ys['gmond']['host']
 
         envlist = [
-                # ['jobhistoryserver.sink.ganglia.servers', self.ys['gmond']],
-                # ['mrappmaster.sink.ganglia.servers', self.ys['gmond']],
-                ['nodemanager.sink.ganglia.servers', self.ys['gmond']],
-                ['resourcemanager.sink.ganglia.servers', self.ys['gmond']],
-                # ['datanode.sink.ganglia.servers', self.ys['gmond']],
-                # ['namenode.sink.ganglia.servers', self.ys['gmond']],
+                # ['jobhistoryserver.sink.ganglia.servers', gmond_host],
+                # ['mrappmaster.sink.ganglia.servers', gmond_host],
+                ['nodemanager.sink.ganglia.servers', gmond_host],
+                ['resourcemanager.sink.ganglia.servers', gmond_host],
+                # ['datanode.sink.ganglia.servers', gmond_host],
+                # ['namenode.sink.ganglia.servers', gmond_host],
                 # ['datanode.sink.file.filename', 'datanode-metrics.out'],
                 ['resourcemanager.sink.file.filename', 'resourcemanager-metrics.out'],
                 ['nodemanager.sink.file.filename', 'nodemanager-metrics.out'],

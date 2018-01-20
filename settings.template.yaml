@@ -117,7 +117,11 @@ roles:
 # Defines gmond's ip:port for hadoop-metrics2.properties
 #
 gmond:
-    '192.168.7.81:8655'
+    host: '192.168.7.81:8655'
+
+gmetad:
+    rrds: 
+        dir: '/var/lib/ganglia/rrds' # change it as need and redirect into one cluster rrds dir
 
 # [$]
 # Defines concrete content/script(s) in each step that is
