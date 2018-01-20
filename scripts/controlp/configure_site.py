@@ -143,6 +143,11 @@ class Custom(Basis):
                   name='yarn.scheduler.minimum-allocation-mb',
                   value='512')
 
+        # yarn->webapp
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.resourcemanager.webapp.rrds.clusterdir',
+                  value='/storage1/ganglia/rrds/ACT-Cars-Cluster')  # user change it as need
+
         # -- logs
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.hostname',
