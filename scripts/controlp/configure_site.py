@@ -145,7 +145,7 @@ class Custom(Basis):
 
         # yarn->webapp
         putconfig(file='./configs/yarn-site.xml',
-                  name='yarn.resourcemanager.webapp.rrds.clusterdir',
+                  name='yarn.resourcemanager.webapp.rrds.dir.cluster',
                   value=self.ys['gmetad']['rrds']['dir'])
 
         # -- logs
