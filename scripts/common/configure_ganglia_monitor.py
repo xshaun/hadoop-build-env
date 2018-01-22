@@ -61,6 +61,9 @@ class Custom(Basis):
             udp_send_channel 中的IP和端口 （此端口对应远程机的udp_recv_channel）
 
         sudo /etc/init.d/ganglia-monitor restart
+
+
+        测试加压：`for j in {1..100}; do for i in {1..10000000}; do echo i>/dev/null; done; done;`&
         """
 
 def trigger(ys):
