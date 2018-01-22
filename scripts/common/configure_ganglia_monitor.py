@@ -56,6 +56,7 @@ class Custom(Basis):
 
         客户端
         修改/etc/ganglia/gmond.conf中
+            send_metadata_interval = 15
             cluster.name
             udp_send_channel 中的IP和端口 （此端口对应远程机的udp_recv_channel）
 
