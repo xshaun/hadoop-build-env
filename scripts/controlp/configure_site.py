@@ -240,6 +240,11 @@ class Custom(Basis):
                   name='yarn.nodemanager.amrmproxy.realrm.scheduler.address',
                   value="%s:8030" % self.ys['roles']['resourcem']['hosts'][0],
                   description="SUNXY-ROSE: targets to help AMRMProxy find real RM scheduler address")
+        # ROSE
+         putconfig(file='./configs/yarn-site.xml',
+                 name='yarn.rose.enabled',
+                 value='true',
+                 description="SUNXY-ROSE: targets to manage opportunistic containers as an overselling method")
 
         # on RM, must change it into rm-ip:8030
         shutil.copy2('./configs/yarn-site.xml',
