@@ -3,7 +3,6 @@
 from scripts.basis import Basis
 from scripts.basis import logger
 from scripts.command import Command
-import copy
 import os
 
 
@@ -40,9 +39,7 @@ class Custom(Basis):
         rm_list = self.getHosts(roles=['resourcem', ])
 
         # -- step1
-        params = copy.deepcopy(self.ys['params'])
-        if params is None:
-            params = []
+        params = self.getParams()
 
         if len(params) == 0:
             params.append('hdfs')

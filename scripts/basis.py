@@ -82,6 +82,13 @@ class Basis(object):
         logger.info("--> one step is end. status is %s <--" % self.status)
         return
 
+    def getParams(self):
+        params = copy.deepcopy(self.ys['params'])
+        if params is None:
+            params = []
+
+        return params
+
     def getHosts(self, roles=['resourcem', 'nodem', 'namen', 'datan']):
         """
          -> resource manager

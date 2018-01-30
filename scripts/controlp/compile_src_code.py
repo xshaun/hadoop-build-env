@@ -74,9 +74,7 @@ class Custom(Basis):
 
         controlp_source_dir = self.getControlPSourceDir()
 
-        params = copy.deepcopy(self.ys['params'])
-        if params is None:
-            params = []
+        params = self.getParams()
 
         candidates = list()
         for p in params:

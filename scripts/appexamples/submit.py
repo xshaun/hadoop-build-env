@@ -16,9 +16,7 @@ class Custom(Basis):
 
         slaves_list = self.getSlaveHosts()
 
-        params = copy.deepcopy(self.ys['params'])
-        if params is None:
-            params = []
+        params = self.getParams()
 
         instructions = list()
 

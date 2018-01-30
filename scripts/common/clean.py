@@ -23,9 +23,7 @@ class Custom(Basis):
         host_list = self.getHosts()
         cluster_script_dir = self.getClusterScriptDir()
 
-        params = copy.deepcopy(self.ys['params'])
-        if params is None:
-            params = []
+        params = self.getParams()
 
         if len(params) == 0:
             params.append('log')

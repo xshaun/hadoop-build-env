@@ -101,9 +101,7 @@ class Custom(Basis):
             return ret
 
         """ sync binary files """
-        params = copy.deepcopy(self.ys['params'])
-        if params is None:
-            params = []
+        params = self.getParams()
 
         instructions = list()
         if len(params) > 0:
