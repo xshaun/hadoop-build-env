@@ -169,6 +169,23 @@ class Custom(Basis):
                   name='yarn.nodemanager.remote-app-log-dir',
                   value=self.getClusterLogDir(subdir='remote-app-logs'))
 
+        # jobhistory
+        putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.jobhistory.address',
+                  value="%s:10020" % self.ys['roles']['resourcem']['hosts'][0]))
+
+        putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.jobhistory.webapp.address',
+                  value="%s:19888" % self.ys['roles']['resourcem']['hosts'][0]))
+
+        putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.jobhistory.webapp.https.address',
+                  value="%s:19890" % self.ys['roles']['resourcem']['hosts'][0]))
+
+        putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.jobhistory.admin.address',
+                  value="%s:10033" % self.ys['roles']['resourcem']['hosts'][0]))
+
         # -- timeline service
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.timeline-service.enabled',

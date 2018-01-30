@@ -50,7 +50,8 @@ class Custom(Basis):
             params.append('timelineserver')
 
         # -- step2
-        EACH_HOST_INS = ['jobhistory', ]
+        EACH_HOST_INS = []  #['jobhistory', ]
+
         instructions = list()
 
         for p in params:
