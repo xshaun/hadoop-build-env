@@ -101,14 +101,18 @@ class Custom(Basis):
             return ret
 
         """ sync binary files """
+        params = copy.deepcopy(self.ys['params'])
+        if params is None:
+            params = []
+
         instructions = list()
-        if len(self.ys['params']) > 0:
+        if len(params) > 0:
             """
             # with params
             """
             candidates = list()
 
-            for p in self.ys['params']:
+            for p in params:
                 candidates.append(self.__parse(p))
 
             for can in candidates:

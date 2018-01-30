@@ -21,16 +21,18 @@ class Custom(Basis):
         ssh_option = '-o StrictHostKeyChecking=no -o ConnectTimeout=600'
 
         host_list = self.getHosts()
-
         cluster_script_dir = self.getClusterScriptDir()
 
-        instructions = list()
+        params = copy.deepcopy(self.ys['params'])
+        if params is None:
+            params = []
 
-        params = self.ys['params']
         if len(params) == 0:
             params.append('log')
 
-        for p in self.ys['params']:
+        instructions = list()
+
+        for p in params:
             remote_ins = self.__parse(p)
 
             for host in host_list:

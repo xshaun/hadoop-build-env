@@ -16,8 +16,13 @@ class Custom(Basis):
 
         slaves_list = self.getSlaveHosts()
 
+        params = copy.deepcopy(self.ys['params'])
+        if params is None:
+            params = []
+
         instructions = list()
-        for p in self.ys['params']:
+
+        for p in params:
             host = choice(slaves_list)
 
             #!!! donot use -tt option
