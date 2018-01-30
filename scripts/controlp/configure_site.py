@@ -232,6 +232,14 @@ class Custom(Basis):
                   name='yarn.nodemanager.opportunistic-containers-max-queue-length',
                   value='20')
 
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.container-monitor.interval-ms',
+                  value='3000')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.health-checker.interval-ms',
+                  value='60000')
+
         # support distributed scheduler
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.nodemanager.distributed-scheduling.enabled',
