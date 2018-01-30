@@ -41,7 +41,8 @@ class Custom(Basis):
 
         # -- step1
         params = copy.deepcopy(self.ys['params'])
-        candidates = list()
+        if params is None:
+            params = []
 
         if len(params) == 0:
             params.append('hdfs')
@@ -61,6 +62,9 @@ class Custom(Basis):
                 tlist = rm_list
 
             for host in tlist:
+                if self.__parse(p) is None:
+                    continue
+
                 #!!! donot use -tt option
                 ins = "ssh {0} {2}@{1} -T '{3}' ".format(
                     ssh_option, host['ip'], host['usr'],
