@@ -192,6 +192,7 @@ stages:
     - 'cirp'
     - 'caug'
     - 'ccbmo'
+    - 'cclean'
     - 'nnffs'
 
   'initcontrolp':
@@ -207,6 +208,7 @@ stages:
     - 'cirp'
     - 'caug'
     - 'ccbmo'
+    - 'cclean'
 
   'initdeploy':
     - 'cpicsc'
@@ -217,6 +219,7 @@ stages:
     - 'cirp'
     - 'caug'
     - 'ccbmo'
+    - 'cclean'
     - 'nnffs'
     - 'cstart'
 
@@ -228,6 +231,7 @@ stages:
     - 'cpcs'
     - 'caug'
     - 'ccbmo'
+    - 'cclean'
     - 'cstart'
 
   'compile':

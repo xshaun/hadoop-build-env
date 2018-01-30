@@ -26,6 +26,10 @@ class Custom(Basis):
 
         instructions = list()
 
+        params = self.ys['params']
+        if len(params) == 0:
+            params.append('log')
+
         for p in self.ys['params']:
             remote_ins = self.__parse(p)
 
