@@ -9,7 +9,7 @@ class Custom(Basis):
 
     def __parse(self, param):
         if 'log' == param:
-            return "cd {0} && for l in `ls ./*.log`; do echo \'\' > $l ; done".format(
+            return "cd {0} && rm -rf ./userlogs && rm -rf ./*.log.* && rm -rf ./*.out.* && for l in `ls ./*.out`; do echo \'\' > $l ; done && for l in `ls ./*.log`; do echo \'\' > $l ; done".format(
                 self.getClusterLogDir())
 
         # TODO, add more
