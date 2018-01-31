@@ -50,6 +50,12 @@ class Custom(Basis):
         if 'ysrm' == param:  # yarn-server-resourcemanager
             return [YARN_SERVER_DIR_FOR.format('hadoop-yarn-server-resourcemanager'), YARN_DESTDIR]
 
+        if 'hadoop-yarn-server-nodemanager' == param:  # yarn-server-nodemanager
+            return [YARN_SERVER_DIR_FOR.format('hadoop-yarn-server-nodemanager'), YARN_DESTDIR]
+
+        if 'hadoop-yarn-server-resourcemanager' == param:  # yarn-server-resourcemanager
+            return [YARN_SERVER_DIR_FOR.format('hadoop-yarn-server-resourcemanager'), YARN_DESTDIR]
+
         if 'hadoop-mapreduce-client-app' == param:
             return [MAPREDUCE_CLIENT_DIR_FOR.format('hadoop-mapreduce-client-app'), MAPREDUCE_DESTDIR]
 
