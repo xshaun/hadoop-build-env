@@ -77,8 +77,7 @@ class Custom(Basis):
         instructions = list()
 
         for host in host_list:
-            #!!! donot use -tt option
-            ins = "ssh {0} {2}@{1} -T 'rm -rf /tmp/hsperfdata*'".format(
+            ins = "ssh {0} {2}@{1} -tt 'sudo -S rm -rf /tmp/hsperfdata*'".format(
                 ssh_option, host['ip'], host['usr'])
 
             instructions.append((ins, host['pwd']))
