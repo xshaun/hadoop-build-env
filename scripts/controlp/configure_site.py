@@ -132,6 +132,10 @@ class Custom(Basis):
 
         # yarn
         putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.resourcemanager.hostname',
+                  value=self.ys['roles']['resourcem']['hosts'][0])
+
+        putconfig(file='./configs/yarn-site.xml',
                   name='yarn.webapp.ui2.enable',
                   value='false')
 
@@ -143,15 +147,15 @@ class Custom(Basis):
                   name='yarn.scheduler.minimum-allocation-mb',
                   value='512')
 
-        # yarn->webapp
+        # ROSE: yarn->webapp
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.webapp.rrds.dir.cluster',
                   value=self.ys['gmetad']['rrds']['dir'])
 
-        # -- logs
+        # -- logs and tmp
         putconfig(file='./configs/yarn-site.xml',
-                  name='yarn.resourcemanager.hostname',
-                  value=self.ys['roles']['resourcem']['hosts'][0])
+                  name='hadoop.tmp.dir',
+                  value=self.getClusterTmpDir())
 
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.nodemanager.delete.debug-delay-sec',
@@ -223,7 +227,7 @@ class Custom(Basis):
                   name='yarn.timeline-service.ttl-ms',
                   value='86400000')  # 86400000ms = 1day
 
-        # support opportunistic container scheduler
+        # yarn-support opportunistic container scheduler
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.opportunistic-container-allocation.enabled',
                   value='true')
@@ -240,7 +244,7 @@ class Custom(Basis):
                   name='yarn.nodemanager.health-checker.interval-ms',
                   value='60000')
 
-        # support distributed scheduler
+        # yarn-support distributed scheduler
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.nodemanager.distributed-scheduling.enabled',
                   value='true')
@@ -271,7 +275,7 @@ class Custom(Basis):
                  value='true',
                  description="SUNXY-ROSE: targets to manage opportunistic containers as an overselling method")
 
-        # on RM, must change it into rm-ip:8030
+        # ROSE: support distributed scheduler: on RM, must change it into rm-ip:8030
         shutil.copy2('./configs/yarn-site.xml',
                      './configs/yarn-rm-site.xml')
 

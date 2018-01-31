@@ -9,8 +9,12 @@ class Custom(Basis):
 
     def __parse(self, param):
         if 'log' == param:
-            return "cd {0} && rm -rf ./userlogs && rm -rf ./*.log.* && rm -rf ./*.out.* && for l in `ls ./*.out`; do echo \'\' > $l ; done && for l in `ls ./*.log`; do echo \'\' > $l ; done".format(
+            return "mkdir -p {0} && cd {0} && rm -rf ./userlogs && rm -rf ./*.log.* && rm -rf ./*.out.* && for l in `ls ./*.out`; do echo \'\' > $l ; done && for l in `ls ./*.log`; do echo \'\' > $l ; done".format(
                 self.getClusterLogDir())
+
+        if 'tmp' == param:
+            return "mkdir -p {0} && cd {0} && rm -rf ./*".format(
+                self.getClusterTmpDir())
 
         # TODO, add more
         return
@@ -27,6 +31,7 @@ class Custom(Basis):
 
         if len(params) == 0:
             params.append('log')
+            params.append('tmp')
 
         instructions = list()
 

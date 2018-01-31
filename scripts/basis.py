@@ -179,6 +179,10 @@ class Basis(object):
         return self.getClusterBaseDir(subdir=os.path.join(
             'logs', subdir))
 
+    def getClusterTmpDir(self, subdir=''):
+        return self.getClusterBaseDir(subdir=os.path.join(
+            'tmp', subdir))
+
     def getClusterHdfsDir(self, subdir=''):
 
         return self.getClusterBaseDir(subdir=os.path.join(
