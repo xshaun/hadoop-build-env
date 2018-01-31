@@ -181,7 +181,7 @@ class Basis(object):
 
     def getClusterTmpDir(self, subdir=''):
         return self.getClusterBaseDir(subdir=os.path.join(
-            'tmp', subdir))
+            'tmp/hadoop-${user.name}', subdir))
 
     def getClusterHdfsDir(self, subdir=''):
 
