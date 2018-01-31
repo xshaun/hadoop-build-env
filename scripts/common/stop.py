@@ -69,7 +69,22 @@ class Custom(Basis):
                     self.__parse(p))
                 instructions.append(ins)
 
+        ret = Command.parallel(instructions)
+        if not ret:
+            return ret
+
+        # -- step3 : remove 'process information unavailable'
+        instructions = list()
+
+        for host in host_list:
+            #!!! donot use -tt option
+            ins = "ssh {0} {2}@{1} -T 'rm -rf /tmp/hsperfdata*'".format(
+                ssh_option, host['ip'], host['usr'])
+
+            instructions.append(ins)
+
         return Command.parallel(instructions)
+
 
 def trigger(ys):
     e = Custom(ys, attempts=3, interval=3, auto=True)
