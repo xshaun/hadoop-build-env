@@ -81,7 +81,7 @@ class Custom(Basis):
             ins = "ssh {0} {2}@{1} -T 'rm -rf /tmp/hsperfdata*'".format(
                 ssh_option, host['ip'], host['usr'])
 
-            instructions.append(ins, host['pwd'])
+            instructions.append((ins, host['pwd']))
 
         return Command.parallel(instructions)
 
