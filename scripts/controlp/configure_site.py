@@ -153,7 +153,7 @@ class Custom(Basis):
                   value=self.ys['gmetad']['rrds']['dir'])
 
         # -- logs and tmp
-        putconfig(file='./configs/yarn-site.xml',
+        putconfig(file='./configs/core-site.xml',
                   name='hadoop.tmp.dir',
                   value=self.getClusterTmpDir())
 
