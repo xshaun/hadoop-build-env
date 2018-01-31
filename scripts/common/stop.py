@@ -13,19 +13,19 @@ class Custom(Basis):
 
         if 'hdfs' == param:
             return os.path.join(
-                cluster_binary_dir, 'sbin/stop-dfs.sh')
+                cluster_binary_dir, '`sbin/stop-dfs.sh`')
 
         if 'yarn' == param:
             return os.path.join(
-                cluster_binary_dir, 'sbin/stop-yarn.sh')
+                cluster_binary_dir, '`sbin/stop-yarn.sh`')
 
         if 'jobhistory' == param:
             return os.path.join(
-                cluster_binary_dir, 'bin/mapred --daemon stop historyserver')
+                cluster_binary_dir, '`bin/mapred --daemon stop historyserver`')
 
         if 'timelineserver' == param:
             return os.path.join(
-                cluster_binary_dir, 'bin/yarn --daemon stop timelineserver')
+                cluster_binary_dir, '`bin/yarn --daemon stop timelineserver`')
 
         # TODO, add more
         return
@@ -88,5 +88,4 @@ class Custom(Basis):
 
 def trigger(ys):
     e = Custom(ys, attempts=3, interval=3, auto=True)
-    # return e.status
-    return True
+    return e.status
