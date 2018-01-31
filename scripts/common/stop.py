@@ -64,7 +64,7 @@ class Custom(Basis):
                     continue
 
                 #!!! donot use -tt option
-                ins = "ssh {0} {2}@{1} -T '`{3}`' ".format(
+                ins = "ssh {0} {2}@{1} -T '{3}' ".format(
                     ssh_option, host['ip'], host['usr'],
                     self.__parse(p))
                 instructions.append(ins)
