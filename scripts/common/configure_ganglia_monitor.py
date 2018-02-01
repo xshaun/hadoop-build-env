@@ -19,12 +19,12 @@ class Custom(Basis):
         instructions = list()
 
         for host in host_list:
-            ins = "ssh {0} {2}@{1} -tt 'sudo -S apt-get install ganglia-monitor ganglia-modules-linux ganglia-monitor-python'".format(
+            ins = "ssh {0} {2}@{1} -tt 'sudo -S apt-get install -y collectd-core ganglia-modules-linux ganglia-monitor ganglia-monitor-python libganglia1-dev libgmetric4j-java libjmxetric-java'".format(
                 ssh_option, host['ip'], host['usr'])
             instructions.append((ins, host['pwd']))
 
         for host in gmetad_list:
-            ins = "ssh {0} {2}@{1} -tt 'sudo -S apt-get install gmetad ganglia-webfrontend rrdtool'".format(
+            ins = "ssh {0} {2}@{1} -tt 'sudo -S apt-get install -y gmetad ganglia-webfrontend rrdtool'".format(
                 ssh_option, host['ip'], host['usr'])
             instructions.append((ins, host['pwd']))
 
