@@ -62,6 +62,17 @@ class Custom(Basis):
 
         sudo /etc/init.d/ganglia-monitor restart
 
+        配置
+        rm -rf /storage1/ganglia/rrds/*
+
+        pdsh -R ssh -w super[07-12] 'scp super12:/etc/ganglia/conf.d/diskstat.pyconf /etc/ganglia/conf.d/diskstat.pyconf'
+        pdsh -R ssh -w super[07-12] 'scp super12:/etc/ganglia/gmond.conf /etc/ganglia/gmond.conf'
+
+        /etc/init.d/gmetad stop
+        pdsh -R ssh -w super[07-12] '/etc/init.d/ganglia-monitor stop'
+
+        pdsh -R ssh -w super[07-12] '/etc/init.d/ganglia-monitor start'
+        /etc/init.d/gmetad start
 
         测试加压：`for j in {1..100}; do for i in {1..10000000}; do echo i>/dev/null; done; done;`&
         """
