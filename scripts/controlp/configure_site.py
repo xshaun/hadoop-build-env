@@ -193,7 +193,7 @@ class Custom(Basis):
         # -- timeline service
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.timeline-service.enabled',
-                  value='true')
+                  value='false') # todo. configue timeline
 
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.timeline-service.version',
