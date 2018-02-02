@@ -153,7 +153,7 @@ class Custom(Basis):
 
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.nodemanager.address',
-                  value='${yarn.nodemanager.hostname}:45603')
+                  value='${yarn.nodemanager.hostname}:45678')
 
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.nodemanager.recovery.supervised',
