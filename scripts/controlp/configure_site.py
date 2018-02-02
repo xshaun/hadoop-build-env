@@ -119,6 +119,22 @@ class Custom(Basis):
 
         # mapreduce
         putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.map.memory.mb',
+                  value='1024')
+
+        putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.map.cpu.vcores',
+                  value='1')
+
+        putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.reduce.memory.mb',
+                  value='1024')
+
+        putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.reduce.cpu.vcores',
+                  value='1')
+
+        putconfig(file='./configs/mapred-site.xml',
                   name='mapreduce.framework.name',
                   value='yarn')
 
