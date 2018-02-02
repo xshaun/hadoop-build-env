@@ -74,16 +74,18 @@ class Custom(Basis):
             return ret
 
         # -- step3 : remove 'process information unavailable'
-        instructions = list()
+        if len(self.getParams()) == 0:
+            instructions = list()
 
-        for host in host_list:
-            ins = "ssh {0} {2}@{1} -tt 'sudo -S rm -rf /tmp/hsperfdata*'".format(
-                ssh_option, host['ip'], host['usr'])
+            for host in host_list:
+                ins = "ssh {0} {2}@{1} -tt 'sudo -S rm -rf /tmp/hsperfdata*'".format(
+                    ssh_option, host['ip'], host['usr'])
 
-            instructions.append((ins, host['pwd']))
+                instructions.append((ins, host['pwd']))
 
-        return Command.parallel(instructions)
+            ret = Command.parallel(instructions)
 
+        return ret
 
 def trigger(ys):
     e = Custom(ys, attempts=3, interval=3, auto=True)
