@@ -119,6 +119,10 @@ class Custom(Basis):
 
         # mapreduce
         putconfig(file='./configs/mapred-site.xml',
+                  name='mapreduce.task.timeout',
+                  value='20000')
+
+        putconfig(file='./configs/mapred-site.xml',
                   name='mapreduce.map.memory.mb',
                   value='1024')
 
