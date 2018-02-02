@@ -147,6 +147,18 @@ class Custom(Basis):
                   name='yarn.scheduler.minimum-allocation-mb',
                   value='512')
 
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.recovery.enabled',
+                  value='true')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.address',
+                  value='${yarn.nodemanager.hostname}:45603')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.nodemanager.recovery.supervised',
+                  value='true')
+
         # ROSE: yarn->webapp
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.webapp.rrds.dir.cluster',
