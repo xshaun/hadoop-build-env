@@ -45,7 +45,7 @@ class Custom(Basis):
             params.append('hdfs')
             params.append('yarn')
             params.append('jobhistory')
-            #params.append('timelineserver')
+            params.append('timelineserver')
 
         # -- step2
         EACH_HOST_INS = [] # such as 'nodemanager' and datanode
