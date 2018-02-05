@@ -120,11 +120,11 @@ class Custom(Basis):
         # mapreduce
         putconfig(file='./configs/mapred-site.xml',
                   name='mapreduce.task.timeout',
-                  value='300000')
+                  value='9000')
 
         putconfig(file='./configs/mapred-site.xml',
                   name='mapreduce.map.memory.mb',
-                  value='1024')
+                  value='1536')
 
         putconfig(file='./configs/mapred-site.xml',
                   name='mapreduce.map.cpu.vcores',

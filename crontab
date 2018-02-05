@@ -6,19 +6,58 @@ echo "step: create dirs"
 mkdir -p /tmp/hbe/
 
 echo "step: initdeploy"
-hbe initdeploy 0>/tmp/hbe/stdout.txt 1>/tmp/hbe/stdout.txt 2>/tmp/hbe/stdout.txt
+#hbe initdeploy 0>/tmp/hbe/stdout.txt 1>/tmp/hbe/stdout.txt 2>/tmp/hbe/stdout.txt && sleep 120s
 
 t=`date '+%Y-%m-%d-%H:%M'`
 
 echo "step: submit applications"
-hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-50maps-50op'       -Dmapreduce.job.num-opportunistic-maps-percent='50' 50 1"       1>/tmp/hbe/${t}-PI-50maps-50op.txt       0>&1 2>&1  &
-hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-500maps-50op'     -Dmapreduce.job.num-opportunistic-maps-percent='50' 500 1"     1>/tmp/hbe/${t}-PI-500maps-50op.txt     0>&1 2>&1  &
-hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-1000maps-100op' -Dmapreduce.job.num-opportunistic-maps-percent='100' 1000 1" 1>/tmp/hbe/${t}-PI-1000maps-100op.txt 0>&1 2>&1  &
-hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-1000maps-0op'     -Dmapreduce.job.num-opportunistic-maps-percent='0' 1000 1"     1>/tmp/hbe/${t}-PI-1000maps-0op.txt     0>&1 2>&1  &
 
-hbe submit "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-5000maps-50op'     -Dmapreduce.job.num-opportunistic-maps-percent='50' 5000 1"     1>/tmp/hbe/${t}-PI-5000maps-50op.txt     0>&1 2>&1 &
-hbe submit "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-5000maps-100op'   -Dmapreduce.job.num-opportunistic-maps-percent='100' 5000 1"   1>/tmp/hbe/${t}-PI-5000maps-100op.txt   0>&1 2>&1 &
-hbe submit "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-10000maps-100op' -Dmapreduce.job.num-opportunistic-maps-percent='100' 10000 1" 1>/tmp/hbe/${t}-PI-10000maps-100op.txt 0>&1 2>&1 &
-hbe submit "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-10000maps-0op'     -Dmapreduce.job.num-opportunistic-maps-percent='0' 10000 1"     1>/tmp/hbe/${t}-PI-10000maps-0op.txt     0>&1 2>&1 &
+# -- Teragen
+#
+hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar teragen -Dmapreduce.job.name='${t}-Teragen-1GB' -Dmapreduce.job.num-opportunistic-maps-percent='100'  10000000 /tmp/input1GB "       1>/tmp/hbe/${t}-Teragen-1GB.txt       0>&1 2>&1  &
+hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar teragen -Dmapreduce.job.name='${t}-Teragen-5GB' -Dmapreduce.job.num-opportunistic-maps-percent='100'  50000000 /tmp/input5GB "       1>/tmp/hbe/${t}-Teragen-5GB.txt       0>&1 2>&1  &
+hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar teragen -Dmapreduce.job.name='${t}-Teragen-10GB' -Dmapreduce.job.num-opportunistic-maps-percent='100'  100000000 /tmp/input10GB "       1>/tmp/hbe/${t}-Teragen-10GB.txt       0>&1 2>&1  &
+
+# -- rm hdfs dirs
+#
+hbe submit "./bin/hadoop fs -rm -f -r /tmp/output1GB" &&
+hbe submit "./bin/hadoop fs -rm -f -r /tmp/output5GB" &&
+hbe submit "./bin/hadoop fs -rm -f -r /tmp/output10GB" &&
+sleep 60s 
+
+# -- Terasort
+#
+hbe submit "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar terasort -Dmapreduce.job.name='${t}-Terasort-1GB' -Dmapreduce.job.num-opportunistic-maps-percent='100' /tmp/input1GB /tmp/output1GB"       1>/tmp/hbe/${t}-Terasort-1GB.txt       0>&1 2>&1  &
+hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar terasort -Dmapreduce.job.name='${t}-Terasort-5GB' -Dmapreduce.job.num-opportunistic-maps-percent='100' /tmp/input5GB /tmp/output5GB"       1>/tmp/hbe/${t}-Terasort-5GB.txt       0>&1 2>&1  &
+hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar terasort -Dmapreduce.job.name='${t}-Terasort-10GB' -Dmapreduce.job.num-opportunistic-maps-percent='100' /tmp/input10GB /tmp/output10GB"       1>/tmp/hbe/${t}-Terasort-10GB.txt       0>&1 2>&1  &
+
+# -- PI
+#
+hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-50maps-100op'       -Dmapreduce.job.num-opportunistic-maps-percent='100' 50 1"       1>/tmp/hbe/${t}-PI-50maps-100op-1.txt       0>&1 2>&1  &
+hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-50maps-100op'       -Dmapreduce.job.num-opportunistic-maps-percent='100' 50 1"       1>/tmp/hbe/${t}-PI-50maps-100op-2.txt       0>&1 2>&1  &
+hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-50maps-100op'       -Dmapreduce.job.num-opportunistic-maps-percent='100' 50 1"       1>/tmp/hbe/${t}-PI-50maps-100op-3.txt       0>&1 2>&1  &
+#hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-50maps-100op'       -Dmapreduce.job.num-opportunistic-maps-percent='100' 50 1"       1>/tmp/hbe/${t}-PI-50maps-100op-4.txt       0>&1 2>&1  &
+#hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-50maps-100op'       -Dmapreduce.job.num-opportunistic-maps-percent='100' 50 1"       1>/tmp/hbe/${t}-PI-50maps-100op-5.txt       0>&1 2>&1  &
+hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-500maps-100op'     -Dmapreduce.job.num-opportunistic-maps-percent='100' 500 1"     1>/tmp/hbe/${t}-PI-500maps-100op-1.txt     0>&1 2>&1  &
+hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-500maps-100op'     -Dmapreduce.job.num-opportunistic-maps-percent='100' 500 1"     1>/tmp/hbe/${t}-PI-500maps-100op-2.txt     0>&1 2>&1  &
+hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-500maps-100op'     -Dmapreduce.job.num-opportunistic-maps-percent='100' 500 1"     1>/tmp/hbe/${t}-PI-500maps-100op-3.txt     0>&1 2>&1  &
+#hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-500maps-100op'     -Dmapreduce.job.num-opportunistic-maps-percent='100' 500 1"     1>/tmp/hbe/${t}-PI-500maps-100op-4.txt     0>&1 2>&1  &
+#hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-500maps-100op'     -Dmapreduce.job.num-opportunistic-maps-percent='100' 500 1"     1>/tmp/hbe/${t}-PI-500maps-100op-5.txt     0>&1 2>&1  &
+#hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-1000maps-100op' -Dmapreduce.job.num-opportunistic-maps-percent='100' 1000 1" 1>/tmp/hbe/${t}-PI-1000maps-100op-1.txt 0>&1 2>&1  &
+#hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-1000maps-100op' -Dmapreduce.job.num-opportunistic-maps-percent='100' 1000 1" 1>/tmp/hbe/${t}-PI-1000maps-100op-2.txt 0>&1 2>&1  &
+#hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-1000maps-100op' -Dmapreduce.job.num-opportunistic-maps-percent='100' 1000 1" 1>/tmp/hbe/${t}-PI-1000maps-100op-3.txt 0>&1 2>&1  &
+#hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-1000maps-100op' -Dmapreduce.job.num-opportunistic-maps-percent='100' 1000 1" 1>/tmp/hbe/${t}-PI-1000maps-100op-4.txt 0>&1 2>&1  &
+#hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-1000maps-100op' -Dmapreduce.job.num-opportunistic-maps-percent='100' 1000 1" 1>/tmp/hbe/${t}-PI-1000maps-100op-5.txt 0>&1 2>&1  &
+
+#hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-50maps-50op'       -Dmapreduce.job.num-opportunistic-maps-percent='50' 50 1"       1>/tmp/hbe/${t}-PI-50maps-50op.txt       0>&1 2>&1  &
+#hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-500maps-50op'     -Dmapreduce.job.num-opportunistic-maps-percent='50' 500 1"     1>/tmp/hbe/${t}-PI-500maps-50op.txt     0>&1 2>&1  &
+#hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-1000maps-100op' -Dmapreduce.job.num-opportunistic-maps-percent='100' 1000 1" 1>/tmp/hbe/${t}-PI-1000maps-100op.txt 0>&1 2>&1  &
+#hbe submit  "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-1000maps-0op'     -Dmapreduce.job.num-opportunistic-maps-percent='0' 1000 1"     1>/tmp/hbe/${t}-PI-1000maps-0op.txt     0>&1 2>&1  &
+#
+#hbe submit "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-5000maps-50op'     -Dmapreduce.job.num-opportunistic-maps-percent='50' 5000 1"     1>/tmp/hbe/${t}-PI-5000maps-50op.txt     0>&1 2>&1 &
+#hbe submit "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-5000maps-100op'   -Dmapreduce.job.num-opportunistic-maps-percent='100' 5000 1"   1>/tmp/hbe/${t}-PI-5000maps-100op.txt   0>&1 2>&1 &
+#hbe submit "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-10000maps-100op' -Dmapreduce.job.num-opportunistic-maps-percent='100' 10000 1" 1>/tmp/hbe/${t}-PI-10000maps-100op.txt 0>&1 2>&1 &
+#hbe submit "./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-beta1.jar pi -Dmapreduce.job.name='${t}-PI-10000maps-0op'     -Dmapreduce.job.num-opportunistic-maps-percent='0' 10000 1"     1>/tmp/hbe/${t}-PI-10000maps-0op.txt     0>&1 2>&1 &
 
 echo "use ' ps aux | grep hadoop-build-env ' to find more background processes"
+
