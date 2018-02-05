@@ -132,7 +132,7 @@ class Custom(Basis):
 
         putconfig(file='./configs/mapred-site.xml',
                   name='mapreduce.reduce.memory.mb',
-                  value='1024')
+                  value='2048')
 
         putconfig(file='./configs/mapred-site.xml',
                   name='mapreduce.reduce.cpu.vcores',
