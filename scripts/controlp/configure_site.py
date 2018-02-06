@@ -450,7 +450,7 @@ class Custom(Basis):
 
         instructions = list()
         for host in host_list:
-            ins = "scp {2} {1}@{0}:{3} ".format(
+            ins = "ssh {1}@{0} -tt 'mkdir -p {3}' && scp {2} {1}@{0}:{3} ".format(
                 host['ip'], host['usr'],
                 hbe_configs, cluster_hadoop_conf_dir)
 
@@ -463,8 +463,10 @@ class Custom(Basis):
         """ sync files to RMs """
         instructions = list()
         for host in rm_list:
-            ins = "scp ./configs/yarn-rm-site.xml {1}@{0}:{2}".format(
-                host['ip'], host['usr'], os.path.join(cluster_hadoop_conf_dir, 'yarn-site.xml'))
+            ins = "ssh {1}@{0} -tt 'mkdir -p {3}' && scp ./configs/yarn-rm-site.xml {1}@{0}:{2}".format(
+                host['ip'], host['usr'],
+                os.path.join(cluster_hadoop_conf_dir, 'yarn-site.xml'),
+                cluster_hadoop_conf_dir)
 
             instructions.append(ins)
 
