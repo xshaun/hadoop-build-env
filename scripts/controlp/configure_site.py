@@ -155,6 +155,14 @@ class Custom(Basis):
                   name='yarn.resourcemanager.hostname',
                   value=self.ys['roles']['resourcem']['hosts'][0])
 
+        putconfig(file='./configs/mapred-site.xml',
+                  name='yarn.app.mapreduce.am.scheduler.heartbeat.interval-ms',
+                  value='3000')
+
+        putconfig(file='./configs/yarn-site.xml',
+                  name='yarn.resourcemanager.nodemanagers.heartbeat-interval-ms',
+                  value='3000')
+
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.webapp.ui2.enable',
                   value='false')
@@ -295,6 +303,7 @@ class Custom(Basis):
 
         putconfig(file='./configs/yarn-site.xml',
                   name='yarn.resourcemanager.scheduler.address',
+                  #value="%s:8030" % self.ys['roles']['resourcem']['hosts'][0])
                   value='0.0.0.0:8049')  # on RM, must change it into rm-ip:8030
 
         putconfig(file='./configs/yarn-site.xml',
